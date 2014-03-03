@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+       
+        <record id="base.group_whatsapp_user" model="res.groups">
+            <field name="name">Whatsapp / User</field>
+        </record>
+
+    </data>
+</openerp>
