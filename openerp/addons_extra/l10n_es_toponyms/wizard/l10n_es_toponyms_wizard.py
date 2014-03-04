@@ -24,8 +24,8 @@
 ##############################################################################
 from openerp.osv import fields,osv
 import os
-import openerp.pooler
-import openerp.tools
+import openerp.pooler as pooler
+import openerp.tools as tools
 
 class config_es_toponyms(osv.osv_memory):
     _name='config.es.toponyms'
