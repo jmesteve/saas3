@@ -35,7 +35,7 @@
     </li>
 </template>
 
-<template id="layout" name="Main layout">&lt;!DOCTYPE html&gt;
+<template id="website.layout" name="Main layout">&lt;!DOCTYPE html&gt;
     <html t-att-lang="lang and lang.replace('_', '-')"
           t-att-data-website-id="website.id if editable else None"
           t-att-data-editable="'1' if editable else None"
@@ -188,11 +188,10 @@
                         </div>
                     </div>
                     <div class="container mt16 mb8">
-                        <!--<div class="pull-right" t-ignore="true" t-if="not editable">
+                        <div class="pull-right" t-ignore="true" t-if="not editable">
                             Create a <a href="http://openerp.com/apps/website">free website</a> with
                             <a class="label label-danger" href="https://openerp.com/apps/website">OpenERP</a>
                         </div>
-                        -->
                         <div class="pull-left text-muted">
                             Copyright &amp;copy; <span t-field="res_company.name">Company name</span>
                         </div>

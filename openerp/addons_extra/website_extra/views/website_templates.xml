@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- vim:fdn=3:
+-->
+<openerp>
+    <data>
+    <record model="ir.ui.view" id="layout_extend">
+         <field name="name">Main layout</field>
+         <field name="type">qweb</field>     
+         <field name="inherit_id" ref="website.layout"/>       
+         <field name="arch" type="xml">            
+               <div class="container mt16 mb8" position="replace">   
+                    <div class="container mt16 mb8">
+                        <div class="pull-right" t-ignore="true" t-if="not editable">
+                            Create a <a href="http://erpandcloud.com">cloud website</a> with
+                            <a class="label label-danger" href="http://erpandcloud.com">ErpAndCloud</a>
+                        </div>
+                        <div class="pull-left text-muted">
+                            Copyright &amp;copy; <span t-field="res_company.name">Company name</span>
+                        </div>
+                    </div>
+            </div>
+            
+                   
+         </field>
+      </record>
+    
+    
+   
+    </data>
+</openerp>
