@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		<record id="view_users_form_extend" model="ir.ui.view">
+            <field name="name">res.users.form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//page[@string='Preferences']" position="after">
+					<page string="Certificates HTTPS">
+	                    <button name="action_generate_ssl" states="active" icon="gtk-add" string="Generate Certificate" type="object"/>
+                    </page>
+                </xpath>
+            </field>
+		</record>
+	</data>
+</openerp>

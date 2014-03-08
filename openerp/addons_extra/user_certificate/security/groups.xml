@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+       <!-- http://toolkt.com/site/security-in-openerp/ -->
+        <record id="group_user_certificate" model="res.groups">
+            <field name="name">User Certificate Read Only</field>
+        </record>
+
+    </data>
+</openerp>

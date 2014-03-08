@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+		<record id="view_company_ssl_tree" model="ir.ui.view">
+			<field name="name">company.ssl.tree</field>
+			<field name="model">certificate.ssl</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="company_ssl_tree" create="false" delete="false">
+					<field name="name" />
+					<field name="state" />
+					<field name="begin_date" />
+					<field name="create_date" />
+					<field name="end_date" />
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_company_ssl_form">
+			<field name="name">company.ssl.form</field>
+			<field name="model">certificate.ssl</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="company_ssl_form" version="7.0" create="false" edit="false" delete="false">
+					<header>
+						<button name="action_generate_authority_ssl" icon="gtk-add" string="Generate Authority Certificate" type="object" />
+						<button name="action_generate_company_ssl" icon="gtk-add" string="Generate Company Certificate" type="object" />
+					</header>
+					<field name="name" />
+					<field name="state" />
+					<field name="begin_date" />
+					<field name="create_date" />
+					<field name="end_date" />
+				</form>
+			</field>
+		</record>
+
+		<record id="action_company_ssl" model="ir.actions.act_window">
+			<field name="name">Certificates Company</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">certificate.ssl</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="view_company_ssl_tree" />
+			<!--<field name="search_view_id" ref="view_user_ssl_search"/> -->
+			<field name="view_mode">tree,form</field>
+			<field name="help">Manage SSL certificates.</field>
+		</record>
+
+		<menuitem action="action_company_ssl" id="menu_action_company_ssl" parent="base.menu_users"/>
+		
+	</data>
+</openerp>

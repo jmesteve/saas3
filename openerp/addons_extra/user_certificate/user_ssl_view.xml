@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+    <data>
+    	
+    	<record id="view_user_ssl_tree" model="ir.ui.view">
+            <field name="name">user.ssl.tree</field>
+            <field name="model">certificate.ssl</field>
+            <field name="arch" type="xml">
+                <tree string="User ssl">
+                    <field name="name"/>
+                    <field name="state"/>
+                    <field name="begin_date"/>
+                    <field name="create_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+    
+    	<record id="action_user_ssl" model="ir.actions.act_window">
+            <field name="name">Certificates SSL</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">certificate.ssl</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_user_ssl_tree"/>
+            <!--<field name="search_view_id" ref="view_user_ssl_search"/> -->
+            <field name="view_mode">tree,form</field>
+            <field name="help">Manage SSL Company certificates.</field>
+        </record>
+		<menuitem action="action_user_ssl" id="menu_action_user_ssl" parent="base.menu_users"/>
+    </data>
+</openerp>
