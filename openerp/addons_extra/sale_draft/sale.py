@@ -33,6 +33,9 @@ class sale_order(orm.Model):
     _inherit = "sale.order"
     _columns = {
             'pricelist_id': fields.many2one('product.pricelist', 'Pricelist', required=True, readonly=True, states={'draft': [('readonly', False)],'progress': [('readonly', False)], 'sent': [('readonly', False)]}, help="Pricelist for current sales order."),
+            'name': fields.char('Order Reference', size=64, required=True,
+            readonly={'draft': [('readonly', False)]}, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, select=True),
+      
     }
     def action_cancel_draft(self, cr, uid, ids, *args):
         if not len(ids):

@@ -133,6 +133,20 @@ def ensure_db(redirect='/web/database/selector'):
     if db and db not in http.db_filter([db]):
         db = None
 
+    if db and not request.session.db:
+        # User asked a specific database on a new session.
+        # That mean the nodb router has been used to find the route
+        # Depending on installed module in the database, the rendering of the page
+        # may depend on data injected by the database route dispatcher.
+        # Thus, we redirect the user to the same page but with the session cookie set.
+        # This will force using the database route dispatcher...
+        r = request.httprequest
+        response = werkzeug.utils.redirect(r.url, 302)
+        request.session.db = db
+        response = r.app.get_response(r, response, explicit_session=False)
+        werkzeug.exceptions.abort(response)
+        return
+
     # if db not provided, use the session one
     if not db:
         db = request.session.db
@@ -602,7 +616,8 @@ def render_bootstrap_template(db, template, values=None, debug=False, lazy=False
         registry = openerp.modules.registry.RegistryManager.get(db)
         with registry.cursor() as cr:
             view_obj = registry["ir.ui.view"]
-            return view_obj.render(cr, openerp.SUPERUSER_ID, template, values)
+            uid = request.uid or openerp.SUPERUSER_ID
+            return view_obj.render(cr, uid, template, values)
     if lazy:
         return LazyResponse(callback, template=template, values=values)
     else:
@@ -998,18 +1013,7 @@ class Session(http.Controller):
         :return: A key identifying the saved action.
         :rtype: integer
         """
-        saved_actions = request.httpsession.get('saved_actions')
-        if not saved_actions:
-            saved_actions = {"next":1, "actions":{}}
-            request.httpsession['saved_actions'] = saved_actions
-        # we don't allow more than 10 stored actions
-        if len(saved_actions["actions"]) >= 10:
-            del saved_actions["actions"][min(saved_actions["actions"])]
-        key = saved_actions["next"]
-        saved_actions["actions"][key] = the_action
-        saved_actions["next"] = key + 1
-        request.httpsession['saved_actions'] = saved_actions
-        return key
+        return request.httpsession.save_action(the_action)
 
     @http.route('/web/session/get_session_action', type='json', auth="user")
     def get_session_action(self, key):
@@ -1022,10 +1026,7 @@ class Session(http.Controller):
         :return: The saved action or None.
         :rtype: anything
         """
-        saved_actions = request.httpsession.get('saved_actions')
-        if not saved_actions:
-            return None
-        return saved_actions["actions"].get(key)
+        return request.httpsession.get_action(key)
 
     @http.route('/web/session/check', type='json', auth="user")
     def check(self):
@@ -1596,8 +1597,8 @@ class Export(http.Controller):
             model, map(operator.itemgetter('name'), export_fields_list))
 
         return [
-            {'name': field_name, 'label': fields_data[field_name]}
-            for field_name in fields_data.keys()
+            {'name': field['name'], 'label': fields_data[field['name']]}
+            for field in export_fields_list
         ]
 
     def fields_info(self, model, export_fields):

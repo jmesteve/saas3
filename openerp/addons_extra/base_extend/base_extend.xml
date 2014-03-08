@@ -3,8 +3,21 @@
   <data>
     <report id="preview_report_internal" report_type="pdf" model="res.company" name="preview.report.internal" multi="True" auto="True" header="True" rml="base_extend/report/preview_report_internal.rml" string="Preview Report Internal"/>
     <report id="preview_report_apaisado" report_type="pdf" model="res.company" name="preview.report.apaisado" multi="True" auto="True" header="True" rml="base_extend/report/preview_report_apaisado.rml" string="Preview Report Apaisado"/>
-    <report id="preview_report_webkit" report_type="webkit" model="res.company" name="preview.report.webkit" multi="True" auto="True" header="False" string="Preview Report Webkit"/>
     <report id="preview_report_shipping" report_type="pdf" model="res.company" name="preview.report.shipping" multi="True" auto="True" header="True" rml="base_extend/report/preview_report_shipping.rml" string="Preview Report Shipping"/>
+	<record id="preview_report_webkit" model="ir.actions.report.xml">
+             <field name="report_type">webkit</field>
+             <field name="report_name">preview.report.webkit</field>
+             <field eval="[(6,0,[])]" name="groups_id"/>
+             <field eval="0" name="multi"/>
+             <field eval="0" name="auto"/>
+             <field eval="1" name="header"/>
+             <field name="model">res.company</field>
+             <field name="type">ir.actions.report.xml</field>
+             <field name="name">preview report webkit</field>
+             <field name="report_rml">base_extend/report/templates/preview_report_webkit.mako</field>
+             <field name="report_file">base_extend/report/templates/preview_report_webkit.mako</field>
+             <field name="webkit_header" ref=""/>
+    </record>
 	
 	<record model="ir.ui.view" id="base_extend">
         <field name="name">res.company.form</field>
