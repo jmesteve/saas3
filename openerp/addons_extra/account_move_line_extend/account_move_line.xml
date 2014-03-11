@@ -33,6 +33,9 @@
 		            	<xpath expr="//button[@name='button_cancel']" position="after"> 
 		            	    <button name="action_remove_move" states="draft,cancel" icon="gtk-cancel" string="Remove Move" type="object"/>
 		                </xpath>
+		                <xpath expr="//field[@name='name']" position="attributes"> 
+		                	<attribute name="readonly">False</attribute>
+		                </xpath>
 					</field>
 		</record>
 	</data>

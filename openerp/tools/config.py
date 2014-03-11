@@ -143,10 +143,12 @@ class configmanager(object):
         # WEB
         # TODO move to web addons after MetaOption merge
         group = optparse.OptionGroup(parser, "Web interface Configuration")
-        group.add_option("--db-filter", dest="dbfilter", default='.*',
+        #group.add_option("--db-filter", dest="dbfilter", default='.*',
+        #                 help="Filter listed database", metavar="REGEXP")
+        group.add_option("--db-filter", dest="dbfilter", my_default='.*',
                          help="Filter listed database", metavar="REGEXP")
         parser.add_option_group(group)
-
+        
         # Static HTTP
         group = optparse.OptionGroup(parser, "Static HTTP service")
         group.add_option("--static-http-enable", dest="static_http_enable", action="store_true", my_default=False, help="enable static HTTP service for serving plain HTML files")

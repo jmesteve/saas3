@@ -21,23 +21,27 @@
 ##############################################################################
 
 from openerp.osv import orm
+#from openerp.addons.account.report.trial_balance import TrialBalanceWebkit
+import xlwt
 #import logging
 #_logger = logging.getLogger(__name__)
 
-class account_common_report(orm.TransientModel):
-    _inherit = 'account.common.report'
+class account_balance_report(orm.TransientModel):
+    _inherit = 'account.balance.report'
        
     def xls_export(self, cr, uid, ids, context=None):
-        return self.check_report(cr, uid, ids, context=context)
+        from datetime import datetime
+        style0 = xlwt.easyxf('font: name Times New Roman, colour red, bold on')
+        style1 = xlwt.easyxf('',num_format_str='DD-MMM-YY')
+        wb = xlwt.Workbook()
+        ws = wb.add_sheet('A Test Sheet',cell_overwrite_ok=True)
+        ws.write(0, 0, 'Test', style0)
+        ws.write(1, 0, datetime.now(), style1)
+        ws.write(2, 0, 4)
+        ws.write(2, 1, 1)
+        ws.write(2, 2, xlwt.Formula("A3+B3"))
+        wb.save('../example.xls')
 
-    def _print_report(self, cr, uid, ids, data, context=None):
-        context = context or {}
-        if context.get('xls_export'):
-            # we update form with display account value
-            data = self.pre_print_report(cr, uid, ids, data, context=context)
-            return {'type': 'ir.actions.report.xml',
-                    'report_name': 'account.account_report_trial_balance_xls',
-                    'datas': data}
-        else:
-            return super(account_common_report, self)._print_report(cr, uid, ids, data, context=context)
-
+        
+        
+  

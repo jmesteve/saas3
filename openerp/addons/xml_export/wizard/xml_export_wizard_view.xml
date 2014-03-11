@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<openerp>
+<data>
+
+	<record id="xml_export_wizard_form" model="ir.ui.view">
+		<field name="name">xml.export.wizard.form</field>
+		<field name="model">xml.export.wizard</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+			<form string="Export xml" version="7.0">
+				<header>
+					<button string="Export" type="object" name="action_export" class="oe_highlight"/>
+					<button string="Close" special="cancel"/>
+				</header>
+				<sheet>
+					<group>
+						<group>
+							<field name="res_model"/>
+							<field name="profile_id"/>
+						</group>
+						<group>
+							<field name="res_id"/>
+							<field name="data_xml"/>
+						</group>
+					</group>
+					<group>
+						<field name="errors"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="xml_export_wizard_action" model="ir.actions.act_window">
+		<field name="name">Export xml</field>
+		<field name="res_model">xml.export.wizard</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="xml_export_wizard_form"/>
+		<field name="target">new</field>
+	</record>
+
+</data>
+</openerp>

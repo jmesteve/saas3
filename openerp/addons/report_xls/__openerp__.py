@@ -3,7 +3,7 @@
 #
 #    OpenERP, Open Source Management Solution
 #
-#    Copyright (c) 2013 Noviat nv/sa (www.noviat.com). All rights reserved.
+#    Copyright (c) 2014 Noviat nv/sa (www.noviat.com). All rights reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -26,6 +26,7 @@
     'author': 'Noviat',
     'website': 'http://www.noviat.com',
     'category': 'Reporting',
+    'summary': 'Excel report engine',
     'description': """
 Excel report engine
 ===================
@@ -67,7 +68,7 @@ the creation XLS reports in OpenERP.
 
 Development assistance
 ''''''''''''''''''''''
-Contact info@noviat.com for help with the development of Excel reports in OpenERP, .
+Contact info@noviat.com for help with the development of Excel reports in OpenERP.
 
     """,
     'depends': ['base'],
