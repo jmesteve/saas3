@@ -22,25 +22,19 @@
 ##############################################################################
 
 {
-    'name': "Web Extra",
+    'name': "Website Login",
     'version': '0.1',
     'category': 'Hidden',
     'description': """
-        [ENG] Extend addon Web  
+        [ENG] Change addon Website Login 
     """,
     'author': 'jmesteve',
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
-    "depends": ['base','web','mail'],
+    "depends": ['website'],
     'data': [
-        'views/webclient_templates.xml',
+        'views/website_templates.xml',
     ],
-    'qweb' : [
-        "static/src/xml/base.xml",
-    ],
-    'js': [
-        'static/src/js/announcement.js',
-    ],
-    "active": False,
+    "active": True,
     "installable": True
 }

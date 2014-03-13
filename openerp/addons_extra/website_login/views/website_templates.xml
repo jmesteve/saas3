@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- vim:fdn=3:
+-->
+<openerp>
+    <data>
+      <record model="ir.ui.view" id="show_sign_in_extend">
+         <field name="name">Show sign in extend</field>
+         <field name="type">qweb</field>     
+         <field name="inherit_id" ref="website.show_sign_in"/>       
+         <field name="arch" type="xml">            
+               <xpath expr="//a[@t-attf-href='/web/login']" position="replace">
+               		<t t-if="request.httprequest.url_root[:5] == 'http:'">
+			            <a t-attf-href="/login">
+			                <b>Sign in</b>
+			            </a>
+			         </t>
+			         <t t-if="request.httprequest.url_root[:5] == 'https'">
+			            <a t-attf-href="/web/login">
+			                <b>Sign in</b>
+			            </a>
+			         </t>
+    			</xpath>
+         </field>
+      </record>
+      
+      
+      
+      
+
+
+
+    </data>
+</openerp>

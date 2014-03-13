@@ -22,7 +22,7 @@
 ##############################################################################
 
 {
-    'name': "Website Extend",
+    'name': "Website Extra",
     'version': '0.1',
     'category': 'Hidden',
     'description': """

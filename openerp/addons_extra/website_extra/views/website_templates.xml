@@ -3,7 +3,7 @@
 -->
 <openerp>
     <data>
-    <record model="ir.ui.view" id="layout_extend">
+       <record model="ir.ui.view" id="layout_extend">
          <field name="name">Main layout</field>
          <field name="type">qweb</field>     
          <field name="inherit_id" ref="website.layout"/>       
@@ -18,8 +18,8 @@
                             Copyright &amp;copy; <span t-field="res_company.name">Company name</span>
                         </div>
                     </div>
-            </div>
+              </div>
          </field>
-      </record>
+      </record>     
     </data>
 </openerp>

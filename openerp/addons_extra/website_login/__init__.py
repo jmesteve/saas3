@@ -21,26 +21,3 @@
 #
 ##############################################################################
 
-{
-    'name': "Web Extra",
-    'version': '0.1',
-    'category': 'Hidden',
-    'description': """
-        [ENG] Extend addon Web  
-    """,
-    'author': 'jmesteve',
-    'website': 'http://www.erpandcloud.com',
-    'license': 'AGPL-3',
-    "depends": ['base','web','mail'],
-    'data': [
-        'views/webclient_templates.xml',
-    ],
-    'qweb' : [
-        "static/src/xml/base.xml",
-    ],
-    'js': [
-        'static/src/js/announcement.js',
-    ],
-    "active": False,
-    "installable": True
-}
