@@ -2,31 +2,103 @@
 
 <openerp>
     <data>
+    
+    	<!-- USER'S PREFERENCES EXTENSION  -->
+    	<record id="view_users_form_extend" model="ir.ui.view">
+            <field name="name">res.users.form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//page[@string='Preferences']" position="after">
+					<page string="Certificates HTTPS">
+	                    <button name="action_generate_ssl" states="active" icon="gtk-add" string="Generate Certificate" type="object"/>
+                    </page>
+                </xpath>
+            </field>
+		</record>
+    	
+    	<!-- GENERATE USER CERTIFICATES -->
     	
     	<record id="view_user_ssl_tree" model="ir.ui.view">
             <field name="name">user.ssl.tree</field>
             <field name="model">certificate.ssl</field>
+            <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="User ssl">
+                <tree string="user_ssl_tree" create="true" delete="true">
                     <field name="name"/>
                     <field name="state"/>
+                    <field name="type"/>
                     <field name="begin_date"/>
-                    <field name="create_date"/>
+                    <field name="create_date" />
                     <field name="end_date"/>
                 </tree>
             </field>
         </record>
+    
+    	<record model="ir.ui.view" id="view_user_ssl_form">
+			<field name="name">user.ssl.form</field>
+			<field name="model">certificate.ssl</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="company_ssl_form" version="7.0" create="true" edit="false" delete="true">
+					<header>
+						<button name="generate_ssl_crl" attrs="{'invisible':[('type','in',['user', 'server'])]}" icon="gtk-add" string="Generate SSL CRL" type="object" />
+						<button name="generate_ssl_revoke_user" icon="STOCK_DIALOG_ERROR" string="Revoke User" type="object" states="active" />
+						<button name="regenerate_certificate" type="object" icon="gtk-jump-to" string="Regenerate Certificate" states="active" />
+						<button name="action_workflow_active" type="object" string="Activate" states="draft" class="oe_highlight"/>
+                        <button name="action_workflow_disable" type="object" string="Disable" states="active" class="oe_highlight" />
+                        <div class="oe_right">
+                        	<field name="state" select="1" widget="statusbar" statusbar_visible="draft,active,disable" statusbar_colors='{"draft":"blue","active":"blue","disable":"red"}'/>
+                        </div>
+					</header>
+					<group>
+						<field name="name" />
+						<field name="password"/>
+						<field name="type"/>
+						<field name="certification_authority" attrs="{'required':[('type','in',['user', 'server'])]}" domain="[('type','=', 'authority_root'), ('state','=', 'active')]"/>
+					</group>
+					<group>
+						<field name="commonname"/>
+						<field name="begin_date" />
+						<field name="end_date" />
+					</group>
+					
+					<group>
+						<field name="country"/>
+						<field name="city" />
+						<field name="state_place" />
+						<field name="organization" />
+						<field name="domains"/>
+					</group>
+				</form>
+			</field>
+		</record>
     
     	<record id="action_user_ssl" model="ir.actions.act_window">
             <field name="name">Certificates SSL</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">certificate.ssl</field>
             <field name="view_type">form</field>
-            <field name="view_id" ref="view_user_ssl_tree"/>
+			<!--<field name="view_id" ref="view_user_ssl_tree"/> -->
             <!--<field name="search_view_id" ref="view_user_ssl_search"/> -->
             <field name="view_mode">tree,form</field>
             <field name="help">Manage SSL Company certificates.</field>
         </record>
+        
+        <record model="ir.actions.act_window.view" id="act_user_ssl_tree_view">
+		    <field eval="1" name="sequence"/>
+		    <field name="view_mode">tree</field>
+		    <field name="view_id" ref="view_user_ssl_tree"/>
+		    <field name="act_window_id" ref="action_user_ssl"/>
+		</record>
+
+		<record model="ir.actions.act_window.view" id="act_user_ssl_form_view">
+		    <field eval="2" name="sequence"/>
+		    <field name="view_mode">form</field>
+		    <field name="view_id" ref="view_user_ssl_form"/>
+		    <field name="act_window_id" ref="action_user_ssl"/>
+		</record>
+        
 		<menuitem action="action_user_ssl" id="menu_action_user_ssl" parent="base.menu_users"/>
     </data>
 </openerp>
