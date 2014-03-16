@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+		<record model="ir.ui.view" id="view_user_ssl_form_workflow">
+			<field name="name">user.ssl.form.workflow</field>
+			<field name="model">environment.ssl</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<group>
+					<button name="initialize_ssl_environment" icon="gtk-add" string="Initialize SSL Environment" type="object" />
+					<button name="remove_ssl_environment" icon="STOCK_DIALOG_WARNING" string="Remove SSL Environment" type="object" />
+				</group>
+			</field>
+		</record>
+
+        <act_window name="SSL Environment"
+	        res_model="environment.ssl"
+	        src_model="environment.ssl"
+	        view_mode="form"
+	        target="new"
+       		id="act_company_ssl_view"/>
+	
+		<record model="ir.actions.act_window.view" id="act_user_ssl_form_view_workflow">
+		    <field eval="3" name="sequence"/>
+		    <field name="view_mode">form</field>
+		    <field name="view_id" ref="view_user_ssl_form_workflow"/>
+		    <field name="act_window_id" ref="act_company_ssl_view"/>
+		</record>
+        
+        <menuitem action="act_company_ssl_view" id="menu_action_company_ssl2" parent="base.menu_users"/>
+    </data>
+</openerp>

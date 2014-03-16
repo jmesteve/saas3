@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="ir_config_parameter_certificates_data" model="ir.config_parameter">
+            <field name="key">certificates_path</field>
+            <field name="value">../certificates/</field>
+        </record>
+        
+        <record id="ir_config_parameter_certificates_keysize" model="ir.config_parameter">
+            <field name="key">certificates_keysize</field>
+            <field name="value">2048</field>
+        </record>
+        
+      	<record id="ir_config_parameter_certificates_days" model="ir.config_parameter">
+            <field name="key">certificates_days_root</field>
+            <field name="value">3650</field>
+        </record>
+        
+        <record id="ir_config_parameter_certificates_crl" model="ir.config_parameter">
+            <field name="key">certificates_crl</field>
+            <field name="value">crl</field>
+        </record>
+        
+        <record id="ir_config_parameter_certificates_default_country" model="ir.config_parameter">
+            <field name="key">certificates_country</field>
+            <field name="value">ES</field>
+        </record>
+        
+       	<record id="ir_config_parameter_certificates_default_organization" model="ir.config_parameter">
+            <field name="key">certificates_organization</field>
+            <field name="value">ErpAndCloud</field>
+        </record>
+        
+       	<record id="ir_config_parameter_certificates_default_state_place" model="ir.config_parameter">
+            <field name="key">certificates_state_place</field>
+            <field name="value">Valencia</field>
+        </record>
+        
+        <record id="ir_config_parameter_certificates_default_city" model="ir.config_parameter">
+            <field name="key">certificates_city</field>
+            <field name="value">Valencia</field>
+        </record>
+        
+        <record id="ir_config_parameter_certificates_virtual_host" model="ir.config_parameter">
+            <field name="key">virtual_host_path</field>
+            <field name="value">/etc/apache2/sites-available/</field>
+        </record>
+        
+        <record id="ir_config_parameter_certificates_apache_reload" model="ir.config_parameter">
+            <field name="key">apache_reload_command</field>
+            <field name="value">service apache2 reload</field>
+        </record>
+        
+    </data>
+</openerp>

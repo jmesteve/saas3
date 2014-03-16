@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	<menuitem
+    	    action="action_account_menu_validate"
+            id="account_menu_validate"
+            name="Validate accounts"
+            parent="account.account_account_menu"
+            groups="account.group_account_manager"
+         />
+	</data>
+</openerp>
+
