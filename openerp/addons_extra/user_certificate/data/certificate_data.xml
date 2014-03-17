@@ -7,6 +7,21 @@
             <field name="value">../certificates/</field>
         </record>
         
+        <record id="ir_config_parameter_virtualhost_data" model="ir.config_parameter">
+            <field name="key">virtualhost_path</field>
+            <field name="value">../virtualhosts/</field>
+        </record>
+        
+        <record id="ir_config_parameter_virtualhost_port" model="ir.config_parameter">
+            <field name="key">virtualhost_port</field>
+            <field name="value">65451</field>
+        </record>
+        
+        <record id="ir_config_parameter_log_data" model="ir.config_parameter">
+            <field name="key">log_path</field>
+            <field name="value">/var/log/</field>
+        </record>
+        
         <record id="ir_config_parameter_certificates_keysize" model="ir.config_parameter">
             <field name="key">certificates_keysize</field>
             <field name="value">2048</field>
