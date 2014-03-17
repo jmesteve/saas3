@@ -8,6 +8,8 @@
 ############################################################################
 #    Coded by: Rodo (rodo@vauxoo.com),Moy (moylop260@vauxoo.com)
 ############################################################################
+#    Modify by: jmesteve
+############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -65,3 +67,17 @@ class product_customer_code(osv.Model):
     ]
 
     # TODO: Add index to product_code, partner_id
+    
+    def code_get(self, cr, user, product_id, context=None):
+        if context is None:
+            context = {}
+        if product_id is None:
+            return []
+        partner_id = context.get('partner_id', False)
+        args= [('product_id','=',product_id),('partner_id','=',partner_id)]
+        ids = self.search(cr, user,  args,  context=context)
+        result = []
+        for product_customer_code in self.browse(cr, user, ids, context=context):
+            result.append([(product_customer_code.product_code)])
+
+        return result

@@ -8,6 +8,8 @@
 ############################################################################
 #    Coded by: Rodo (rodo@vauxoo.com),Moy (moylop260@vauxoo.com)
 ############################################################################
+#    Modify by: jmesteve
+############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
