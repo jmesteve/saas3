@@ -5,6 +5,7 @@ import openerp.pooler
 import subprocess
 import datetime
 import uuid
+import environment_ssl
 
 class certificate_ssl(osv.osv):
     _name =  'certificate.ssl'
@@ -32,11 +33,46 @@ class certificate_ssl(osv.osv):
     
     _sql_constraints = [('item_name_file_unique','unique(name_file)', 'Item Name File must be unique!')]
     
+    def get_company(self, cr, uid, context):
+        company_id = self.pool.get('res.company')._company_default_get(cr, uid, 'certificate.ssl', context=context)
+        company = self.pool.get('res.company').browse(cr, uid, company_id, context=context)
+        return company
+    
+    def get_company_name(self, cr, uid, context):
+        company = self.get_company(cr, uid, context)
+        name = company.name
+        if name == '' or name == None or name == False:
+            name = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_organization", context)
+        return name
+    
+    def get_company_city(self, cr, uid, context):
+        company = self.get_company(cr, uid, context)
+        city = company.city
+        if city == '' or city == None or city == False:
+            city = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_city", context)
+        return city
+    
+    def get_company_country(self, cr, uid, context):
+        company = self.get_company(cr, uid, context)
+        country = company.country_id.code
+        print country
+        if country == '' or country == None or country == False:
+            country = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_country", context)
+        return country
+    
+    def get_company_state(self, cr, uid, context):
+        company = self.get_company(cr, uid, context)
+        state = company.state_id.name
+        print state
+        if state == '' or state == None or state == False:
+            state = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_state_place", context)
+        return state
+    
     _defaults = {
-        'city': lambda self, cr, uid, context: self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_city", context),
-        'state_place': lambda self, cr, uid, context: self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_state_place", context),
-        'country': lambda self, cr, uid, context: self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_country", context),
-        'organization': lambda self, cr, uid, context: self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_organization", context),
+        'city': get_company_city ,
+        'state_place':  get_company_state,
+        'country': get_company_country,
+        'organization': get_company_name,
         'type': 'user',
         'begin_date': lambda self, cr, uid, context: datetime.date.today().strftime("%Y-%m-%d"),
         'end_date': lambda self, cr, uid, context: (datetime.date.today() + datetime.timedelta(days=3650)).strftime("%Y-%m-%d")
@@ -48,6 +84,9 @@ class certificate_ssl(osv.osv):
         certificatesKeysize = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_keysize", context=context)
         certificatesDays = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_days_root", context=context)
         savedPath = os.getcwd()
+        
+        domain_ssl = self.pool.get('environment.ssl')
+        domain_ssl.initialize_ssl_environment(cr, uid, [], context=None)
         
         os.chdir(certificatesPath)
         

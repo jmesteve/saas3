@@ -19,7 +19,7 @@
 	RequestHeader set "X-Forwarded-Proto" "https"
 	ProxyRequests Off
 	ProxyPreserveHost On
-g
+
 	<Proxy>
 	Order deny,allow
 	Allow from all
