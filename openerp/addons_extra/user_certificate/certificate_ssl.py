@@ -47,14 +47,14 @@ class certificate_ssl(osv.osv):
     
     def get_company_city(self, cr, uid, context):
         company = self.get_company(cr, uid, context)
-        city = str(company.city)
+        city = unicode(company.city)
         if city == '' or city == None or city == False:
             city = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_city", context)
         return city
     
     def get_company_country(self, cr, uid, context):
         company = self.get_company(cr, uid, context)
-        country = str(company.country_id.code)
+        country = company.country_id.code
         #print country
         if country == '' or country == None or country == False:
             country = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_country", context)
@@ -62,7 +62,7 @@ class certificate_ssl(osv.osv):
     
     def get_company_state(self, cr, uid, context):
         company = self.get_company(cr, uid, context)
-        state = str(company.state_id.name)
+        state = unicode(company.state_id.name)
         #print state
         if state == '' or state == None or state == False:
             state = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_state_place", context)
