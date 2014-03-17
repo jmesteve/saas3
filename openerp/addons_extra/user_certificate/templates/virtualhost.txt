@@ -1,10 +1,10 @@
 <VirtualHost *:443>
 	# require a client certificate which has to be directly
 	# signed by our CA certificate in ca.crt
-	ServerName #####hofa####
-	ServerAlias www.erpandcloud.com erpandcloud.com
+	ServerName ${servername}
+	ServerAlias ${serveralias}
 
-	SSLCACertificateFile /etc/ssl/certificados-erpandcloud/CertificadoCA.pem
+	SSLCACertificateFile ${certificateca}
 	SSLVerifyClient require 
 	#SSLVerifyDepth 1
 
@@ -13,22 +13,26 @@
 
 
 	SSLEngine on
-	SSLCertificateFile /etc/ssl/certificados-erpandcloud/Certificado.pem
-	SSLCertificateKeyFile /etc/ssl/certificados-erpandcloud/clavecert.nopass
+	SSLCARevocationFile ${revocationfile}
+	SSLCertificateFile ${certificateserver}
+	SSLCertificateKeyFile ${keyserver}
 
 	RequestHeader set "X-Forwarded-Proto" "https"
 	ProxyRequests Off
 	ProxyPreserveHost On
-g
+
 	<Proxy>
 	Order deny,allow
 	Allow from all
 	</Proxy>
 
+	# Remove server signature
+	Header set Server nginx
+
 	SetEnv proxy-nokeepalive 1
 
-	ProxyPass / http://185.37.226.193:65451/
-	ProxyPassReverse / http://185.37.226.193:65451/
+	ProxyPass / ${proxypass}
+	ProxyPassReverse / ${proxypass}
 
-	TransferLog /var/log/transfer-web-openerp-eac.log
+	TransferLog ${logfile}
 </VirtualHost>

@@ -100,5 +100,59 @@
 		</record>
         
 		<menuitem action="action_user_ssl" id="menu_action_user_ssl" parent="base.menu_users"/>
+		
+		
+		
+		<!-- VIRTUALHOST -->
+		
+		<record id="view_virtualhost_ssl_tree" model="ir.ui.view">
+            <field name="name">virtualhost.ssl.tree</field>
+            <field name="model">virtualhost.ssl</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="virtualhost_ssl_tree" create="true" delete="true">
+					<field name="name" />
+					<field name="certificateca" />
+					<field name="certificateserver"/>
+					<field name="servername" />
+					<field name="serveralias" />
+					<field name="ip" />
+					<field name="port" />
+					<field name="logpath" />
+                </tree>
+            </field>
+        </record>
+		
+		
+		<record model="ir.ui.view" id="view_virtualhost_ssl_form">
+			<field name="name">virtualhost.ssl.form</field>
+			<field name="model">virtualhost.ssl</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="virtualhost_ssl_form" version="7.0" create="true" edit="false" delete="true">
+					<group>
+						<field name="name" />
+						<field name="certificateca" domain="[('type','=', 'authority_root'), ('state','=', 'active')]"/>
+						<field name="certificateserver" domain="[('type','=', 'server'), ('state','=', 'active')]"/>
+						<field name="servername" />
+						<field name="serveralias" />
+						<field name="ip" />
+						<field name="port" />
+						<field name="logpath" />
+					</group>
+				</form>
+			</field>
+		</record>
+		
+		<record id="action_virtualhost_ssl" model="ir.actions.act_window">
+            <field name="name">Virtualhost SSL</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">virtualhost.ssl</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help">Manage Virtualhosts.</field>
+        </record>
+		
+		<menuitem action="action_virtualhost_ssl" id="menu_action_virtualhost_ssl" parent="base.menu_users"/>
     </data>
 </openerp>
