@@ -62,7 +62,7 @@ class certificate_ssl(osv.osv):
     
     def get_company_state(self, cr, uid, context):
         company = self.get_company(cr, uid, context)
-        state = company.state_id.name.encode('utf8')
+        state = company.state_id.name.encode('ascii', 'ignore')
         #print state
         if state == '' or state == None or state == False:
             state = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_state_place", context)
