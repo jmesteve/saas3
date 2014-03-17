@@ -55,7 +55,7 @@ class certificate_ssl(osv.osv):
     def get_company_country(self, cr, uid, context):
         company = self.get_company(cr, uid, context)
         country = company.country_id.code
-        print country
+        #print country
         if country == '' or country == None or country == False:
             country = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_country", context)
         return country
@@ -63,7 +63,7 @@ class certificate_ssl(osv.osv):
     def get_company_state(self, cr, uid, context):
         company = self.get_company(cr, uid, context)
         state = company.state_id.name
-        print state
+        #print state
         if state == '' or state == None or state == False:
             state = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_state_place", context)
         return state
@@ -133,7 +133,7 @@ class certificate_ssl(osv.osv):
                              ], shell=True)
             
         elif values['type'] == 'authority_root':
-            print values['name_file'], values['password'], certificatesKeysize
+            #print values['name_file'], values['password'], certificatesKeysize
             subprocess.call(["sh ssl_root_authority.sh " + 
                              values['name_file'] + " "+
                              values['commonname'] + " "+
