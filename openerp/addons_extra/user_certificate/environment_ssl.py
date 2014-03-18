@@ -18,7 +18,10 @@ class environment_ssl(osv.osv):
          currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
          certificatesPath = self.get_certificates_path(cr, uid, context)
          absfilePath = os.path.abspath(os.path.join(currentPath, 'scripts/'))
-         savedPath = os.getcwd()
+         try:
+             savedPath = os.getcwd()
+         except OSError:
+             pas
          
          try:
              os.mkdir(certificatesPath)
@@ -41,7 +44,10 @@ class environment_ssl(osv.osv):
      def remove_ssl_environment(self, cr, uid, ids, context=None, *args):
          currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
          certificatesPath = self.get_certificates_path(cr, uid, context)
-         savedPath = os.getcwd()
+         try:
+             savedPath = os.getcwd()
+         except OSError:
+             pas
          
          os.chdir(certificatesPath)
          subprocess.call(['sh ssl_remove.sh'], shell=True)
