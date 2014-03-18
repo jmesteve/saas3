@@ -21,7 +21,7 @@ class environment_ssl(osv.osv):
          try:
              savedPath = os.getcwd()
          except OSError:
-             pas
+             pass
          
          try:
              os.mkdir(certificatesPath)
@@ -47,7 +47,7 @@ class environment_ssl(osv.osv):
          try:
              savedPath = os.getcwd()
          except OSError:
-             pas
+             pass
          
          os.chdir(certificatesPath)
          subprocess.call(['sh ssl_remove.sh'], shell=True)

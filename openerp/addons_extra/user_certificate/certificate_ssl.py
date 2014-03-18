@@ -94,6 +94,7 @@ class certificate_ssl(osv.osv):
         
         os.chdir(certificatesPath)
         
+        values['state'] = 'draft'
         values['name'] = values['name'].replace (" ", "_")
         values['name_file'] = uuid.uuid4().hex + '_' + values['name']
         values['name_filep12'] = values['name'] + ".p12"
