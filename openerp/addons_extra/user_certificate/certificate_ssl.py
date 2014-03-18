@@ -6,6 +6,7 @@ import subprocess
 import datetime
 import uuid
 import environment_ssl
+import base64
 
 class certificate_ssl(osv.osv):
     _name =  'certificate.ssl'
@@ -17,11 +18,13 @@ class certificate_ssl(osv.osv):
                 'state_place': fields.char('State', size=25, required=False),
                 'organization': fields.char('Organization', size=25, required=False),
                 'name_file': fields.char('Name File', size=60, required=False),
+                'name_filep12': fields.char('Name File', size=60, required=False),
                 'state': fields.selection([('draft','Draft'), ('active','Active'), ('disable','Disable')], 'State', readonly=True, help="The state.", select=True),
                 'begin_date':  fields.date('Begin Date', required=False),
                 'create_date':  fields.date('Create Date', required=False),
                 'end_date':  fields.date('End Date', required=False),
                 'type': fields.selection([('user', 'User'), ('server', 'Server'), ('authority_root', 'Certification ROOT authority')], 'Type', readonly=False),
+                'certificate_data_p12': fields.binary('Download Certificate', readonly=True),
                 'certificate_data_pem': fields.char('Data PEM', size=10000, required=True, readonly=True),
                 'private_key': fields.char('Data PrivateKey', size=10000, required=True, readonly=True),
                 'certification_authority': fields.many2one(
@@ -31,7 +34,7 @@ class certificate_ssl(osv.osv):
                 'domains': fields.one2many('domain.ssl','certificate_id', string='Alternate Domains', required=False)
                 }
     
-    _sql_constraints = [('item_name_file_unique','unique(name_file)', 'Item Name File must be unique!')]
+    _sql_constraints = [('item_name_file_unique','unique(name_file)', 'Item Name File must be unique!'), ('item_commonname_unique','unique(commonname)', 'Item Common Name must be unique!')]
     
     def get_company(self, cr, uid, context):
         company_id = self.pool.get('res.company')._company_default_get(cr, uid, 'certificate.ssl', context=context)
@@ -55,7 +58,7 @@ class certificate_ssl(osv.osv):
     def get_company_country(self, cr, uid, context):
         company = self.get_company(cr, uid, context)
         country = company.country_id.code
-        #print country
+
         if country == '' or country == None or country == False:
             country = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_country", context)
         return country
@@ -63,7 +66,6 @@ class certificate_ssl(osv.osv):
     def get_company_state(self, cr, uid, context):
         company = self.get_company(cr, uid, context)
         state = company.state_id.name.encode('ascii', 'ignore')
-        #print state
         if state == '' or state == None or state == False:
             state = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_state_place", context)
         return state
@@ -79,8 +81,7 @@ class certificate_ssl(osv.osv):
     }
 
     def create(self, cr, uid, values, context=None):
-        
-        certificatesPath = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_path", context=context)
+        certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
         certificatesKeysize = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_keysize", context=context)
         certificatesDays = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_days_root", context=context)
         savedPath = os.getcwd()
@@ -91,7 +92,9 @@ class certificate_ssl(osv.osv):
         os.chdir(certificatesPath)
         
         values['name_file'] = uuid.uuid4().hex + '_' + values['name']
+        values['name_filep12'] = values['name'] + ".p12"
         certificateNameUser = 'certs/' + values['name_file'] + ".cert.pem"
+        certificateP12 = 'certs/' + values['name_file'] + ".p12"
         privateKeyNameUser = 'private/' + values['name_file'] + ".key.pem"
         
         values['country'] = values['country'].replace (" ", "_")
@@ -133,7 +136,6 @@ class certificate_ssl(osv.osv):
                              ], shell=True)
             
         elif values['type'] == 'authority_root':
-            #print values['name_file'], values['password'], certificatesKeysize
             subprocess.call(["sh ssl_root_authority.sh " + 
                              values['name_file'] + " "+
                              values['commonname'] + " "+
@@ -174,7 +176,13 @@ class certificate_ssl(osv.osv):
 
         f = open(privateKeyNameUser, 'r')
         private_key = f.read()
-        f.close()   
+        f.close() 
+        
+        if values['type'] == 'user':
+            f = open(certificateP12, 'rb')
+            certificate_data_p12 = f.read()
+            f.close()
+            values['certificate_data_p12'] = base64.encodestring(certificate_data_p12)
         
         os.chdir(savedPath)
         
@@ -186,7 +194,7 @@ class certificate_ssl(osv.osv):
         
     def unlink(self, cr, uid, ids, context=None, *args):
         
-        certificatesPath = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_path", context=context)
+        certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
         savedPath = os.getcwd()
         
         os.chdir(certificatesPath)
@@ -228,7 +236,7 @@ class certificate_ssl(osv.osv):
         return super(certificate_ssl, self).unlink(cr, uid, ids, context=context, *args)
     
     def generate_ssl_crl(self, cr, uid, ids, context=None, *args):
-         certificatesPath = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_path", context=context)
+         certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
          namefileCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
          certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
          currentPath = os.getcwd()
@@ -245,7 +253,7 @@ class certificate_ssl(osv.osv):
          return
     
     def generate_ssl_revoke_user(self, cr, uid, ids, context=None, *args):
-         certificatesPath = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_path", context=context)
+         certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
          namefileCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
          certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
          
@@ -269,7 +277,7 @@ class certificate_ssl(osv.osv):
          return
      
     def regenerate_certificate(self, cr, uid, ids, context=None, *args):
-        certificatesPath = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_path", context=context)
+        certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
         currentPath = os.getcwd()
         certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
         

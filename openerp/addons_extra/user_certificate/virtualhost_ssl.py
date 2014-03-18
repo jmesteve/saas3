@@ -2,7 +2,7 @@ from openerp.osv import fields, osv
 
 from mako.template import Template
 from mako.lookup import TemplateLookup
-import os
+import os, inspect
 
 class virtualhost_ssl(osv.osv):
      _name =  'virtualhost.ssl'
@@ -23,14 +23,24 @@ class virtualhost_ssl(osv.osv):
      }
      _sql_constraints = [('item_name_unique','unique(name)', 'Item Name must be unique!')]
      
-     def create(self, cr, uid, values, context=None):
+     def get_virtualhost_path(self, cr, uid, context=None):
+         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+         serverDir = os.path.join(currentPath, os.pardir)
+         serverDir = os.path.join(serverDir, os.pardir)
+         serverDir = os.path.join(serverDir, os.pardir)
          virtualhostPath = self.pool.get('ir.config_parameter').get_param(cr, uid, "virtualhost_path", context=context)
-         certificatesPath = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_path", context=context)
+         virtualhostPath = os.path.join(serverDir, virtualhostPath)
+         return virtualhostPath
+     
+     def create(self, cr, uid, values, context=None):
+         virtualhostPath = self.get_virtualhost_path(cr, uid, context)
+         certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
          certificatesCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
          certificationAuthority = self.pool.get('certificate.ssl').browse(cr, uid, values['certificateca'], context)
          certificationServer = self.pool.get('certificate.ssl').browse(cr, uid, values['certificateserver'], context)
-         absfilePath = os.path.abspath('openerp/addons_extra/user_certificate/templates/')
-         currentPath = os.getcwd()
+         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+         savedPath = os.getcwd()
+         absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))
          
          absfilePathCA = os.path.abspath(os.path.join(certificatesPath, "certs", certificationAuthority.name_file + ".cert.pem"))
          absfilePathCRL = os.path.abspath(os.path.join(certificatesPath, "crl", certificatesCrl + ".pem"))
@@ -59,19 +69,24 @@ class virtualhost_ssl(osv.osv):
          f.write(templateRendered)
          f.close()   
         
-         os.chdir(currentPath)
+         os.chdir(savedPath)
          
          return osv.osv.create(self, cr, uid, values, context=context)
      
      def unlink(self, cr, uid, ids, context=None):
-         virtualhostPath = self.pool.get('ir.config_parameter').get_param(cr, uid, "virtualhost_path", context=context)
+
+         virtualhostPath = self.get_virtualhost_path(cr, uid, context)
+         
          currentPath = os.getcwd()
          
          os.chdir(virtualhostPath)
          
          virtualhosts = super(virtualhost_ssl, self).browse(cr, uid, ids, context=context)
          for virtualhost in virtualhosts:
-             os.remove(virtualhost.name)
+            try:
+                os.remove(virtualhost.name)
+            except OSError:
+                pass
          
          os.chdir(currentPath)
          

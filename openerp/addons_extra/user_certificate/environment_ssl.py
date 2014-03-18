@@ -1,14 +1,24 @@
 from openerp.osv import fields, osv
-import os, subprocess, shutil
+import os, subprocess, shutil, inspect
 
-class domain_ssl(osv.osv):
+class environment_ssl(osv.osv):
      _name =  'environment.ssl'
      _columns = {}
      
-     def initialize_ssl_environment(self, cr, uid, ids, context=None, *args):
+     def get_certificates_path(self, cr, uid, context=None):
+         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
          certificatesPath = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_path", context=context)
-         absfilePath = os.path.abspath('openerp/addons_extra/user_certificate/scripts/')
-         currentPath = os.getcwd()
+         serverDir = os.path.join(currentPath, os.pardir)
+         serverDir = os.path.join(serverDir, os.pardir)
+         serverDir = os.path.join(serverDir, os.pardir)
+         certificatesPath = os.path.join(serverDir, certificatesPath)
+         return certificatesPath
+    
+     def initialize_ssl_environment(self, cr, uid, ids, context=None, *args):
+         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+         certificatesPath = self.get_certificates_path(cr, uid, context)
+         absfilePath = os.path.abspath(os.path.join(currentPath, 'scripts/'))
+         savedPath = os.getcwd()
          
          try:
              os.mkdir(certificatesPath)
@@ -22,17 +32,19 @@ class domain_ssl(osv.osv):
                 shutil.copy(full_file_name, certificatesPath)
          
          os.chdir(certificatesPath)
-         subprocess.call(['sh ssl_initialize.sh'], shell=True)
-         os.chdir(currentPath)
+         if not os.path.isfile('index.txt'):
+             subprocess.call(['sh ssl_initialize.sh'], shell=True)
+         os.chdir(savedPath)
          
          return
          
      def remove_ssl_environment(self, cr, uid, ids, context=None, *args):
-         certificatesPath = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_path", context=context)
-         currentPath = os.getcwd()
+         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+         certificatesPath = self.get_certificates_path(cr, uid, context)
+         savedPath = os.getcwd()
          
          os.chdir(certificatesPath)
          subprocess.call(['sh ssl_remove.sh'], shell=True)
-         os.chdir(currentPath)
+         os.chdir(savedPath)
          
          return
