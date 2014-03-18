@@ -84,7 +84,7 @@ class certificate_ssl(osv.osv):
     }
 
     def create(self, cr, uid, values, context=None):
-        certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
+        certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
         certificatesKeysize = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_keysize", context=context)
         certificatesDays = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_days_root", context=context)
         savedPath = os.getcwd()
