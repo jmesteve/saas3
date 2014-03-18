@@ -4,12 +4,12 @@
 
         <record id="ir_config_parameter_certificates_data" model="ir.config_parameter">
             <field name="key">certificates_path</field>
-            <field name="value">../certificates/</field>
+            <field name="value">certificates</field>
         </record>
         
         <record id="ir_config_parameter_virtualhost_data" model="ir.config_parameter">
             <field name="key">virtualhost_path</field>
-            <field name="value">../virtualhosts/</field>
+            <field name="value">virtualhosts</field>
         </record>
         
         <record id="ir_config_parameter_virtualhost_port" model="ir.config_parameter">

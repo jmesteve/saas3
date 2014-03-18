@@ -70,6 +70,10 @@
 						<field name="organization" />
 						<field name="domains"/>
 					</group>
+					<group>
+						<field name="name_filep12" readonly="1" invisible="1"/>
+						<field name="certificate_data_p12" readonly="1" filename="name_filep12"/>
+					</group>
 				</form>
 			</field>
 		</record>
