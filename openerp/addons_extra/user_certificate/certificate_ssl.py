@@ -227,7 +227,7 @@ class certificate_ssl(osv.osv):
                     os.remove('certs/' + certificate.name_file + ".cert.pem")
                 except OSError:
                     pass
-            elif certificate.type == 'authority_root' and (certificate.state == 'draft' or certificate.state == 'disable'):
+            elif certificate.type == 'authority_root':
                 try:
                     os.remove('private/' + certificate.name_file + ".key.pem")
                     os.remove('certs/' + certificate.name_file + ".cert.pem")
