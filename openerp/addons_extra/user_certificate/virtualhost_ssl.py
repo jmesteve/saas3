@@ -38,7 +38,7 @@ class virtualhost_ssl(osv.osv):
          else:
             raise osv.except_osv('Invalid URL', 'Please enter a valid URL address')
      
-     def ValidateIP(self, cr, uid, ids, ip):
+     def validateIP(self, cr, uid, ids, ip):
          if re.match('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip) != None:
             return True
          else:
