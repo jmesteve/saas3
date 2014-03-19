@@ -3,6 +3,7 @@ from openerp.osv import fields, osv
 from mako.template import Template
 from mako.lookup import TemplateLookup
 import os, inspect
+import re
 
 class virtualhost_ssl(osv.osv):
      _name =  'virtualhost.ssl'
@@ -23,6 +24,26 @@ class virtualhost_ssl(osv.osv):
      }
      _sql_constraints = [('item_name_unique','unique(name)', 'Item Name must be unique!')]
      
+     def validateURL(self, cr, uid, ids, url):
+         regex = re.compile(
+            r'^(?:http|ftp)s?://' # http:// or https://
+            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+            r'localhost|' #localhost...
+            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+            r'(?::\d+)?' # optional port
+            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+         
+         if regex.match(url) != None:
+            return True
+         else:
+            raise osv.except_osv('Invalid URL', 'Please enter a valid URL address')
+     
+     def ValidateIP(self, cr, uid, ids, ip):
+         if re.match('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip) != None:
+            return True
+         else:
+            raise osv.except_osv('Invalid IP', 'Please enter a valid IP address')
+          
      def get_virtualhost_path(self, cr, uid, context=None):
          currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
          serverDir = os.path.join(currentPath, os.pardir)
@@ -56,7 +77,7 @@ class virtualhost_ssl(osv.osv):
                                             revocationfile=absfilePathCRL, \
                                             certificateserver=absfilePathCertificateServer, \
                                             keyserver=absfilePathKeyServer,\
-                                            proxypass= "http://" + values['ip'] + ":" + values['port'],\
+                                            proxypass= 'http://' + values['ip'] + ":" + values['port'] + '/',\
                                             logfile= absfilePathLog,\
                                             )
          

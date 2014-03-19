@@ -141,7 +141,7 @@
 						<field name="certificateserver" domain="[('type','=', 'server'), ('state','=', 'active')]"/>
 						<field name="servername" />
 						<field name="serveralias" />
-						<field name="ip" />
+						<field name="ip" on_change="validateIP(ip)" />
 						<field name="port" />
 						<field name="logpath" />
 					</group>
