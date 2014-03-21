@@ -353,5 +353,5 @@ ess_cert_id_chain	= no	# Must the ESS cert id chain be included?
 
 
 [alt_names]
-DNS.1 = esgeno.com
-DNS.2 = www.esgeno.com
+#DNS.1 = esgeno.com
+#DNS.2 = www.esgeno.com
