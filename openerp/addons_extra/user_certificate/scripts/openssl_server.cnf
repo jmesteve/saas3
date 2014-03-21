@@ -221,7 +221,7 @@ authorityKeyIdentifier=keyid,issuer
 basicConstraints = CA:FALSE
 keyUsage = keyEncipherment, dataEncipherment
 extendedKeyUsage = serverAuth
-subjectAltName = @alt_names
+#subjectAltName = @alt_names
 
 [ v3_ca ]
 
@@ -352,6 +352,6 @@ ess_cert_id_chain	= no	# Must the ESS cert id chain be included?
 				# (optional, default: no)
 
 
-[alt_names]
+#[alt_names]
 #DNS.1 = esgeno.com
 #DNS.2 = www.esgeno.com
