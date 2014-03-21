@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_group_user_certificate,certificate.ssl,model_certificate_ssl,user_certificate.group_user_certificate,1,0,0,0
+access_group_user_certificate_all,certificate.ssl,model_certificate_ssl,user_certificate.group_user_certificate_all,1,1,1,1

@@ -7,6 +7,7 @@ import datetime
 import uuid
 import environment_ssl
 import base64
+import string
 
 class certificate_ssl(osv.osv):
     _name =  'certificate.ssl'
@@ -27,14 +28,21 @@ class certificate_ssl(osv.osv):
                 'certificate_data_p12': fields.binary('Download Certificate', readonly=True),
                 'certificate_data_pem': fields.char('Data PEM', size=10000, required=True, readonly=True),
                 'private_key': fields.char('Data PrivateKey', size=10000, required=True, readonly=True),
-                'certification_authority': fields.many2one(
-                    'certificate.ssl',
-                    string='Certification Authority', required=False),
+                'certification_authority': fields.many2one('certificate.ssl', string='Certification Authority', required=False),
                 'certificates': fields.one2many('certificate.ssl','certification_authority', string='Certificates', required=False),
-                'domains': fields.one2many('domain.ssl','certificate_id', string='Alternate Domains', required=False)
+                'domains': fields.one2many('domain.ssl','certificate_id', string='Alternate Domains', required=False),
+                'user': fields.many2one('res.users', string='User', required=False),
                 }
     
     _sql_constraints = [('item_name_file_unique','unique(name_file)', 'Item Name File must be unique!'), ('item_commonname_unique','unique(commonname)', 'Item Common Name must be unique!')]
+    
+    def generate_random_password(self, cr, uid, context):
+        chars = string.letters + string.digits + '+/'
+        assert 256 % len(chars) == 0  # non-biased later modulo
+        PWD_LEN = 16
+        password = ''.join(chars[ord(c) % len(chars)] for c in os.urandom(PWD_LEN))
+        
+        return password
     
     def get_company(self, cr, uid, context):
         company_id = self.pool.get('res.company')._company_default_get(cr, uid, 'certificate.ssl', context=context)
@@ -74,7 +82,8 @@ class certificate_ssl(osv.osv):
         return state
     
     _defaults = {
-        'city': get_company_city ,
+        'password': generate_random_password,
+        'city': get_company_city,
         'state_place':  get_company_state,
         'country': get_company_country,
         'organization': get_company_name,
@@ -82,6 +91,36 @@ class certificate_ssl(osv.osv):
         'begin_date': lambda self, cr, uid, context: datetime.date.today().strftime("%Y-%m-%d"),
         'end_date': lambda self, cr, uid, context: (datetime.date.today() + datetime.timedelta(days=3650)).strftime("%Y-%m-%d")
     }
+    
+    def default_get(self, cr, uid, fields, context=None):
+        """
+             To get default values for the object.
+
+             @param self: The object pointer.
+             @param cr: A database cursor
+             @param uid: ID of the user currently logged in
+             @param fields: List of fields for which we want default values
+             @param context: A standard dictionary
+
+             @return: A dictionary which of fields with values.
+
+        """
+        res = super(certificate_ssl, self).default_get(cr, uid, fields, context=context)
+        
+        if 'user' in context:
+            user_id = context.get('user', False)
+            res['user'] = user_id
+        if 'name' in context:
+            name = context.get('name', False)
+            res['name'] = name
+        if 'commonname' in context:
+            commonname = context.get('commonname', False)
+            res['commonname'] =  commonname
+        if 'certification_authority' in context:
+            authority_id = context.get('certification_authority', False)
+            res['certification_authority'] = authority_id
+        
+        return res
 
     def create(self, cr, uid, values, context=None):
         certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
@@ -110,7 +149,14 @@ class certificate_ssl(osv.osv):
         values['commonname'] = values['commonname'].replace (" ", "_")
         values['password'] = values['password'].replace (" ", "_")
         
+        if not 'type' in values:
+            values['type'] = 'user'
+        
         if values['type'] == 'user':
+            
+            if not 'user' in values or values['user'] == None:
+                user = self.pool.get('res.users').browse(cr, uid, uid)
+                values['user'] = user.id
             
             certificationAuthority = self.pool.get('certificate.ssl').browse(cr, uid, values['certification_authority'], context)
             

@@ -60,7 +60,6 @@ class virtualhost_ssl(osv.osv):
          certificationAuthority = self.pool.get('certificate.ssl').browse(cr, uid, values['certificateca'], context)
          certificationServer = self.pool.get('certificate.ssl').browse(cr, uid, values['certificateserver'], context)
          currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-         savedPath = os.getcwd()
          absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))
          
          absfilePathCA = os.path.abspath(os.path.join(certificatesPath, "certs", certificationAuthority.name_file + ".cert.pem"))
@@ -84,13 +83,9 @@ class virtualhost_ssl(osv.osv):
          if not os.path.exists(virtualhostPath):
              os.makedirs(virtualhostPath)
          
-         os.chdir(virtualhostPath)
-         
-         f = open(values['name'], 'w')
+         f = open(os.path.join(virtualhostPath, values['name']), 'w')
          f.write(templateRendered)
          f.close()   
-        
-         os.chdir(savedPath)
          
          return osv.osv.create(self, cr, uid, values, context=context)
      
@@ -98,18 +93,12 @@ class virtualhost_ssl(osv.osv):
 
          virtualhostPath = self.get_virtualhost_path(cr, uid, context)
          
-         currentPath = os.getcwd()
-         
-         os.chdir(virtualhostPath)
-         
          virtualhosts = super(virtualhost_ssl, self).browse(cr, uid, ids, context=context)
          for virtualhost in virtualhosts:
             try:
-                os.remove(virtualhost.name)
+                os.remove(os.path.join(virtualhostPath, virtualhost.name))
             except OSError:
                 pass
-         
-         os.chdir(currentPath)
          
          return osv.osv.unlink(self, cr, uid, ids, context=context)
      
