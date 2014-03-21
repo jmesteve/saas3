@@ -4,6 +4,8 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 import os, inspect
 import re
+import subprocess
+import unicodedata
 
 class virtualhost_ssl(osv.osv):
      _name =  'virtualhost.ssl'
@@ -103,5 +105,27 @@ class virtualhost_ssl(osv.osv):
          return osv.osv.unlink(self, cr, uid, ids, context=context)
      
      def regenerate_file(self, cr, uid, ids, context=None):
+         
+         return
+     
+     def activate_virtualhost(self, cr, uid, ids, context=None):
+         virtualhostPath = self.get_virtualhost_path(cr, uid, context)
+         scriptsPath = self.pool.get('environment.ssl').get_scripts_path(cr, uid, context)
+         apachePath = self.pool.get('ir.config_parameter').get_param(cr, uid, "apache_sites_available", context=context)
+         virtualhost = self.pool.get('virtualhost.ssl').browse(cr, uid, ids[0], context=context)
+         virtualhostsource = os.path.join(virtualhostPath, virtualhost.name)
+         virtualhostdestination = os.path.join(apachePath, virtualhost.name)
+         
+         p = subprocess.Popen(["sh", "virtualhost_activate.sh", virtualhost.name, virtualhostsource, virtualhostdestination],  cwd=scriptsPath).wait()
+         
+         return
+     
+     def deactivate_virtualhost(self, cr, uid, ids, context=None):
+         scriptsPath = self.pool.get('environment.ssl').get_scripts_path(cr, uid, context)
+         apachePath = self.pool.get('ir.config_parameter').get_param(cr, uid, "apache_sites_available", context=context)
+         virtualhost = self.pool.get('virtualhost.ssl').browse(cr, uid, ids[0], context=context)
+         virtualhostdestination = os.path.join(apachePath, virtualhost.name)
+         
+         p = subprocess.Popen(["sh", "virtualhost_deactivate.sh", virtualhost.name, virtualhostdestination],  cwd=scriptsPath).wait()
          
          return

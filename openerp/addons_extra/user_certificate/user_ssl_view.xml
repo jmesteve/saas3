@@ -205,6 +205,7 @@
 				<form string="virtualhost_ssl_form" version="7.0" create="true" edit="false" delete="true">
 					<header>
 						<button name="activate_virtualhost" icon="gtk-add" string="Activate Virtualhost" type="object" />
+						<button name="deactivate_virtualhost" icon="STOCK_DIALOG_ERROR" string="Deactivate Virtualhost" type="object" />
 					</header>
 					<group>
 						<field name="name" />

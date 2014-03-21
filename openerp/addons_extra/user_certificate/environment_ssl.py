@@ -14,6 +14,12 @@ class environment_ssl(osv.osv):
          certificatesPath = os.path.join(serverDir, certificatesPath)
          return certificatesPath
     
+     def get_scripts_path(self, cr, uid, context=None):
+         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+         scriptsPath = os.path.abspath(os.path.join(currentPath, 'scripts/'))
+         
+         return scriptsPath
+    
      def initialize_ssl_environment(self, cr, uid, ids, context=None, *args):
          currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
          certificatesPath = self.get_certificates_path(cr, uid, context)

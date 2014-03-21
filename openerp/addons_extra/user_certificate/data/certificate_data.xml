@@ -7,6 +7,11 @@
             <field name="value">certificates</field>
         </record>
         
+        <record id="ir_config_parameter_apache_sites_available" model="ir.config_parameter">
+            <field name="key">apache_sites_available</field>
+            <field name="value">/etc/apache2/sites-available</field>
+        </record>
+        
         <record id="ir_config_parameter_virtualhost_data" model="ir.config_parameter">
             <field name="key">virtualhost_path</field>
             <field name="value">virtualhosts</field>
