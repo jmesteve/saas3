@@ -3,5 +3,5 @@ virtualhostsource=$2
 destination=$3
 
 ln -s $virtualhostsource $destination
-a2ensite $virtualhost
-service apache2 reload
+/usr/sbin/a2ensite $virtualhost
+/usr/sbin/service apache2 reload

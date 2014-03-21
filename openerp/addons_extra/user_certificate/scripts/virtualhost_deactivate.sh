@@ -1,6 +1,6 @@
 virtualhost=$1
 destination=$2
 
-a2dissite $virtualhost
+/usr/sbin/a2dissite $virtualhost
 rm $destination
-service apache2 reload
+/usr/sbin/service apache2 reload
