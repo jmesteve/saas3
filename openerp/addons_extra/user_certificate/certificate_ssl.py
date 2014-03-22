@@ -292,20 +292,15 @@ class certificate_ssl(osv.osv):
         return super(certificate_ssl, self).unlink(cr, uid, ids, context=context, *args)
     
     def generate_ssl_crl(self, cr, uid, ids, context=None, *args):
-         certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
+         certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
          namefileCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
          certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
-         currentPath = os.getcwd()
          
-         os.chdir(certificatesPath)
-         subprocess.call(['sh ssl_gen_crl.sh ' + 
-                           namefileCrl + " " + 
-                           certificate.name_file + " " +
-                           certificate.password + " " +
-                           'openssl_client.cnf'
-                          ], shell=True)
-         os.chdir(currentPath)
-         
+         p = subprocess.Popen(["sh", "ssl_gen_crl.sh",
+                               namefileCrl, 
+                               certificate.name_file, 
+                               certificate.password, 
+                               'openssl_client.cnf'],  cwd=certificatesPath).wait()
          return
     
     def generate_ssl_revoke_user(self, cr, uid, ids, context=None, *args):
@@ -313,21 +308,15 @@ class certificate_ssl(osv.osv):
          namefileCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
          certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
          
-         currentPath = os.getcwd()
-         
          if certificate.type == 'user' or certificate.type == 'server':
-             os.chdir(certificatesPath)
-         
-             subprocess.call(['sh ssl_revoke_user.sh ' + 
-                               certificate.name_file + " " + 
-                               certificate.password + " " +
-                               namefileCrl + " " +
-                               certificate.certification_authority.name_file + " "
-                               'openssl_client.cnf'
-                              ], shell=True)
-             
-             os.chdir(currentPath)
-         
+             p = subprocess.Popen(["sh", 
+                                   "ssl_revoke_user.sh",
+                                   certificate.name_file,
+                                   certificate.certification_authority.password,
+                                   namefileCrl,
+                                   certificate.certification_authority.name_file,
+                                   'openssl_client.cnf'],  cwd=certificatesPath).wait()
+                                   
              self.write(cr, uid, ids, { 'state' : 'disable' }, context=context)
          
          return
@@ -335,7 +324,7 @@ class certificate_ssl(osv.osv):
     def regenerate_certificate(self, cr, uid, ids, context=None, *args):
         certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context=context)
         privatePath = self.pool.get('environment.ssl').get_certificates_path_private(cr, uid, context=context)
-        certsPath = self.pool.get('environment.ssl').get_certificates_path_private(cr, uid, context=context)
+        certsPath = self.pool.get('environment.ssl').get_certificates_path_certs(cr, uid, context=context)
         
         certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
         

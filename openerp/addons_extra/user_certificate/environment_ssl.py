@@ -19,7 +19,7 @@ class environment_ssl(osv.osv):
          privatePath = os.path.join(certificatesPath, 'private/')
          return privatePath
      
-     def get_certificates_path_private(self, cr, uid, context=None):
+     def get_certificates_path_certs(self, cr, uid, context=None):
          certificatesPath = self.get_certificates_path(cr, uid, context=context)
          certsPath = os.path.join(certificatesPath, 'certs/')
          return certsPath
@@ -45,7 +45,7 @@ class environment_ssl(osv.osv):
             if (os.path.isfile(full_file_name)):
                 shutil.copy(full_file_name, certificatesPath)
          
-         if not os.path.isfile('index.txt'):
+         if not os.path.isfile(os.path.join(certificatesPath, 'index.txt')):
              p = subprocess.Popen(["sh", "ssl_initialize.sh"],  cwd=certificatesPath).wait()
          
          return
