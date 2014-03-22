@@ -37,7 +37,7 @@ class certificate_ssl(osv.osv):
     _sql_constraints = [('item_name_file_unique','unique(name_file)', 'Item Name File must be unique!'), ('item_commonname_unique','unique(commonname)', 'Item Common Name must be unique!')]
     
     def generate_random_password(self, cr, uid, context):
-        chars = string.letters + string.digits + '+/'
+        chars = '23456789ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz'
         assert 256 % len(chars) == 0  # non-biased later modulo
         PWD_LEN = 16
         password = ''.join(chars[ord(c) % len(chars)] for c in os.urandom(PWD_LEN))
