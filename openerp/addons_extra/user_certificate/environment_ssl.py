@@ -21,42 +21,27 @@ class environment_ssl(osv.osv):
          return scriptsPath
     
      def initialize_ssl_environment(self, cr, uid, ids, context=None, *args):
-         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-         certificatesPath = self.get_certificates_path(cr, uid, context)
-         absfilePath = os.path.abspath(os.path.join(currentPath, 'scripts/'))
-         try:
-             savedPath = os.getcwd()
-         except OSError:
-             pass
-         
+         certificatesPath = self.get_certificates_path(cr, uid, context=context)
+         scriptsPath = self.get_scripts_path(cr, uid, context=context)
+
          try:
              os.mkdir(certificatesPath)
          except OSError:
              pass
          
-         src_files = os.listdir(absfilePath)
+         src_files = os.listdir(scriptsPath)
          for file_name in src_files:
-            full_file_name = os.path.join(absfilePath, file_name)
+            full_file_name = os.path.join(scriptsPath, file_name)
             if (os.path.isfile(full_file_name)):
                 shutil.copy(full_file_name, certificatesPath)
          
-         os.chdir(certificatesPath)
          if not os.path.isfile('index.txt'):
-             subprocess.call(['sh ssl_initialize.sh'], shell=True)
-         os.chdir(savedPath)
+             p = subprocess.Popen(["sh", "ssl_initialize.sh"],  cwd=certificatesPath).wait()
          
          return
          
      def remove_ssl_environment(self, cr, uid, ids, context=None, *args):
-         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
          certificatesPath = self.get_certificates_path(cr, uid, context)
-         try:
-             savedPath = os.getcwd()
-         except OSError:
-             pass
-         
-         os.chdir(certificatesPath)
-         subprocess.call(['sh ssl_remove.sh'], shell=True)
-         os.chdir(savedPath)
+         p = subprocess.Popen(["sh", "ssl_remove.sh"],  cwd=certificatesPath).wait()
          
          return
