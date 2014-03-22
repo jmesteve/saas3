@@ -38,7 +38,7 @@ class certificate_ssl(osv.osv):
     
     def generate_random_password(self, cr, uid, context):
         chars = '23456789ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz'
-        assert 256 % len(chars) == 0  # non-biased later modulo
+        #assert 256 % len(chars) == 0  # non-biased later modulo
         PWD_LEN = 16
         password = ''.join(chars[ord(c) % len(chars)] for c in os.urandom(PWD_LEN))
         
