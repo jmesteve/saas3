@@ -14,7 +14,7 @@ configfile=${12}
 openssl genrsa -out private/$namefile.key.pem $keysize
 #chmod 400 private/$namefile.key.pem
 
-openssl req -extensions v3_req -config $configfile -new -key private/$namefile.key.pem -out certs/$namefile.csr.pem -subj /C=$country/ST=$state/L=$city/O=$organization/CN="$commonname"
+openssl req -extensions v3_req -config $configfile -new -key private/$namefile.key.pem -out certs/$namefile.csr.pem -subj /C="$country"/ST="$state"/L="$city"/O="$organization"/CN="$commonname"
 
 openssl ca -batch -extensions v3_req -config $configfile -startdate $begindate -enddate $enddate -passin pass:$passca -keyfile private/$namefileca.key.pem -cert certs/$namefileca.cert.pem -notext -md sha1 -in certs/$namefile.csr.pem -out certs/$namefile.cert.pem
 #chmod 444 certs/$namefile.cert.pem

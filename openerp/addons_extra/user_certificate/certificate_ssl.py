@@ -95,7 +95,7 @@ class certificate_ssl(osv.osv):
     def onchange_attribute_name(self, cr, uid, ids, name=False, context=None):
         result = {}
         if name:
-            result['value'] = {'commonname': cr.dbname + '_' + name}
+            result['value'] = {'commonname': cr.dbname + ' ' + name}
         return result
     
     def default_get(self, cr, uid, fields, context=None):
@@ -123,7 +123,7 @@ class certificate_ssl(osv.osv):
             authority_id = context.get('certification_authority', False)
             res['certification_authority'] = authority_id
         if 'name' in context and 'certification_authority' in context:
-            res['commonname'] = cr.dbname + "_" + res['name']
+            res['commonname'] = cr.dbname + " " + res['name']
         
         return res
 
@@ -138,20 +138,12 @@ class certificate_ssl(osv.osv):
         domain_ssl.initialize_ssl_environment(cr, uid, [], context=None)
         
         values['state'] = 'draft'
-        values['name'] = values['name'].replace (" ", "_")
-        values['name_file'] = cr.dbname + '_' + values['name']
-        values['name_filep12'] = values['name'] + ".p12"
+        values['name'] = values['name']
+        values['name_file'] = (cr.dbname + '_' + values['name'].strip()).replace (" ", "_")
+        values['name_filep12'] = values['name_file'] + ".p12"
         certificateNameUser =  os.path.join(certsPath, values['name_file'] + ".cert.pem") 
-        certificateP12 = os.path.join(certsPath, values['name_file'] + ".p12")
+        certificateP12 = os.path.join(certsPath, values['name_filep12'])
         privateKeyNameUser =  os.path.join(privatePath, values['name_file'] + ".key.pem")
-        
-        values['country'] = values['country'].replace (" ", "_")
-        values['city'] = values['city'].replace (" ", "_")
-        values['state_place'] = values['state_place'].replace (" ", "_")
-        values['organization'] = values['organization'].replace (" ", "_")
-        values['name_file'] = values['name_file'].replace (" ", "_")
-        values['commonname'] = values['commonname'].replace (" ", "_")
-        values['password'] = values['password'].replace (" ", "_")
         
         if not 'type' in values:
             values['type'] = 'user'
@@ -256,7 +248,7 @@ class certificate_ssl(osv.osv):
                     os.remove(os.path.join(privatePath,  certificate.name_file + ".key.pem"))
                     os.remove(os.path.join(certsPath,  certificate.name_file + ".cert.pem"))
                     os.remove(os.path.join(certsPath,  certificate.name_file + ".csr.pem"))
-                    os.remove(os.path.join(certsPath,  certificate.name_file + ".p12"))
+                    os.remove(os.path.join(certsPath,  certificate.name_filep12))
                 except OSError:
                     pass
             elif certificate.type == 'server':
