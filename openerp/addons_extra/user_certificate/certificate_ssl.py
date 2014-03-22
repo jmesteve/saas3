@@ -89,8 +89,14 @@ class certificate_ssl(osv.osv):
         'organization': get_company_name,
         'type': 'user',
         'begin_date': lambda self, cr, uid, context: datetime.date.today().strftime("%Y-%m-%d"),
-        'end_date': lambda self, cr, uid, context: (datetime.date.today() + datetime.timedelta(days=3650)).strftime("%Y-%m-%d")
+        'end_date': lambda self, cr, uid, context: (datetime.date.today() + datetime.timedelta(days=3650)).strftime("%Y-%m-%d"),
     }
+    
+    def onchange_attribute_name(self, cr, uid, ids, name=False, context=None):
+        result = {}
+        if name:
+            result['value'] = {'commonname': cr.dbname + '_' + name}
+        return result
     
     def default_get(self, cr, uid, fields, context=None):
         """
@@ -113,12 +119,11 @@ class certificate_ssl(osv.osv):
         if 'name' in context:
             name = context.get('name', False)
             res['name'] = name
-        if 'commonname' in context:
-            commonname = context.get('commonname', False)
-            res['commonname'] =  commonname
         if 'certification_authority' in context:
             authority_id = context.get('certification_authority', False)
             res['certification_authority'] = authority_id
+        if 'name' in context and 'certification_authority' in context:
+            res['commonname'] = cr.dbname + "_" + res['name']
         
         return res
 
@@ -135,7 +140,7 @@ class certificate_ssl(osv.osv):
         
         values['state'] = 'draft'
         values['name'] = values['name'].replace (" ", "_")
-        values['name_file'] = uuid.uuid4().hex + '_' + values['name']
+        values['name_file'] = cr.dbname + '_' + values['name']
         values['name_filep12'] = values['name'] + ".p12"
         certificateNameUser = 'certs/' + values['name_file'] + ".cert.pem"
         certificateP12 = 'certs/' + values['name_file'] + ".p12"

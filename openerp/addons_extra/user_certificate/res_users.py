@@ -16,7 +16,7 @@ class res_users(osv.osv):
         authority_id = self.pool.get('certificate.ssl').search(cr, uid, [('type', 'ilike', 'authority_root'), ('state', 'ilike', 'active')], context=context)
         if isinstance(authority_id, list):
             authority_id = authority_id[0]
-        context.update({'user': user.id, 'name': user.name, 'certification_authority':  authority_id , 'commonname': uuid.uuid4().hex + '_' + user.name})
+        context.update({'user': user.id, 'name': user.name, 'certification_authority':  authority_id})
         return {
             'view_type': 'form',
             'view_mode': 'form',

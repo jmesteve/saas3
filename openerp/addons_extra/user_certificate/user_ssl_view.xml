@@ -12,7 +12,7 @@
             	<xpath expr="//page[@string='Preferences']" position="after">
 					<page string="Certificates HTTPS">
 						<group>
-	                    	<button name="action_generate_ssl" context="{'id':id}" states="active" icon="gtk-add" string="Generate Certificate" type="object"/>
+	                    	<button name="action_generate_ssl" context="{'id':id}" icon="gtk-add" string="Generate Certificate" type="object"/>
 	                    </group>
 	                    <group string="Certificates">
 	                   		<field name="certificates" nolabel="1" context="{'tree_view_ref' : 'user_certificate.view_user_ssl_tree_user'}" />
@@ -76,15 +76,17 @@
                         </div>
 					</header>
 					<group>
-						<field name="name" />
-						<field name="password"/>
-						<field name="type"/>
-						<field name="certification_authority" attrs="{'required':[('type','in',['user', 'server'])]}" domain="[('type','=', 'authority_root'), ('state','=', 'active')]"/>
-					</group>
-					<group>
-						<field name="commonname"/>
-						<field name="begin_date" />
-						<field name="end_date" />
+						<group>
+							<field name="name" on_change="onchange_attribute_name(name)"/>
+							<field name="password"/>
+							<field name="type"/>
+							<field name="certification_authority" attrs="{'required':[('type','in',['user', 'server'])]}" domain="[('type','=', 'authority_root'), ('state','=', 'active')]"/>
+						</group>
+						<group>
+							<field name="commonname"/>
+							<field name="begin_date" />
+							<field name="end_date" />
+						</group>
 					</group>
 					
 					<group>
@@ -121,7 +123,7 @@
                         </div>
 					</header>
 					<group>
-						<field name="name" />
+						<field name="name" onchange="onchange_attribute_name(name)"/>
 						<field name="password"/>
 						<field name="certification_authority" required="1" domain="[('type','=', 'authority_root'), ('state','=', 'active')]"/>
 					</group>
