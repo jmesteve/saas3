@@ -13,6 +13,16 @@ class environment_ssl(osv.osv):
          serverDir = os.path.join(serverDir, os.pardir)
          certificatesPath = os.path.join(serverDir, certificatesPath)
          return certificatesPath
+     
+     def get_certificates_path_private(self, cr, uid, context=None):
+         certificatesPath = self.get_certificates_path(cr, uid, context=context)
+         privatePath = os.path.join(certificatesPath, 'private/')
+         return privatePath
+     
+     def get_certificates_path_private(self, cr, uid, context=None):
+         certificatesPath = self.get_certificates_path(cr, uid, context=context)
+         certsPath = os.path.join(certificatesPath, 'certs/')
+         return certsPath
     
      def get_scripts_path(self, cr, uid, context=None):
          currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))

@@ -333,30 +333,27 @@ class certificate_ssl(osv.osv):
          return
      
     def regenerate_certificate(self, cr, uid, ids, context=None, *args):
-        certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
-        currentPath = os.getcwd()
+        certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context=context)
+        privatePath = self.pool.get('environment.ssl').get_certificates_path_private(cr, uid, context=context)
+        certsPath = self.pool.get('environment.ssl').get_certificates_path_private(cr, uid, context=context)
+        
         certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
         
-        os.chdir(certificatesPath)
-        
-        f = open('private/' + certificate.name_file + '.key.pem', 'w')
+        f = open(os.path.join(privatePath, certificate.name_file + '.key.pem'), 'w')
         f.write(certificate.private_key)
         f.close()
         
-        f = open('certs/' + certificate.name_file + '.cert.pem', 'w')
+        f = open(os.path.join(certsPath, certificate.name_file + '.cert.pem'), 'w')
         f.write(certificate.certificate_data_pem)
         f.close()
         
         if certificate.type == 'user':
-            subprocess.call(["sh ssl_gen_p12.sh " +
-                     certificate.name_file + " " +
-                     certificate.certification_authority.name_file + " " +
-                     certificate.password + " " +
-                     certificate.certification_authority.password
-                     ], shell=True)
-
-
-        os.chdir(currentPath)
+            p = subprocess.Popen(["sh", 
+                                  "ssl_gen_p12.sh", 
+                                  certificate.name_file, 
+                                  certificate.certification_authority.name_file,
+                                  certificate.password,
+                                  certificate.certification_authority.password],  cwd=certificatesPath).wait()
         
         return
     
