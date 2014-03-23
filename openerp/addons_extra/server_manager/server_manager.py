@@ -187,7 +187,10 @@ class server_manager(osv.osv):
             if num<1:
                 num = 0
             self.write(cr, uid, [reg.id], {'notes': proc,'active_process':num})
-            return proc
+            try:
+                return int(proc[0])
+            except:
+                return 0
        
     def action_workflow_draft(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, { 'state' : 'draft' }, context=context)
