@@ -3,8 +3,8 @@
 ## restart openerp servers
 ##########################################
 DIR_SERVICE='/etc/init.d/'
-NAME_PATTERN=${NAME_PATTERN}
-SERVICE_PATTERN=${SERVICE_PATTERN}
+NAME_PATTERN='${NAME_PATTERN}'
+SERVICE_PATTERN='${SERVICE_PATTERN}'
 
 PROCESS=`ps ax | grep $NAME_PATTERN | grep 'python' | awk '{ print $1}'`
 for P in $PROCESS
