@@ -18,7 +18,7 @@ DIRECTORY=`ls $DIR_SERVICE | grep $SERVICE_PATTERN`
 
 for D in $DIRECTORY
   do
-        $DIR_SERVICE$D start
+        service $DIR_SERVICE$D start
   done
 
 exit 0
