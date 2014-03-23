@@ -1,13 +1,30 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-    
+    	<record id="view_server_manager_tree" model="ir.ui.view">
+            <field name="name">server.manager.tree</field>
+            <field name="model">server.manager</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="server_manager_tree" create="true" delete="false">
+                    <field name="name"/>
+                    <field name="xmlrpc_interface"/>  
+	            	<field name="xmlrpc_port"/>
+	            	<field name="xmlrpc_interface"/>  
+	            	<field name="debug_mode"/>
+		            <field name="list_db"/>
+		            <field name="db_filter"/> 
+	            	<field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
     	<record model="ir.ui.view" id="view_server_manager_form">
             <field name="name">server.manager.form</field>
             <field name="model">server.manager</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-            	<form string="server_manager" version="7.0">
+            	<form string="server_manager" delete="false" version="7.0">
             		<header>
                     	<button name="action_workflow_conf" states="draft" string="Create configuration" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
                     	<button name="action_workflow_daemon" states="conf" string="Create daemon" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
@@ -24,37 +41,37 @@
                     </header>
                     <group>
                     	<group>
-	                    	<field name="name"/>
+	                    	<field name="name" attrs="{'readonly':[('state','!=','draft')]}"/>
 	                    	<field name="path_server"/>
                     	</group>
                     	<group>
-	                    	<field name="conf"/>
+	                    	<field name="conf" attrs="{'readonly':[('state','!=','draft')]}"/>
 			            	<field name="path_configuration"/>
 		            	</group>
                     </group>
                     
                     <group>
 	            		<group>
-		            		<field name="debug_mode"/>
-		            		<field name="list_db"/>
-		            		<field name="static_http_document_root"/>  
-		            		<field name="admin_passwd" password="True"/>
+		            		<field name="debug_mode" attrs="{'readonly':[('state','!=','draft')]}"/>
+		            		<field name="list_db" attrs="{'readonly':[('state','!=','draft')]}"/>
+		            		<field name="static_http_document_root" attrs="{'readonly':[('state','!=','draft')]}"/>  
+		            		<field name="admin_passwd" password="True" attrs="{'readonly':[('state','!=','draft')]}"/>
 	            		</group> 
 	            		<group>
-	            			<field name="db_name"/>   
-	            			<field name="db_filter"/> 
-	            			<field name="db_user"/>  
-	            			<field name="db_password"/> 
+	            			<field name="db_name" attrs="{'readonly':[('state','!=','draft')]}"/>   
+	            			<field name="db_filter" attrs="{'readonly':[('state','!=','draft')]}"/> 
+	            			<field name="db_user" attrs="{'readonly':[('state','!=','draft')]}"/>  
+	            			<field name="db_password" attrs="{'readonly':[('state','!=','draft')]}"/> 
 	            		</group>   
             		</group>  
             		<group>
 	            		<group>
-	            			<field name="netrpc_interface"/>
-	            			<field name="log"/>
+	            			<field name="netrpc_interface" attrs="{'readonly':[('state','!=','draft')]}"/>
+	            			<field name="log" attrs="{'readonly':[('state','!=','draft')]}"/>
 	            		</group> 
 	            		<group>
-	            			<field name="xmlrpc_interface"/>  
-	            			<field name="xmlrpc_port"/>
+	            			<field name="xmlrpc_interface" attrs="{'readonly':[('state','!=','draft')]}"/>  
+	            			<field name="xmlrpc_port" attrs="{'readonly':[('state','!=','draft')]}"/>
 	            		</group>  
             		</group>  		
             	</form>

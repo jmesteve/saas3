@@ -52,6 +52,10 @@ class server_manager(osv.osv):
                  'state': 'draft',
                  'log': '/var/log/openerp/openerp.log',
                  }
+    _sql_constraints = [
+        ('name_uniq', 'unique(name)', 'Name must be unique per Company!'),
+    ]
+
     
     def create_conf(self, cr, uid, ids, context=None):
         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))

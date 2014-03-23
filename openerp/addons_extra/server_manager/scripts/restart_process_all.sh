@@ -12,7 +12,7 @@ for P in $PROCESS
      kill $P
      echo 'kill process '$P
   done
-#echo $PROCESS
+echo $PROCESS
 DIRECTORY=`ls $DIR_SERVICE | grep $SERVICE_PATTERN`
 #echo $DIRECTORY
 

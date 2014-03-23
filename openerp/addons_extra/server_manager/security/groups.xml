@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+       <!-- http://toolkt.com/site/security-in-openerp/ -->
+        <record id="group_server_manager" model="res.groups">
+            <field name="name">Server Manager</field>
+        </record>
+    </data>
+</openerp>
+
