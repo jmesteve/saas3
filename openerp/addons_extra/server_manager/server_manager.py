@@ -184,6 +184,8 @@ class server_manager(osv.osv):
             service = "ps -ax | grep " + name +" | grep python"
             proc = os.popen(service).read()
             num = proc.count('\n')
+            if num<2:
+                num = 0
             self.write(cr, uid, [reg.id], {'notes': proc,'active_process':num})
             return True
        
