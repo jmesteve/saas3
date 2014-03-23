@@ -36,7 +36,8 @@
     'data': [
              'data/data.xml',
              'server_manager_view.xml',
-             'workflow.xml'],
+             'workflow.xml',
+             'wizard/server_general.xml',],
     'demo': [],
     'installable': True,
     'application': True,

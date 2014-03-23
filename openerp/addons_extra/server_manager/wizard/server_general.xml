@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		
+        <record model="ir.ui.view" id="view_server_general_form_workflow">
+			<field name="name">server.general.workflow</field>
+			<field name="model">server.general</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+					<button name="action_start_server_all" icon="gtk-yes" string="Start Servers" type="object" />
+                    <button name="action_stop_server_all" icon="gtk-no" string="Stop Servers" type="object" />
+                    <button name="action_restart_server_all" icon="STOCK_REFRESH" string="Restart Servers" type="object" />
+			</field>
+		</record>
+		
+
+        <act_window name="Server General"
+	        res_model="server.general"
+	        src_model="server.general"
+	        view_mode="form"
+	        target="new"
+       		id="action_menu_server_general"/>
+	
+        <menuitem id="menu_server_manager_general" name="General" parent="menu_server_manager" action='action_menu_server_general' />
+    </data>
+</openerp>

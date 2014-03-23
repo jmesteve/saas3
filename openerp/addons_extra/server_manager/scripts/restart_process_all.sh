@@ -6,7 +6,7 @@ DIR_SERVICE='/etc/init.d/'
 NAME_PATTERN='openerp-server'
 SERVICE_PATTERN='openerp'
 
-PROCESS=`ps ax | grep $NAME_PATTERN | awk '{ print $1}' | sed '$d'`
+PROCESS=`ps ax | grep $NAME_PATTERN | grep 'python' | awk '{ print $1}'`
 for P in $PROCESS
   do
      kill $P
