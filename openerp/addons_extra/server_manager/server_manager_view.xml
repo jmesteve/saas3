@@ -14,6 +14,8 @@
                     	<button name="action_workflow_active" states="daemon" string="Activate" type="object" class="oe_highlight"/>
                     	<button name="action_workflow_draft" states="active,disable" string="Draft" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
                     	<button name="action_workflow_disable" states="conf,daemon,active" string="Disable" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
+                    	<button name="action_start_server" states="active" icon="gtk-yes" string="Start Server" type="object" />
+                    	<button name="action_stop_server" states="active" icon="gtk-no" string="Stop Server" type="object" />
                     	<div class="oe_right">
                         	<field name="state" select="1" widget="statusbar"/>
                         </div>

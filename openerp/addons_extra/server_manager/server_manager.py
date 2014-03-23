@@ -1,7 +1,7 @@
 from openerp.osv import fields, osv
 from mako.template import Template
 from mako.lookup import TemplateLookup
-import os, inspect
+import os, inspect, subprocess, shutil
 
 class server_manager(osv.osv):
     _name = 'server.manager'
@@ -77,9 +77,10 @@ class server_manager(osv.osv):
         
             virtualhostPath = line.path_configuration
             f = open(virtualhostPath, 'w')
-            os.chmod(virtualhostPath, 0755)
+            #os.chmod(virtualhostPath, 0755)
             f.write(templateRendered)
             f.close()   
+        return True
    
     def create_daemon(self, cr, uid, ids, context=None):
         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -108,9 +109,34 @@ class server_manager(osv.osv):
             f = open(virtualhostPath, 'w')
             os.chmod(virtualhostPath, 0755)
             f.write(templateRendered)
-            f.close()   
-         
-
+            f.close()  
+        return True 
+    
+    def action_start_server(self, cr, uid, ids, context=None):
+        currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+        absfilePath = os.path.abspath(os.path.join(currentPath, 'scripts/'))
+        try:
+            savedPath = os.getcwd()
+        except OSError:
+            pass
+        
+        os.chdir(absfilePath)
+        subprocess.call(['sh start_process.sh'], shell=True)
+        os.chdir(savedPath)
+        return True      
+    
+    def action_stop_server(self, cr, uid, ids, context=None):
+        currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+        absfilePath = os.path.abspath(os.path.join(currentPath, 'scripts/'))
+        try:
+            savedPath = os.getcwd()
+        except OSError:
+            pass
+        
+        os.chdir(absfilePath)
+        subprocess.call(['sh stop_process.sh'], shell=True)
+        os.chdir(savedPath)
+        return True     
     
     def action_workflow_draft(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, { 'state' : 'draft' }, context=context)
