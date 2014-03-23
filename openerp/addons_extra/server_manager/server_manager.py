@@ -38,6 +38,8 @@ class server_manager(osv.osv):
                 'state': fields.selection([('draft','Draft'), ('conf','Conf created'),('daemon','Daemon Created'), ('active','Active'), ('disable','Disable')], 'State', readonly=True, help="The state.", select=True),
                 'admin_passwd': fields.char('admin password', size=64, required=True),
                 'log':fields.char('log path', size=100, required=True),
+                'notes':fields.text('notes'),
+                'active_process':fields.integer('active processes', readonly=True, store=False)
                 }
     
     _defaults = {
@@ -51,6 +53,7 @@ class server_manager(osv.osv):
                  'static_http_document_root':'/var/www/',
                  'state': 'draft',
                  'log': '/var/log/openerp/openerp.log',
+                 'active_process': 0,
                  }
     _sql_constraints = [
         ('name_uniq', 'unique(name)', 'Name must be unique per Company!'),
@@ -174,21 +177,14 @@ class server_manager(osv.osv):
         return True  
     
     def action_status_server(self, cr, uid, ids, context=None):
-        currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-        absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))
-        lookup = TemplateLookup(directories=[absfilePath])
-        
-        obj = self.pool.get('server.manager')
-        for line in obj.browse(cr, uid, ids):
-            name = 'openerp-server-'+line.name
-            template = Template("""<%include file="status_process.sh"/>""", lookup=lookup)
-            templateRendered = template.render(
-                                                NAME_PATTERN=name, \
-                                              )
-            subprocess.call([templateRendered], shell=True)
-            
-        return True     
-      
+        service = "ps -ax | grep openerp-server | grep python"
+        proc = os.popen(service).read()
+        num = proc.count('\n')
+        if not len(ids):
+            return False
+        for reg in self.browse(cr, uid, ids, context):
+            self.write(cr, uid, [reg.id], {'notes': proc,'active_process':num})
+            return True
        
     def action_workflow_draft(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, { 'state' : 'draft' }, context=context)

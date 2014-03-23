@@ -32,14 +32,23 @@
                     	<button name="action_workflow_draft" states="active,disable" string="Draft" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
                     	<button name="action_workflow_disable" states="conf,daemon,active" string="Disable" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
                     	<button name="action_status_server" states="active" icon="gtk-info" string="Status Server" type="object" />
-                    	<button name="action_start_server" states="active" icon="gtk-yes" string="Start Server" type="object" />
-                    	<button name="action_stop_server" states="active" icon="gtk-no" string="Stop Server" type="object" />
+                    	<span  attrs="{'invisible':[('active_process','=',0)]}">
+                    		<button name="action_start_server" states="active" icon="gtk-disable" string="Start Server" type="object" />
+                    		<button name="action_stop_server" states="active" icon="gtk-no" string="Stop Server" type="object" />
+                    	</span>
+                    	<span  attrs="{'invisible':[('active_process','>',0)]}">
+                    		<button name="action_start_server" states="active"  icon="gtk-yes" string="Start Server" type="object" />
+                    		<button name="action_stop_server" states="active" icon="gtk-disable" string="Stop Server" type="object" />
+                    	</span>
                     	<button name="action_restart_server" states="active" icon="STOCK_REFRESH" string="Restart Server" type="object" />
                     	<div class="oe_right">
                         	<field name="state" select="1" widget="statusbar"/>
                         </div>
                     </header>
                     <group>
+                    	<group>
+                    		<field name="active_process"/>
+                    	</group>
                     	<group>
 	                    	<field name="name" attrs="{'readonly':[('state','!=','draft')]}"/>
 	                    	<field name="path_server"/>
@@ -72,6 +81,9 @@
 	            		<group>
 	            			<field name="xmlrpc_interface" attrs="{'readonly':[('state','!=','draft')]}"/>  
 	            			<field name="xmlrpc_port" attrs="{'readonly':[('state','!=','draft')]}"/>
+	            		</group>  
+	            		<group>
+	            			<field name="notes"/>  
 	            		</group>  
             		</group>  		
             	</form>
