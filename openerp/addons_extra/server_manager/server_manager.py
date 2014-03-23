@@ -181,13 +181,13 @@ class server_manager(osv.osv):
             return False
         for reg in self.browse(cr, uid, ids, context):
             name = 'openerp-server-' + reg.name
-            service = "ps -ax | grep " + name +" | grep python"
+            service = "ps -ax | grep " + name +" | grep 'python' | awk '{ print $1}'"
             proc = os.popen(service).read()
-            num = proc.count('\n')
-            if num<2:
+            num = proc.count('\n')-1
+            if num<1:
                 num = 0
             self.write(cr, uid, [reg.id], {'notes': proc,'active_process':num})
-            return True
+            return proc
        
     def action_workflow_draft(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, { 'state' : 'draft' }, context=context)
