@@ -48,6 +48,7 @@
                     <group>
                     	<group>
                     		<field name="active_process"/>
+                    		<field name="pid"/>
                     	</group>
                     	<group>
 	                    	<field name="name" attrs="{'readonly':[('state','!=','draft')]}"/>

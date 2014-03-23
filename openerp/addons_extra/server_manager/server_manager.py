@@ -39,7 +39,8 @@ class server_manager(osv.osv):
                 'admin_passwd': fields.char('admin password', size=64, required=True),
                 'log':fields.char('log path', size=100, required=True),
                 'notes':fields.text('notes'),
-                'active_process':fields.integer('active processes', readonly=True, store=False)
+                'active_process':fields.integer('active processes', readonly=True, store=False),
+                'pid':fields.text('pid list', readonly=True, store=False),
                 }
     
     _defaults = {
@@ -183,14 +184,15 @@ class server_manager(osv.osv):
             name = 'openerp-server-' + reg.name
             service = "ps -ax | grep " + name +" | grep 'python' | awk '{ print $1}'"
             proc = os.popen(service).read()
-            num = proc.count('\n')-1
-            if num<1:
-                num = 0
-            self.write(cr, uid, [reg.id], {'notes': proc,'active_process':num})
+            proc = proc.split()
+            proc = proc[:-1]
             try:
-                return int(proc[0])
+                num = len[proc]
+                pid = map(int, proc)
+                self.write(cr, uid, [reg.id], {'pid': pid,'active_process':num})
+                return pid
             except:
-                return 0
+                return []
        
     def action_workflow_draft(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, { 'state' : 'draft' }, context=context)
