@@ -1,7 +1,7 @@
 from openerp.osv import fields, osv
 from mako.template import Template
 from mako.lookup import TemplateLookup
-import os, inspect, subprocess, shutil
+import os, inspect, subprocess, shutil, signal
 
 class server_manager(osv.osv):
     _name = 'server.manager'
@@ -144,20 +144,15 @@ class server_manager(osv.osv):
         return True 
     
     def action_stop_server(self, cr, uid, ids, context=None):
-        currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-        absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))
-        lookup = TemplateLookup(directories=[absfilePath])
-        
-        obj = self.pool.get('server.manager')
-        for line in obj.browse(cr, uid, ids):
-            name = 'openerp-server-'+line.name
-            template = Template("""<%include file="stop_process.sh"/>""", lookup=lookup)
-            templateRendered = template.render(
-                                                NAME_PATTERN=name, \
-                                              )
-            subprocess.call([templateRendered], shell=True)
-            
-        return True 
+        try: 
+            pids = self.action_status_server( cr, uid, ids, context)
+            for pid in pids:
+                os.kill(pid, signal.SIGKILL)
+            self.action_status_server( cr, uid, ids, context)
+            return True 
+        except:
+            self.action_status_server( cr, uid, ids, context)
+            return False
           
     def action_restart_server(self, cr, uid, ids, context=None):
         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -188,12 +183,9 @@ class server_manager(osv.osv):
             proc = proc[:-1]
             try:
                 num = len(proc)
-                if num == 0:
-                    return []
-                else:
-                    pid = map(int, proc)
-                    self.write(cr, uid, [reg.id], {'pid': pid,'active_process':num})
-                    return pid
+                pid = map(int, proc)
+                self.write(cr, uid, [reg.id], {'pid': pid,'active_process':num})
+                return pid
             except:
                 return []
        
