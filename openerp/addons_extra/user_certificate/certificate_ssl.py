@@ -89,7 +89,7 @@ class certificate_ssl(osv.osv):
         'organization': get_company_name,
         'type': 'user',
         'begin_date': lambda self, cr, uid, context: datetime.date.today().strftime("%Y-%m-%d"),
-        'end_date': lambda self, cr, uid, context: (datetime.date.today() + datetime.timedelta(days=3650)).strftime("%Y-%m-%d"),
+        'end_date': lambda self, cr, uid, context: (datetime.date.today() + datetime.timedelta(days=3650)).strftime("%Y-%m-%d")
     }
     
     def onchange_attribute_name(self, cr, uid, ids, name=False, context=None):

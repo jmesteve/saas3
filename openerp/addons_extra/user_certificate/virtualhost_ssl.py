@@ -17,7 +17,8 @@ class virtualhost_ssl(osv.osv):
                  'serveralias': fields.char('Server Alias', size=64, required=True),
                  'ip': fields.char('IP', size=15, required=True),
                  'port': fields.char('Port', size=5, required=True),
-                 'logpath': fields.char('Log Path', size=64, required=True)
+                 'logpath': fields.char('Log Path', size=64, required=True),
+                 'state': fields.selection([('draft','Draft'), ('active','Active'), ('disable','Disable')], 'State', readonly=True, help="The state.", select=True),
                  }
      
      _defaults = {
@@ -56,38 +57,6 @@ class virtualhost_ssl(osv.osv):
          return virtualhostPath
      
      def create(self, cr, uid, values, context=None):
-         virtualhostPath = self.get_virtualhost_path(cr, uid, context)
-         certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
-         certificatesCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
-         certificationAuthority = self.pool.get('certificate.ssl').browse(cr, uid, values['certificateca'], context)
-         certificationServer = self.pool.get('certificate.ssl').browse(cr, uid, values['certificateserver'], context)
-         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-         absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))
-         
-         absfilePathCA = os.path.abspath(os.path.join(certificatesPath, "certs", certificationAuthority.name_file + ".cert.pem"))
-         absfilePathCRL = os.path.abspath(os.path.join(certificatesPath, "crl", certificatesCrl + ".pem"))
-         absfilePathCertificateServer = os.path.abspath(os.path.join(certificatesPath, "certs", certificationServer.name_file + ".cert.pem"))
-         absfilePathKeyServer = os.path.abspath(os.path.join(certificatesPath, "private", certificationServer.name_file + ".key.pem"))
-         absfilePathLog = os.path.abspath(os.path.join(values['logpath'], values['name'] + ".log"))
-         
-         lookup = TemplateLookup(directories=[absfilePath])
-         template = Template("""<%include file="virtualhost.txt"/>""", lookup=lookup)
-         templateRendered = template.render(servername=values['servername'], \
-                                            serveralias=values['serveralias'], \
-                                            certificateca=absfilePathCA,\
-                                            revocationfile=absfilePathCRL, \
-                                            certificateserver=absfilePathCertificateServer, \
-                                            keyserver=absfilePathKeyServer,\
-                                            proxypass= 'http://' + values['ip'] + ":" + values['port'] + '/',\
-                                            logfile= absfilePathLog,\
-                                            )
-         
-         if not os.path.exists(virtualhostPath):
-             os.makedirs(virtualhostPath)
-         
-         f = open(os.path.join(virtualhostPath, values['name']), 'w')
-         f.write(templateRendered)
-         f.close()   
          
          return osv.osv.create(self, cr, uid, values, context=context)
      
@@ -108,19 +77,57 @@ class virtualhost_ssl(osv.osv):
          
          return
      
-     def activate_virtualhost(self, cr, uid, ids, context=None):
+         # Workflow
+     def action_workflow_draft(self, cr, uid, ids, context=None):
+         self.write(cr, uid, ids, { 'state' : 'draft' }, context=context)
+         return True
+    
+     def action_workflow_active(self, cr, uid, ids, context=None):
+         virtualhost = super(virtualhost_ssl, self).browse(cr, uid, ids[0], context=context)
          virtualhostPath = self.get_virtualhost_path(cr, uid, context)
          scriptsPath = self.pool.get('environment.ssl').get_scripts_path(cr, uid, context)
          apachePath = self.pool.get('ir.config_parameter').get_param(cr, uid, "apache_sites_available", context=context)
-         virtualhost = self.pool.get('virtualhost.ssl').browse(cr, uid, ids[0], context=context)
+         certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
+         certificatesCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
+         certificationAuthority = self.pool.get('certificate.ssl').browse(cr, uid, virtualhost.certificateca, context=context)
+         certificationServer = self.pool.get('certificate.ssl').browse(cr, uid, virtualhost.certificateserver, context=context)
+         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+         absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))
+         
+         absfilePathCA = os.path.abspath(os.path.join(certificatesPath, "certs", certificationAuthority.name_file + ".cert.pem"))
+         absfilePathCRL = os.path.abspath(os.path.join(certificatesPath, "crl", certificatesCrl + ".pem"))
+         absfilePathCertificateServer = os.path.abspath(os.path.join(certificatesPath, "certs", certificationServer.name_file + ".cert.pem"))
+         absfilePathKeyServer = os.path.abspath(os.path.join(certificatesPath, "private", certificationServer.name_file + ".key.pem"))
+         absfilePathLog = os.path.abspath(os.path.join(virtualhost.logpath, virtualhost.name + ".log"))
+         
+         lookup = TemplateLookup(directories=[absfilePath])
+         template = Template("""<%include file="virtualhost.txt"/>""", lookup=lookup)
+         templateRendered = template.render(servername=virtualhost.servername, \
+                                            serveralias=virtualhost.serveralias, \
+                                            certificateca=absfilePathCA,\
+                                            revocationfile=absfilePathCRL, \
+                                            certificateserver=absfilePathCertificateServer, \
+                                            keyserver=absfilePathKeyServer,\
+                                            proxypass= 'http://' + virtualhost.ip + ":" + virtualhost.port + '/',\
+                                            logfile= absfilePathLog,\
+                                            )
+         
+         if not os.path.exists(virtualhostPath):
+             os.makedirs(virtualhostPath)
+         
+         f = open(os.path.join(virtualhostPath, virtualhost.name), 'w')
+         f.write(templateRendered)
+         f.close()   
+         
          virtualhostsource = os.path.join(virtualhostPath, virtualhost.name)
          virtualhostdestination = os.path.join(apachePath, virtualhost.name)
          
          p = subprocess.Popen(["sh", "virtualhost_activate.sh", virtualhost.name, virtualhostsource, virtualhostdestination],  cwd=scriptsPath).wait()
          
-         return
-     
-     def deactivate_virtualhost(self, cr, uid, ids, context=None):
+         self.write(cr, uid, ids, { 'state' : 'active' }, context=context)
+         return True
+    
+     def action_workflow_disable(self, cr, uid, ids, context=None):
          scriptsPath = self.pool.get('environment.ssl').get_scripts_path(cr, uid, context)
          apachePath = self.pool.get('ir.config_parameter').get_param(cr, uid, "apache_sites_available", context=context)
          virtualhost = self.pool.get('virtualhost.ssl').browse(cr, uid, ids[0], context=context)
@@ -128,4 +135,6 @@ class virtualhost_ssl(osv.osv):
          
          p = subprocess.Popen(["sh", "virtualhost_deactivate.sh", virtualhost.name, virtualhostdestination],  cwd=scriptsPath).wait()
          
-         return
+         self.write(cr, uid, ids, { 'state' : 'disable' }, context=context)
+        
+         return True
