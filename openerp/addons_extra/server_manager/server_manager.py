@@ -91,6 +91,7 @@ class server_manager(osv.osv):
             template = Template("""<%include file="daemon.mako"/>""", lookup=lookup)
             templateRendered = template.render(
                                                 PIDFILE1='${PIDFILE}', \
+                                                CASE='${1}' ,\
                                                 DAEMON1='${DAEMON}', \
                                                 DAEMON_OPTS1='${DAEMON_OPTS}', \
                                                 NAME1='${NAME}', \

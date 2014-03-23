@@ -11,7 +11,7 @@
             		<header>
                     	<button name="action_workflow_conf" states="draft" string="Create configuration" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
                     	<button name="action_workflow_daemon" states="conf" string="Create daemon" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
-                    	<button name="action_workflow_active" states="daemon" string="Activate" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
+                    	<button name="action_workflow_active" states="daemon" string="Activate" type="object" class="oe_highlight"/>
                     	<button name="action_workflow_draft" states="active,disable" string="Draft" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
                     	<button name="action_workflow_disable" states="conf,daemon,active" string="Disable" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
                     	<div class="oe_right">

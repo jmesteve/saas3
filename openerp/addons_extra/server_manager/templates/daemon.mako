@@ -21,7 +21,7 @@ DESC=${DESC}
 USER=${USER}
 
 # Specify an alternate config file (Default: /etc/openerp-server.conf).
-CONFIGFILE=${CONFIGFILE}
+CONFIGFILE="${CONFIGFILE}"
 # pidfile
 PIDFILE=/var/run/$NAME.pid
 
@@ -38,7 +38,7 @@ checkpid() {
     return 1
 }
 
-case "${1}" in
+case "${CASE}" in
         start)
                 echo -n "Starting ${DESC1}: "
 
