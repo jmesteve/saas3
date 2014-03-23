@@ -1,0 +1,102 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* partner_extend
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-02-12 12:46+0000\n"
+"PO-Revision-Date: 2014-02-12 12:46+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: partner_extend
+#: field:res.partner,date_brother:0
+msgid "Date brother"
+msgstr "Date brother"
+
+#. module: partner_extend
+#: field:res.partner,date_presidency_end:0
+msgid "Date presidency end"
+msgstr "Date presidency end"
+
+#. module: partner_extend
+#: view:res.partner:0
+msgid "Relationship"
+msgstr "Relationship"
+
+#. module: partner_extend
+#: field:res.partner,presidency:0
+msgid "Presidency"
+msgstr "Presidency"
+
+#. module: partner_extend
+#: field:res.partner,date_brother_end:0
+msgid "Date brother end"
+msgstr "Date brother end"
+
+#. module: partner_extend
+#: field:res.partner,brother:0
+msgid "Brother"
+msgstr "Brother"
+
+#. module: partner_extend
+#: field:res.partner,date_collegiate:0
+msgid "Date collegiate"
+msgstr "Date collegiate"
+
+#. module: partner_extend
+#: field:res.partner,collegiate:0
+msgid "Collegiate"
+msgstr "Collegiate"
+
+#. module: partner_extend
+#: field:res.partner,governing:0
+msgid "Governing board"
+msgstr "Governing board"
+
+#. module: partner_extend
+#: model:ir.model,name:partner_extend.model_res_partner
+msgid "Partner"
+msgstr "Partner"
+
+#. module: partner_extend
+#: field:res.partner,date_governing_end:0
+msgid "Date governing end"
+msgstr "Date governing end"
+
+#. module: partner_extend
+#: field:res.partner,phone_business:0
+msgid "Business phone"
+msgstr "Business phone"
+
+#. module: partner_extend
+#: field:res.partner,date_governing:0
+msgid "Date governing"
+msgstr "Date governing"
+
+#. module: partner_extend
+#: field:res.partner,date_collegiate_end:0
+msgid "Date collegiate end"
+msgstr "Date collegiate end"
+
+#. module: partner_extend
+#: field:res.partner,phone_other:0
+msgid "Other phone"
+msgstr "Other phone"
+
+#. module: partner_extend
+#: field:res.partner,number_collegiate:0
+msgid "Number collegiate"
+msgstr "Number collegiate"
+
+#. module: partner_extend
+#: field:res.partner,date_presidency:0
+msgid "Date presidency"
+msgstr "Date presidency"
+
