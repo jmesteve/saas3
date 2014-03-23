@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    
+    	<record model="ir.ui.view" id="view_server_manager_form">
+            <field name="name">server.manager.form</field>
+            <field name="model">server.manager</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form string="server_manager" version="7.0">
+            		<header>
+                    	<button name="action_workflow_conf" states="draft" string="Create configuration" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
+                    	<button name="action_workflow_daemon" states="conf" string="Create daemon" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
+                    	<button name="action_workflow_active" states="daemon" string="Activate" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
+                    	<button name="action_workflow_draft" states="active,disable" string="Draft" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
+                    	<button name="action_workflow_disable" states="conf,daemon,active" string="Disable" type="object" class="oe_highlight" confirm="Are you sure you want to do this?"/>
+                    	<div class="oe_right">
+                        	<field name="state" select="1" widget="statusbar"/>
+                        </div>
+                    </header>
+                    <group>
+                    	<group>
+	                    	<field name="name"/>
+	                    	<field name="path_server"/>
+                    	</group>
+                    	<group>
+	                    	<field name="conf"/>
+			            	<field name="path_configuration"/>
+		            	</group>
+                    </group>
+                    
+                    <group>
+	            		<group>
+		            		<field name="debug_mode"/>
+		            		<field name="list_db"/>
+		            		<field name="static_http_document_root"/>  
+		            		<field name="admin_passwd" password="True"/>
+	            		</group> 
+	            		<group>
+	            			<field name="db_name"/>   
+	            			<field name="db_filter"/> 
+	            			<field name="db_user"/>  
+	            			<field name="db_password"/> 
+	            		</group>   
+            		</group>  
+            		<group>
+	            		<group>
+	            			<field name="netrpc_interface"/>
+	            			<field name="log"/>
+	            		</group> 
+	            		<group>
+	            			<field name="xmlrpc_interface"/>  
+	            			<field name="xmlrpc_port"/>
+	            		</group>  
+            		</group>  		
+            	</form>
+            	
+            </field>
+       	</record>
+    	
+    	<record model='ir.actions.act_window' id='action_menu_server_manager_servers'>
+            <field name="name">Server Manager</field>
+            <field name="res_model">server.manager</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    
+     	<menuitem id="menu_server_manager" name="Server manager" parent="base.menu_administration" />
+     		<menuitem id="menu_server_manager_servers" name="Server manager" parent="menu_server_manager" action='action_menu_server_manager_servers' />
+    
+    
+    </data>
+</openerp>
