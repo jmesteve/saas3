@@ -187,10 +187,13 @@ class server_manager(osv.osv):
             proc = proc.split()
             proc = proc[:-1]
             try:
-                num = len[proc]
-                pid = map(int, proc)
-                self.write(cr, uid, [reg.id], {'pid': pid,'active_process':num})
-                return pid
+                num = len(proc)
+                if num == 0:
+                    return []
+                else:
+                    pid = map(int, proc)
+                    self.write(cr, uid, [reg.id], {'pid': pid,'active_process':num})
+                    return pid
             except:
                 return []
        
