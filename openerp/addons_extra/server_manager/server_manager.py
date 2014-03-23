@@ -177,12 +177,13 @@ class server_manager(osv.osv):
         return True  
     
     def action_status_server(self, cr, uid, ids, context=None):
-        service = "ps -ax | grep openerp-server | grep python"
-        proc = os.popen(service).read()
-        num = proc.count('\n')
         if not len(ids):
             return False
         for reg in self.browse(cr, uid, ids, context):
+            name = 'openerp-server-' + reg.name
+            service = "ps -ax | grep " + name +" | grep python"
+            proc = os.popen(service).read()
+            num = proc.count('\n')
             self.write(cr, uid, [reg.id], {'notes': proc,'active_process':num})
             return True
        
