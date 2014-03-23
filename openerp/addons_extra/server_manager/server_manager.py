@@ -87,17 +87,17 @@ class server_manager(osv.osv):
         
         obj = self.pool.get('server.manager')
         for line in obj.browse(cr, uid, ids):
+            name = 'openerp-server-'+line.name
             template = Template("""<%include file="daemon.mako"/>""", lookup=lookup)
-            templateRendered = template.render(NAME='openerp-server-'+line.name, \
-                                               DESC='openerp-server-'+line.name, \
-                                               PATH='/bin:/sbin:/usr/bin', \
+            templateRendered = template.render(PATH='/sbin:/bin:/usr/sbin:/usr/bin', \
                                                DAEMON='/etc/openerp/server/openerp-server', \
+                                               NAME=name, \
+                                               DESC=name, \
+                                               CONFIG=line.path_configuration, \
+                                               LOGFILE='/var/log/openerp/'+name+'.log', \
                                                USER=line.db_user, \
-                                               PIDFILE='/var/run/$NAME.pid', \
-                                               DAEMON_OPTS='"-c $CONFIGFILE"', \
-                                               PATH_CONFIGURATION=line.path_configuration, \
                                            )
-        
+            
             virtualhostPath = line.path_server
             f = open(virtualhostPath, 'w')
             f.write(templateRendered)

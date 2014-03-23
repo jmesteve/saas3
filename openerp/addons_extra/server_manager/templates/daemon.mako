@@ -1,83 +1,70 @@
 #!/bin/sh
 
 ### BEGIN INIT INFO
-# Provides:             openerp-server
-# Required-Start:       $remote_fs $syslog
-# Required-Stop:        $remote_fs $syslog
-# Should-Start:         $network
-# Should-Stop:          $network
-# Default-Start:        2 3 4 5
-# Default-Stop:         0 1 6
-# Short-Description:    Enterprise Resource Management software
-# Description:          Open ERP is a complete ERP and CRM software.
+# Provides:		openerp-server
+# Required-Start:	$remote_fs $syslog
+# Required-Stop:	$remote_fs $syslog
+# Should-Start:		$network
+# Should-Stop:		$network
+# Default-Start:	2 3 4 5
+# Default-Stop:		0 1 6
+# Short-Description:	Enterprise Resource Management software
+# Description:		Open ERP is a complete ERP and CRM software.
 ### END INIT INFO
+
+#PATH=/sbin:/bin:/usr/sbin:/usr/bin
+#DAEMON=/usr/bin/openerp-server
+#NAME=openerp-server
+#DESC=openerp-server
+#CONFIG=/etc/openerp/openerp-server.conf
+#LOGFILE=/var/log/openerp/openerp-server.log
+#USER=openerp
 
 PATH=${PATH}
 DAEMON=${DAEMON}
 NAME=${NAME}
-DESC=${DESC}
+DESC=${NAME}
+CONFIG=${CONFIG}
+LOGFILE=${LOGFILE}
+USER=${USER}
 
-# Specify the user name (Default: openerp).
-USER={USER}
+test -x ${DAEMON} || exit 0
 
-# Specify an alternate config file (Default: /etc/openerp-server.conf).
-CONFIGFILE="${PATH_CONFIGURATION}"
-# pidfile
-PIDFILE=${PIDFILE}
+set -e
 
-# Additional options that are passed to the Daemon.
-DAEMON_OPTS=${DAEMON_OPTS}
+do_start () {
+    echo -n "Starting ${DESC}: "
+    start-stop-daemon --start --quiet --pidfile /var/run/${NAME}.pid --chuid ${USER} --background --make-pidfile --exec ${DAEMON} -- --config=${CONFIG} --logfile=${LOGFILE}
+    echo "${NAME}."
+}
 
-[ -x $DAEMON ] || exit 0
-[ -f $CONFIGFILE ] || exit 0
-
-checkpid() {
-    [ -f $PIDFILE ] || return 1
-    pid=`cat $PIDFILE`
-    [ -d /proc/$pid ] && return 0
-    return 1
+do_stop () {
+    echo -n "Stopping ${DESC}: "
+    start-stop-daemon --stop --quiet --pidfile /var/run/${NAME}.pid --oknodo
+    echo "${NAME}."
 }
 
 case "${1}" in
-        start)
-                echo -n "Starting ${DESC}: "
+    start)
+        do_start
+        ;;
 
-                start-stop-daemon --start --quiet --pidfile ${PIDFILE} \
-                        --chuid ${USER} --background --make-pidfile \
-                        --exec ${DAEMON} -- ${DAEMON_OPTS}
+    stop)
+        do_stop
+        ;;
 
-                echo "${NAME}."
-                ;;
+    restart|force-reload)
+        echo -n "Restarting ${DESC}: "
+        do_stop
+        sleep 1
+        do_start
+        ;;
 
-        stop)
-                echo -n "Stopping ${DESC}: "
-
-                start-stop-daemon --stop --quiet --pidfile ${PIDFILE} \
-                        --oknodo
-
-                echo "${NAME}."
-                ;;
-
-        restart|force-reload)
-                echo -n "Restarting ${DESC}: "
-
-                start-stop-daemon --stop --quiet --pidfile ${PIDFILE} \
-                        --oknodo
-
-                sleep 1
-
-                start-stop-daemon --start --quiet --pidfile ${PIDFILE} \
-                        --chuid ${USER} --background --make-pidfile \
-                        --exec ${DAEMON} -- ${DAEMON_OPTS}
-
-                echo "${NAME}."
-                ;;
-
-        *)
-                N=/etc/init.d/${NAME}
-                echo "Usage: ${NAME} {start|stop|restart|force-reload}" >&2
-                exit 1
-                ;;
+    *)
+        N=/etc/init.d/${NAME}
+        echo "Usage: ${NAME} {start|stop|restart|force-reload}" >&2
+        exit 1
+        ;;
 esac
 
 exit 0
