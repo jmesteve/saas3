@@ -56,7 +56,7 @@ class server_manager(osv.osv):
                 'admin_passwd': fields.char('admin password', size=64, required=True),
                 'log':fields.char('log path', size=100, required=True),
                 'notes':fields.text('notes'),
-                'active_process':fields.function(_status_server, type='integer', string='active processes',store=True),
+                'active_process':fields.function(_status_server, type='integer', string='active processes',store=False),
                 'pid':fields.text('pid list', readonly=True, store=False),
                 }
     
