@@ -124,7 +124,7 @@ class server_manager(osv.osv):
         for line in obj.browse(cr, uid, ids):
             path_service = '/etc/init.d/' 
             service = path_service + 'openerp-'+line.name
-            proc = subprocess.call([service, "start"], shell=True)
+            proc = subprocess.call(['sh ' + service, "start"], shell=True)
             self.write(cr, uid, [line.id], {'notes':proc})
             return True
     
