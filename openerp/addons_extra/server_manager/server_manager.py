@@ -126,7 +126,8 @@ class server_manager(osv.osv):
             path_service = '/etc/init.d/' 
             service ='sh ' + path_service + 'openerp-'+line.name +' start'
             proc = subprocess.call([service], shell=True)
-            self.write(cr, uid, [line.id], {'notes':proc})
+            #self.write(cr, uid, [line.id], {'notes':proc})
+            self.action_status_server( cr, uid, ids, context)
             return True
     
     def action_start_server2(self, cr, uid, ids, context=None):
@@ -157,21 +158,8 @@ class server_manager(osv.osv):
             return False
           
     def action_restart_server(self, cr, uid, ids, context=None):
-        currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-        absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))
-        lookup = TemplateLookup(directories=[absfilePath])
-        
-        obj = self.pool.get('server.manager')
-        for line in obj.browse(cr, uid, ids):
-            name = 'openerp-server-'+line.name
-            service = 'openerp-'+line.name
-            template = Template("""<%include file="restart_process.sh"/>""", lookup=lookup)
-            templateRendered = template.render(
-                                                SERVICE_PATTERN=service, \
-                                                NAME_PATTERN=name, \
-                                              )
-            subprocess.call([templateRendered], shell=True)
-            
+        self.action_stop_server(cr, uid, ids, context)
+        self.action_start_server(cr, uid, ids, context)
         return True  
     
     def action_status_server(self, cr, uid, ids, context=None):
