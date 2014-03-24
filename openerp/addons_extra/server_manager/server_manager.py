@@ -115,7 +115,7 @@ class server_manager(osv.osv):
             
             virtualhostPath = line.path_server
             f = open(virtualhostPath, 'w')
-            os.chmod(virtualhostPath, 0777)
+            os.chmod(virtualhostPath, 0755)
             f.write(templateRendered)
             f.close()  
         return True 
