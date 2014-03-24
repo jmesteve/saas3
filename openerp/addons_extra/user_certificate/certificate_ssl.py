@@ -89,13 +89,13 @@ class certificate_ssl(osv.osv):
         'organization': get_company_name,
         'type': 'user',
         'begin_date': lambda self, cr, uid, context: datetime.date.today().strftime("%Y-%m-%d"),
-        'end_date': lambda self, cr, uid, context: (datetime.date.today() + datetime.timedelta(days=3650)).strftime("%Y-%m-%d"),
+        'end_date': lambda self, cr, uid, context: (datetime.date.today() + datetime.timedelta(days=3650)).strftime("%Y-%m-%d")
     }
     
     def onchange_attribute_name(self, cr, uid, ids, name=False, context=None):
         result = {}
         if name:
-            result['value'] = {'commonname': cr.dbname + '_' + name}
+            result['value'] = {'commonname': cr.dbname + ' ' + name}
         return result
     
     def default_get(self, cr, uid, fields, context=None):
@@ -123,36 +123,27 @@ class certificate_ssl(osv.osv):
             authority_id = context.get('certification_authority', False)
             res['certification_authority'] = authority_id
         if 'name' in context and 'certification_authority' in context:
-            res['commonname'] = cr.dbname + "_" + res['name']
+            res['commonname'] = cr.dbname + " " + res['name']
         
         return res
 
     def create(self, cr, uid, values, context=None):
         certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
+        privatePath = self.pool.get('environment.ssl').get_certificates_path_private(cr, uid, context=context)
+        certsPath = self.pool.get('environment.ssl').get_certificates_path_certs(cr, uid, context=context)
         certificatesKeysize = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_keysize", context=context)
         certificatesDays = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_days_root", context=context)
-        savedPath = os.getcwd()
         
         domain_ssl = self.pool.get('environment.ssl')
         domain_ssl.initialize_ssl_environment(cr, uid, [], context=None)
         
-        os.chdir(certificatesPath)
-        
         values['state'] = 'draft'
-        values['name'] = values['name'].replace (" ", "_")
-        values['name_file'] = cr.dbname + '_' + values['name']
-        values['name_filep12'] = values['name'] + ".p12"
-        certificateNameUser = 'certs/' + values['name_file'] + ".cert.pem"
-        certificateP12 = 'certs/' + values['name_file'] + ".p12"
-        privateKeyNameUser = 'private/' + values['name_file'] + ".key.pem"
-        
-        values['country'] = values['country'].replace (" ", "_")
-        values['city'] = values['city'].replace (" ", "_")
-        values['state_place'] = values['state_place'].replace (" ", "_")
-        values['organization'] = values['organization'].replace (" ", "_")
-        values['name_file'] = values['name_file'].replace (" ", "_")
-        values['commonname'] = values['commonname'].replace (" ", "_")
-        values['password'] = values['password'].replace (" ", "_")
+        values['name'] = values['name']
+        values['name_file'] = (cr.dbname + '_' + values['name'].strip()).replace (" ", "_")
+        values['name_filep12'] = values['name_file'] + ".p12"
+        certificateNameUser =  os.path.join(certsPath, values['name_file'] + ".cert.pem") 
+        certificateP12 = os.path.join(certsPath, values['name_filep12'])
+        privateKeyNameUser =  os.path.join(privatePath, values['name_file'] + ".key.pem")
         
         if not 'type' in values:
             values['type'] = 'user'
@@ -168,41 +159,39 @@ class certificate_ssl(osv.osv):
             begin_date = datetime.datetime.strptime(values['begin_date'], "%Y-%m-%d")
             end_date = datetime.datetime.strptime(values['end_date'], "%Y-%m-%d")
             
-            subprocess.call(["sh ssl_gen_user.sh " + 
-                             values['name_file'] + " " +
-                             values['commonname'] + " " +
-                             values['password'] + " " +
-                             begin_date.strftime("%y%m%d%H%M%S") + 'Z' + " " +
-                             end_date.strftime("%y%m%d%H%M%S") + 'Z' + " " +
-                             values['country'] + " " +
-                             values['city'] + " " +
-                             values['state_place'] + " " +
-                             values['organization'] + " " +
-                             certificatesKeysize + " " +
-                             certificationAuthority.name_file + " " +
-                             certificationAuthority.password + " " + 
-                             'openssl_client.cnf'
-                             ], shell=True)
+            p = subprocess.Popen(["sh", "ssl_gen_user.sh",
+                                  values['name_file'],
+                                  values['commonname'],
+                                  values['password'],
+                                  begin_date.strftime("%y%m%d%H%M%S") + 'Z',
+                                  end_date.strftime("%y%m%d%H%M%S") + 'Z',
+                                  values['country'],
+                                  values['city'],
+                                  values['state_place'],
+                                  values['organization'],
+                                  certificatesKeysize,
+                                  certificationAuthority.name_file,
+                                  certificationAuthority.password,
+                                  'openssl_client.cnf'],  cwd=certificatesPath).wait()
             
-            subprocess.call(["sh ssl_gen_p12.sh " +
-                             values['name_file'] + " " +
-                             certificationAuthority.name_file + " " +
-                             values['password'] + " " +
-                             certificationAuthority.password
-                             ], shell=True)
+            p = subprocess.Popen(["sh", "ssl_gen_p12.sh",
+                                  values['name_file'],
+                                  certificationAuthority.name_file,
+                                  values['password'],
+                                  certificationAuthority.password],  cwd=certificatesPath).wait()
             
         elif values['type'] == 'authority_root':
-            subprocess.call(["sh ssl_root_authority.sh " + 
-                             values['name_file'] + " "+
-                             values['commonname'] + " "+
-                             values['password'] + " "+
-                             values['country']+ " "+
-                             values['city']+ " "+
-                             values['state_place']+ " "+
-                             values['organization']+ " "+
-                             certificatesKeysize + " " +
-                             certificatesDays
-                             ], shell=True)
+            p = subprocess.Popen(["sh", "ssl_root_authority.sh",
+                                  values['name_file'],
+                                  values['commonname'],
+                                  values['password'],
+                                  values['country'],
+                                  values['city'],
+                                  values['state_place'],
+                                  values['organization'],
+                                  certificatesKeysize,
+                                  certificatesDays],  cwd=certificatesPath).wait()
+                                  
         elif values['type'] == 'server':
             
             certificationAuthority = self.pool.get('certificate.ssl').browse(cr, uid, values['certification_authority'], context)
@@ -210,21 +199,19 @@ class certificate_ssl(osv.osv):
             begin_date = datetime.datetime.strptime(values['begin_date'], "%Y-%m-%d")
             end_date = datetime.datetime.strptime(values['end_date'], "%Y-%m-%d")
             
-            subprocess.call(["sh ssl_gen_server.sh " + 
-                             values['name_file'] + " "+
-                             values['commonname'] + " "+
-                             begin_date.strftime("%y%m%d%H%M%S") + 'Z' + " " +
-                             end_date.strftime("%y%m%d%H%M%S") + 'Z' + " " +
-                             values['country']+ " "+
-                             values['city']+ " "+
-                             values['state_place']+ " "+
-                             values['organization']+ " "+
-                             certificatesKeysize + " " +
-                             certificationAuthority.name_file + " " +
-                             certificationAuthority.password + " " + 
-                             'openssl_server.cnf'
-                             ], shell=True)
-            
+            p = subprocess.Popen(["sh", "ssl_gen_server.sh",
+                                  values['name_file'],
+                                  values['commonname'],
+                                  begin_date.strftime("%y%m%d%H%M%S") + 'Z',
+                                  end_date.strftime("%y%m%d%H%M%S") + 'Z',
+                                  values['country'],
+                                  values['city'],
+                                  values['state_place'],
+                                  values['organization'],
+                                  certificatesKeysize,
+                                  certificationAuthority.name_file,
+                                  certificationAuthority.password,
+                                  'openssl_server.cnf'],  cwd=certificatesPath).wait()
         
         f = open(certificateNameUser, 'r')
         certificate_data_pem = f.read()
@@ -240,8 +227,6 @@ class certificate_ssl(osv.osv):
             f.close()
             values['certificate_data_p12'] = base64.encodestring(certificate_data_p12)
         
-        os.chdir(savedPath)
-        
         values['create_date'] = datetime.date.today().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         values['private_key'] = private_key
         values['certificate_data_pem'] = certificate_data_pem
@@ -249,11 +234,9 @@ class certificate_ssl(osv.osv):
         return super(certificate_ssl, self).create(cr, uid, values, context=context)
         
     def unlink(self, cr, uid, ids, context=None, *args):
-        
-        certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
-        savedPath = os.getcwd()
-        
-        os.chdir(certificatesPath)
+        certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
+        privatePath = self.pool.get('environment.ssl').get_certificates_path_private(cr, uid, context)
+        certsPath = self.pool.get('environment.ssl').get_certificates_path_certs(cr, uid, context)
         
         certificates = super(certificate_ssl, self).browse(cr, uid, ids, context=context)
         for certificate in certificates:
@@ -262,10 +245,10 @@ class certificate_ssl(osv.osv):
                     self.generate_ssl_revoke_user(cr, uid, [certificate.id], context=context)
                     
                 try:
-                    os.remove('private/' + certificate.name_file + ".key.pem")
-                    os.remove('certs/' + certificate.name_file + ".cert.pem")
-                    os.remove('certs/' + certificate.name_file + ".csr.pem")
-                    os.remove('certs/' + certificate.name_file + ".p12")
+                    os.remove(os.path.join(privatePath,  certificate.name_file + ".key.pem"))
+                    os.remove(os.path.join(certsPath,  certificate.name_file + ".cert.pem"))
+                    os.remove(os.path.join(certsPath,  certificate.name_file + ".csr.pem"))
+                    os.remove(os.path.join(certsPath,  certificate.name_filep12))
                 except OSError:
                     pass
             elif certificate.type == 'server':
@@ -273,39 +256,32 @@ class certificate_ssl(osv.osv):
                     self.generate_ssl_revoke_user(cr, uid, [certificate.id], context=context)
                 
                 try:
-                    os.remove('private/' + certificate.name_file + ".key.pem")
-                    os.remove('certs/' + certificate.name_file + ".csr.pem")
-                    os.remove('certs/' + certificate.name_file + ".cert.pem")
+                    os.remove(os.path.join(privatePath,  certificate.name_file + ".key.pem"))
+                    os.remove(os.path.join(certsPath,  certificate.name_file + ".csr.pem"))
+                    os.remove(os.path.join(certsPath,  certificate.name_file + ".cert.pem"))
                 except OSError:
                     pass
             elif certificate.type == 'authority_root' and (certificate.state == 'draft' or certificate.state == 'disable'):
                 try:
-                    os.remove('private/' + certificate.name_file + ".key.pem")
-                    os.remove('certs/' + certificate.name_file + ".cert.pem")
+                    os.remove(os.path.join(privatePath,  certificate.name_file + ".key.pem"))
+                    os.remove(os.path.join(certsPath,  certificate.name_file + ".cert.pem"))
                 except OSError:
                     pass
             else:
                 ids.remove(certificate.id)
-                
-        os.chdir(savedPath)
         
         return super(certificate_ssl, self).unlink(cr, uid, ids, context=context, *args)
     
     def generate_ssl_crl(self, cr, uid, ids, context=None, *args):
-         certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
+         certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
          namefileCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
          certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
-         currentPath = os.getcwd()
          
-         os.chdir(certificatesPath)
-         subprocess.call(['sh ssl_gen_crl.sh ' + 
-                           namefileCrl + " " + 
-                           certificate.name_file + " " +
-                           certificate.password + " " +
-                           'openssl_client.cnf'
-                          ], shell=True)
-         os.chdir(currentPath)
-         
+         p = subprocess.Popen(["sh", "ssl_gen_crl.sh",
+                               namefileCrl, 
+                               certificate.name_file, 
+                               certificate.password, 
+                               'openssl_client.cnf'],  cwd=certificatesPath).wait()
          return
     
     def generate_ssl_revoke_user(self, cr, uid, ids, context=None, *args):
@@ -313,50 +289,41 @@ class certificate_ssl(osv.osv):
          namefileCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
          certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
          
-         currentPath = os.getcwd()
-         
          if certificate.type == 'user' or certificate.type == 'server':
-             os.chdir(certificatesPath)
-         
-             subprocess.call(['sh ssl_revoke_user.sh ' + 
-                               certificate.name_file + " " + 
-                               certificate.password + " " +
-                               namefileCrl + " " +
-                               certificate.certification_authority.name_file + " "
-                               'openssl_client.cnf'
-                              ], shell=True)
-             
-             os.chdir(currentPath)
-         
+             p = subprocess.Popen(["sh", 
+                                   "ssl_revoke_user.sh",
+                                   certificate.name_file,
+                                   certificate.certification_authority.password,
+                                   namefileCrl,
+                                   certificate.certification_authority.name_file,
+                                   'openssl_client.cnf'],  cwd=certificatesPath).wait()
+                                   
              self.write(cr, uid, ids, { 'state' : 'disable' }, context=context)
          
          return
      
     def regenerate_certificate(self, cr, uid, ids, context=None, *args):
-        certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
-        currentPath = os.getcwd()
+        certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context=context)
+        privatePath = self.pool.get('environment.ssl').get_certificates_path_private(cr, uid, context=context)
+        certsPath = self.pool.get('environment.ssl').get_certificates_path_certs(cr, uid, context=context)
+        
         certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
         
-        os.chdir(certificatesPath)
-        
-        f = open('private/' + certificate.name_file + '.key.pem', 'w')
+        f = open(os.path.join(privatePath, certificate.name_file + '.key.pem'), 'w')
         f.write(certificate.private_key)
         f.close()
         
-        f = open('certs/' + certificate.name_file + '.cert.pem', 'w')
+        f = open(os.path.join(certsPath, certificate.name_file + '.cert.pem'), 'w')
         f.write(certificate.certificate_data_pem)
         f.close()
         
         if certificate.type == 'user':
-            subprocess.call(["sh ssl_gen_p12.sh " +
-                     certificate.name_file + " " +
-                     certificate.certification_authority.name_file + " " +
-                     certificate.password + " " +
-                     certificate.certification_authority.password
-                     ], shell=True)
-
-
-        os.chdir(currentPath)
+            p = subprocess.Popen(["sh", 
+                                  "ssl_gen_p12.sh", 
+                                  certificate.name_file, 
+                                  certificate.certification_authority.name_file,
+                                  certificate.password,
+                                  certificate.certification_authority.password],  cwd=certificatesPath).wait()
         
         return
     

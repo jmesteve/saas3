@@ -38,6 +38,7 @@
              'security/ir.model.access.csv',
              'data/certificate_data.xml',
              'workflow.xml',
+             'workflow_virtualhost.xml',
              'wizard/wizard.xml'],
     'demo': [],
     'installable': True,

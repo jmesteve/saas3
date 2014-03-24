@@ -18,7 +18,7 @@ echo $keysize
 
 openssl genrsa -aes256 -passout pass:$pass -out private/$namefile.key.pem $keysize
 #chmod 400 private/$namefile.key.pem
-openssl req -config $configfile -new -key private/$namefile.key.pem -subj /C=$country/ST=$state/L=$city/O=$organization/CN="$commonname" -passin pass:$pass -out certs/$namefile.csr.pem
+openssl req -config $configfile -new -key private/$namefile.key.pem -subj /C="$country"/ST="$state"/L="$city"/O="$organization"/CN="$commonname" -passin pass:$pass -out certs/$namefile.csr.pem
 
 # Poner la hora con python
 # import datetime
