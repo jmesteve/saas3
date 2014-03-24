@@ -20,6 +20,23 @@ class server_manager(osv.osv):
             res[line.id] = conf_path + 'openerp-server-' + line.name + '.conf'
         return res
     
+    def _status_server(self, cr, uid, ids, name, arg=None, context=None):
+        if not len(ids):
+            return False
+        for reg in self.browse(cr, uid, ids, context):
+            name = 'openerp-server-' + reg.name
+            service = "ps -ax | grep " + name +" | grep 'python' | awk '{ print $1}'"
+            proc = os.popen(service).read()
+            proc = proc.split()
+            proc = proc[:-1]
+            try:
+                num = len(proc)
+                pid = map(int, proc)
+                self.write(cr, uid, [reg.id], {'pid': pid,'active_process':num})
+                return num
+            except:
+                return 0
+    
     _columns = {
                 'name': fields.char('Name', size=50, required=True),
                 'conf': fields.char('Name file configuration', size=50, required=True),
@@ -39,7 +56,7 @@ class server_manager(osv.osv):
                 'admin_passwd': fields.char('admin password', size=64, required=True),
                 'log':fields.char('log path', size=100, required=True),
                 'notes':fields.text('notes'),
-                'active_process':fields.integer('active processes', readonly=True, store=False),
+                'active_process':fields.function(_status_server, type='integer', string='active processes',store=True),
                 'pid':fields.text('pid list', readonly=True, store=False),
                 }
     
@@ -53,14 +70,12 @@ class server_manager(osv.osv):
                  'xmlrpc_port':'65450',
                  'static_http_document_root':'/var/www/',
                  'state': 'draft',
-                 'log': '/var/log/openerp/openerp.log',
-                 'active_process': 0,
+                 'log': '/var/log/openerp/openerp.log'
                  }
     _sql_constraints = [
         ('name_uniq', 'unique(name)', 'Name must be unique per Company!'),
     ]
-
-    
+  
     def create_conf(self, cr, uid, ids, context=None):
         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
         absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))

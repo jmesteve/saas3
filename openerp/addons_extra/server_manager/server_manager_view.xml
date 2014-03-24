@@ -13,7 +13,10 @@
 	            	<field name="xmlrpc_interface"/>  
 	            	<field name="debug_mode"/>
 		            <field name="list_db"/>
-		            <field name="db_filter"/> 
+		            <field name="db_filter"/>
+		            <field name="active_process"/>
+                    <button name="action_start_server" icon="gtk-yes" string="Start Server" type="object" />
+                    <button name="action_stop_server"  icon="gtk-no" string="Stop Server" type="object" />
 	            	<field name="state"/>
                 </tree>
             </field>
