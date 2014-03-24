@@ -6,23 +6,28 @@ import os, inspect
 import re
 import subprocess
 import unicodedata
+import socket
 
 class virtualhost_ssl(osv.osv):
      _name =  'virtualhost.ssl'
+     
      _columns = {
                  'name': fields.char('Name', size=64, required=True),
-                 'certificateca': fields.many2one('certificate.ssl', 'Certificate CA', readonly=False, required=True),
                  'certificateserver': fields.many2one('certificate.ssl', 'Certificate Server', required=True),
                  'servername': fields.char('Server Name', size=64, required=True),
                  'serveralias': fields.char('Server Alias', size=64, required=True),
-                 'ip': fields.char('IP', size=15, required=True),
+                 'ip': fields.char('IP', size=16, required=True),
                  'port': fields.char('Port', size=5, required=True),
                  'logpath': fields.char('Log Path', size=64, required=True),
                  'state': fields.selection([('draft','Draft'), ('active','Active'), ('disable','Disable')], 'State', readonly=True, help="The state.", select=True),
                  }
      
+     def get_ip(self, cr, uid, context=None):
+         return socket.gethostbyname(socket.gethostname())
+     
      _defaults = {
                   'logpath': lambda self, cr, uid, context: self.pool.get('ir.config_parameter').get_param(cr, uid, "log_path", context),
+                  'ip': get_ip,
                   'port': lambda self, cr, uid, context: self.pool.get('ir.config_parameter').get_param(cr, uid, "virtualhost_port", context)
      }
      _sql_constraints = [('item_name_unique','unique(name)', 'Item Name must be unique!')]
@@ -58,6 +63,8 @@ class virtualhost_ssl(osv.osv):
      
      def create(self, cr, uid, values, context=None):
          
+         values['state'] = 'draft'
+         
          return osv.osv.create(self, cr, uid, values, context=context)
      
      def unlink(self, cr, uid, ids, context=None):
@@ -79,6 +86,15 @@ class virtualhost_ssl(osv.osv):
      
          # Workflow
      def action_workflow_draft(self, cr, uid, ids, context=None):
+         virtualhostPath = self.get_virtualhost_path(cr, uid, context)
+         scriptsPath = self.pool.get('environment.ssl').get_scripts_path(cr, uid, context)
+         apachePath = self.pool.get('ir.config_parameter').get_param(cr, uid, "apache_sites_available", context=context)
+         virtualhost = self.pool.get('virtualhost.ssl').browse(cr, uid, ids[0], context=context)
+         virtualhostdestination = os.path.join(apachePath, virtualhost.name)
+         virtualhostsource = os.path.join(virtualhostPath, virtualhost.name)
+         
+         p = subprocess.Popen(["sh", "virtualhost_deactivate.sh", virtualhost.name, virtualhostsource, virtualhostdestination],  cwd=scriptsPath).wait()
+         
          self.write(cr, uid, ids, { 'state' : 'draft' }, context=context)
          return True
     
@@ -89,8 +105,8 @@ class virtualhost_ssl(osv.osv):
          apachePath = self.pool.get('ir.config_parameter').get_param(cr, uid, "apache_sites_available", context=context)
          certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
          certificatesCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
-         certificationAuthority = self.pool.get('certificate.ssl').browse(cr, uid, virtualhost.certificateca, context=context)
-         certificationServer = self.pool.get('certificate.ssl').browse(cr, uid, virtualhost.certificateserver, context=context)
+         certificationServer = self.pool.get('certificate.ssl').browse(cr, uid, virtualhost.certificateserver.id, context=context)
+         certificationAuthority = self.pool.get('certificate.ssl').browse(cr, uid, certificationServer.certification_authority.id, context=context)
          currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
          absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))
          
@@ -128,12 +144,14 @@ class virtualhost_ssl(osv.osv):
          return True
     
      def action_workflow_disable(self, cr, uid, ids, context=None):
+         virtualhostPath = self.get_virtualhost_path(cr, uid, context)
          scriptsPath = self.pool.get('environment.ssl').get_scripts_path(cr, uid, context)
          apachePath = self.pool.get('ir.config_parameter').get_param(cr, uid, "apache_sites_available", context=context)
          virtualhost = self.pool.get('virtualhost.ssl').browse(cr, uid, ids[0], context=context)
          virtualhostdestination = os.path.join(apachePath, virtualhost.name)
+         virtualhostsource = os.path.join(virtualhostPath, virtualhost.name)
          
-         p = subprocess.Popen(["sh", "virtualhost_deactivate.sh", virtualhost.name, virtualhostdestination],  cwd=scriptsPath).wait()
+         p = subprocess.Popen(["sh", "virtualhost_deactivate.sh", virtualhost.name, virtualhostsource, virtualhostdestination],  cwd=scriptsPath).wait()
          
          self.write(cr, uid, ids, { 'state' : 'disable' }, context=context)
         

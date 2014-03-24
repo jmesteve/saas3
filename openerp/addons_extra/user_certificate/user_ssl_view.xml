@@ -83,7 +83,7 @@
 							<field name="certification_authority" attrs="{'required':[('type','in',['user', 'server'])]}" domain="[('type','=', 'authority_root'), ('state','=', 'active')]"/>
 							<field name="user" select="2" attrs="{'invisible':[('type','in',['authority_root', 'server'])]}" />
 							<field name="name_filep12" readonly="1" invisible="1"/>
-							<field name="certificate_data_p12" readonly="1" filename="name_filep12" attrs="{'invisible':[('state','in',['draft', 'disable'])]}" domain="[('state','=', 'active')]"/>
+							<field name="certificate_data_p12" readonly="1" filename="name_filep12" attrs="{'invisible':[('state','not in',['active'])]}" domain="[('state','=', 'active')]"/>
 						</group>
 						<group string="Certificate Data">
 							<field name="commonname"/>
@@ -126,7 +126,7 @@
 							<field name="certification_authority" required="1" domain="[('type','=', 'authority_root'), ('state','=', 'active')]"/>
 							<field name="user" invisible="1"/>
 							<field name="name_filep12" readonly="1" invisible="1"/>
-							<field name="certificate_data_p12" readonly="1" filename="name_filep12" attrs="{'invisible':[('state','in',['draft', 'disable'])]}" domain="[('state','=', 'active')]"/>
+							<field name="certificate_data_p12" readonly="1" filename="name_filep12" attrs="{'invisible':[('state','not in',['active'])]}" domain="[('state','=', 'active')]"/>
 						</group>
 						<group string="Certificate Data">
 							<field name="commonname"/>
@@ -180,7 +180,6 @@
             <field name="arch" type="xml">
                 <tree string="virtualhost_ssl_tree" create="true" delete="true">
 					<field name="name" />
-					<field name="certificateca" />
 					<field name="certificateserver"/>
 					<field name="servername" />
 					<field name="serveralias" />
@@ -200,7 +199,7 @@
 				<form string="virtualhost_ssl_form" version="7.0" create="true" edit="false" delete="true">
 					<header>
 						<button name="action_workflow_active" type="object" string="Activate" states="draft" class="oe_highlight"/>
-						<button name="action_workflow_draft" type="object" string="Activate" states="active" class="oe_highlight"/>
+						<button name="action_workflow_draft" type="object" string="Draft" states="active" class="oe_highlight"/>
                         <button name="action_workflow_disable" type="object" string="Disable" states="active" class="oe_highlight" />
 						<div class="oe_right">
                         	<field name="state" attrs="{'invisible':[('state','not in',['draft', 'active', 'disable'])]}" select="1" widget="statusbar" statusbar_visible="draft,active,disable" statusbar_colors='{"draft":"blue","active":"blue","disable":"red"}'/>
@@ -209,11 +208,10 @@
 					<group>
 						<group>
 							<field name="name" />
-							<field name="certificateca" domain="[('type','=', 'authority_root'), ('state','=', 'active')]"/>
 							<field name="certificateserver" domain="[('type','=', 'server'), ('state','=', 'active')]"/>
 							<field name="servername" />
 							<field name="serveralias" />
-							<field name="ip" on_change="validateIP(ip)" />
+							<field name="ip" />
 							<field name="port" />
 							<field name="logpath" />
 							</group>
