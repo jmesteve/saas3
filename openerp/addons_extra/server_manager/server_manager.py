@@ -23,6 +23,7 @@ class server_manager(osv.osv):
     def _status_server(self, cr, uid, ids, name, arg=None, context=None):
         if not len(ids):
             return False
+        res = {}
         for reg in self.browse(cr, uid, ids, context):
             name = 'openerp-server-' + reg.name
             service = "ps -ax | grep " + name +" | grep 'python' | awk '{ print $1}'"
@@ -32,10 +33,12 @@ class server_manager(osv.osv):
             try:
                 num = len(proc)
                 pid = map(int, proc)
-                self.write(cr, uid, [reg.id], {'pid': pid,'active_process':num})
-                return num
+                self.write(cr, uid, [reg.id], {'pid': pid})
+                res[reg.id] = num
+                
             except:
-                return 0
+                return res
+        return res
     
     _columns = {
                 'name': fields.char('Name', size=50, required=True),
