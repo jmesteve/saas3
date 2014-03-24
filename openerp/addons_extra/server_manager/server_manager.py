@@ -115,16 +115,17 @@ class server_manager(osv.osv):
             
             virtualhostPath = line.path_server
             f = open(virtualhostPath, 'w')
-            os.chmod(virtualhostPath, 0755)
+            os.chmod(virtualhostPath, 0777)
             f.write(templateRendered)
             f.close()  
         return True 
+    
     def action_start_server(self, cr, uid, ids, context=None):
         obj = self.pool.get('server.manager')
         for line in obj.browse(cr, uid, ids):
             path_service = '/etc/init.d/' 
             service = path_service + 'openerp-'+line.name
-            proc = subprocess.check_output([ service, "start"], shell=True)
+            proc = subprocess.call([service, "start"], shell=True)
             self.write(cr, uid, [line.id], {'notes':proc})
             return True
     
