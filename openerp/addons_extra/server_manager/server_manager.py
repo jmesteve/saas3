@@ -166,6 +166,8 @@ class server_manager(osv.osv):
     
     def action_stop_server(self, cr, uid, ids, context=None):
         try: 
+            if context['name'] and context['name'] == cr.dbname:
+                return False
             pids = self.action_status_server( cr, uid, ids, context)
             for pid in pids:
                 os.kill(pid, signal.SIGKILL)
