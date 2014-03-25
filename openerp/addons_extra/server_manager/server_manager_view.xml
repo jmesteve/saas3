@@ -17,8 +17,8 @@
 		            <field name="db_name"/>
 		            <field name="db_filter"/>
 		            <field name="active_process"/>
-                    <button name="action_start_server" attrs="{'invisible':[('active_process','=',0)]}" icon="gtk-no" string="Start Server" type="object" />
-                    <button name="action_stop_server"  attrs="{'invisible':[('active_process','>',0)]}" icon="gtk-yes" string="Stop Server" type="object" context="{'name':name}"/>
+                    <button name="action_start_server" attrs="{'invisible':[('active_process','>',0)]}" icon="gtk-no" string="Start Server" type="object" />
+                    <button name="action_stop_server"  attrs="{'invisible':[('active_process','=',0)]}" icon="gtk-yes" string="Stop Server" type="object" context="{'name':name}"/>
 	            	<field name="state"/>
                 </tree>
             </field>
