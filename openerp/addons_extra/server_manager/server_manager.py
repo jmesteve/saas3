@@ -61,6 +61,7 @@ class server_manager(osv.osv):
                 'notes':fields.text('notes'),
                 'active_process':fields.function(_status_server, type='integer', string='active processes',store=False),
                 'pid':fields.text('pid list', readonly=True, store=False),
+                'autostart':fields.boolean('Autostart'),
                 }
     
     _defaults = {
