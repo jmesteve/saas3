@@ -141,8 +141,7 @@ class server_manager(osv.osv):
     def action_start_server(self, cr, uid, ids, context=None):
         obj = self.pool.get('server.manager')
         for line in obj.browse(cr, uid, ids):
-            path_service = '/etc/init.d/' 
-            service ='sh ' + path_service + 'openerp-'+line.name +' start'
+            service ='sudo service ' + 'openerp-'+line.name +' start'
             proc = subprocess.call([service], shell=True)
             #self.write(cr, uid, [line.id], {'notes':proc})
             self.action_status_server( cr, uid, ids, context)
