@@ -49,6 +49,7 @@
                     	<div class="oe_right">
                         	<field name="state" select="1" widget="statusbar"/>
                         </div>
+                        <button name="action_autostart" states="active" icon="terp-project" string="auto start" type="object" context="{'autostart':autostart}"/>
                     </header>
                     <group>
                     	<group>

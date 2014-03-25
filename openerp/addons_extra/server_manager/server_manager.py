@@ -3,6 +3,13 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 import os, inspect, subprocess, shutil, signal
 
+# add permissions sudo with visudo
+# visudo
+# add this 2 lines in the file
+# openerp ALL = NOPASSWD : /usr/bin/service openerp-* *
+# openerp ALL = NOPASSWD : /usr/sbin/update-rc.d * openerp-* *
+# 
+
 class server_manager(osv.osv):
     _name = 'server.manager'
     
@@ -79,7 +86,18 @@ class server_manager(osv.osv):
     _sql_constraints = [
         ('name_uniq', 'unique(name)', 'Name must be unique per Company!'),
     ]
-  
+    def action_autostart(self, cr, uid, ids, autostart, context=None):
+        obj = self.pool.get('server.manager')
+        for line in obj.browse(cr, uid, ids):
+            if autostart:
+                service ='sudo update-rc.d -f ' + 'openerp-'+line.name +' defaults'
+            else:
+                service ='sudo update-rc.d -f ' + 'openerp-'+line.name +' remove'
+            proc = subprocess.call([service], shell=True)
+            return True
+        return False
+        
+        
     def create_conf(self, cr, uid, ids, context=None):
         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
         absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))
