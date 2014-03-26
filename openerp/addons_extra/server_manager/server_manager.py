@@ -3,6 +3,13 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 import os, inspect, subprocess, shutil, signal
 
+# add permissions sudo with visudo
+# visudo
+# add this 2 lines in the file
+# openerp ALL = NOPASSWD : /usr/bin/service openerp-* *
+# openerp ALL = NOPASSWD : /usr/sbin/update-rc.d * openerp-* *
+# 
+
 class server_manager(osv.osv):
     _name = 'server.manager'
     
@@ -18,6 +25,26 @@ class server_manager(osv.osv):
         conf_path = self.pool.get('ir.config_parameter').get_param(cr, uid, "conf_path", context=context)
         for line in self.browse(cr, uid, ids, context=context):
             res[line.id] = conf_path + 'openerp-server-' + line.name + '.conf'
+        return res
+    
+    def _status_server(self, cr, uid, ids, name, arg=None, context=None):
+        if not len(ids):
+            return False
+        res = {}
+        for reg in self.browse(cr, uid, ids, context):
+            name = 'openerp-server-' + reg.name
+            service = "ps -ax | grep " + name +" | grep 'python' | awk '{ print $1}'"
+            proc = os.popen(service).read()
+            proc = proc.split()
+            proc = proc[:-1]
+            try:
+                num = len(proc)
+                pid = map(int, proc)
+                self.write(cr, uid, [reg.id], {'pid': pid})
+                res[reg.id] = num
+                
+            except:
+                return res
         return res
     
     _columns = {
@@ -39,8 +66,9 @@ class server_manager(osv.osv):
                 'admin_passwd': fields.char('admin password', size=64, required=True),
                 'log':fields.char('log path', size=100, required=True),
                 'notes':fields.text('notes'),
-                'active_process':fields.integer('active processes', readonly=True, store=False),
+                'active_process':fields.function(_status_server, type='integer', string='active processes',store=False),
                 'pid':fields.text('pid list', readonly=True, store=False),
+                'autostart':fields.boolean('Autostart'),
                 }
     
     _defaults = {
@@ -53,14 +81,23 @@ class server_manager(osv.osv):
                  'xmlrpc_port':'65450',
                  'static_http_document_root':'/var/www/',
                  'state': 'draft',
-                 'log': '/var/log/openerp/openerp.log',
-                 'active_process': 0,
+                 'log': '/var/log/openerp/openerp.log'
                  }
     _sql_constraints = [
         ('name_uniq', 'unique(name)', 'Name must be unique per Company!'),
     ]
-
-    
+    def action_autostart(self, cr, uid, ids, context=None):
+        obj = self.pool.get('server.manager')
+        for line in obj.browse(cr, uid, ids):
+            if context['autostart']:
+                service ='sudo update-rc.d -f ' + 'openerp-'+line.name +' defaults'
+            else:
+                service ='sudo update-rc.d -f ' + 'openerp-'+line.name +' remove'
+            proc = subprocess.call([service], shell=True)
+            return True
+        return False
+        
+        
     def create_conf(self, cr, uid, ids, context=None):
         currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
         absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))
@@ -123,31 +160,16 @@ class server_manager(osv.osv):
     def action_start_server(self, cr, uid, ids, context=None):
         obj = self.pool.get('server.manager')
         for line in obj.browse(cr, uid, ids):
-            path_service = '/etc/init.d/' 
-            service ='sh ' + path_service + 'openerp-'+line.name +' start'
+            service ='sudo service ' + 'openerp-'+line.name +' start'
             proc = subprocess.call([service], shell=True)
             #self.write(cr, uid, [line.id], {'notes':proc})
             self.action_status_server( cr, uid, ids, context)
             return True
-    
-    def action_start_server2(self, cr, uid, ids, context=None):
-        currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-        absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))
-        lookup = TemplateLookup(directories=[absfilePath])
-        
-        obj = self.pool.get('server.manager')
-        for line in obj.browse(cr, uid, ids):
-            service = 'openerp-'+line.name
-            template = Template("""<%include file="start_process.sh"/>""", lookup=lookup)
-            templateRendered = template.render(
-                                                SERVICE_PATTERN=service, \
-                                              )
-            subprocess.call([templateRendered], shell=True)
-            
-        return True 
-    
+     
     def action_stop_server(self, cr, uid, ids, context=None):
         try: 
+            if context['name'] and context['name'] == cr.dbname:
+                return False
             pids = self.action_status_server( cr, uid, ids, context)
             for pid in pids:
                 os.kill(pid, signal.SIGKILL)

@@ -13,7 +13,12 @@
 	            	<field name="xmlrpc_interface"/>  
 	            	<field name="debug_mode"/>
 		            <field name="list_db"/>
-		            <field name="db_filter"/> 
+		            <field name="autostart"/>
+		            <field name="db_name"/>
+		            <field name="db_filter"/>
+		            <field name="active_process"/>
+                    <button name="action_start_server" attrs="{'invisible':[('active_process','>',0)]}" icon="gtk-no" string="Start Server" type="object" />
+                    <button name="action_stop_server"  attrs="{'invisible':[('active_process','=',0)]}" icon="gtk-yes" string="Stop Server" type="object" context="{'name':name}"/>
 	            	<field name="state"/>
                 </tree>
             </field>
@@ -34,21 +39,23 @@
                     	<button name="action_status_server" states="active" icon="gtk-info" string="Status Server" type="object" />
                     	<span  attrs="{'invisible':[('active_process','=',0)]}">
                     		<button name="action_start_server" states="active" icon="gtk-disable" string="Start Server" type="object" />
-                    		<button name="action_stop_server" states="active" icon="gtk-no" string="Stop Server" type="object" />
+                    		<button name="action_stop_server" states="active" icon="gtk-no" string="Stop Server" type="object" context="{'name':name}"/>
                     	</span>
                     	<span  attrs="{'invisible':[('active_process','>',0)]}">
                     		<button name="action_start_server" states="active"  icon="gtk-yes" string="Start Server" type="object" />
-                    		<button name="action_stop_server" states="active" icon="gtk-disable" string="Stop Server" type="object" />
+                    		<button name="action_stop_server" states="active" icon="gtk-disable" string="Stop Server" type="object" context="{'name':name}"/>
                     	</span>
-                    	<button name="action_restart_server" states="active" icon="STOCK_REFRESH" string="Restart Server" type="object" />
+                    	<button name="action_restart_server" states="active" icon="STOCK_REFRESH" string="Restart Server" type="object" context="{'name':name}"/>
                     	<div class="oe_right">
                         	<field name="state" select="1" widget="statusbar"/>
                         </div>
+                        <button name="action_autostart" states="active" icon="terp-project" string="auto start" type="object" context="{'autostart':autostart}"/>
                     </header>
                     <group>
                     	<group>
                     		<field name="active_process"/>
                     		<field name="pid"/>
+                    		<field name="autostart"/>
                     	</group>
                     	<group>
 	                    	<field name="name" attrs="{'readonly':[('state','!=','draft')]}"/>
