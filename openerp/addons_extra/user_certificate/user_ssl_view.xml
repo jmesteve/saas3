@@ -67,7 +67,6 @@
 				<form string="company_ssl_form" version="7.0" create="true" edit="false" delete="true">
 					<header>
 						<button name="generate_ssl_crl" attrs="{'invisible':[('type','in',['user', 'server'])]}" icon="gtk-add" string="Generate SSL CRL" type="object" />
-						<button name="generate_ssl_revoke_user" icon="STOCK_DIALOG_ERROR" string="Revoke User" type="object" states="active" />
 						<button name="regenerate_certificate" type="object" icon="gtk-jump-to" string="Regenerate Certificate" states="active" />
 						<button name="action_workflow_active" type="object" string="Activate" states="draft" class="oe_highlight"/>
                         <button name="action_workflow_disable" type="object" string="Disable" states="active" class="oe_highlight" />
@@ -80,7 +79,7 @@
 							<field name="name" on_change="onchange_attribute_name(name)"/>
 							<field name="password"/>
 							<field name="type"/>
-							<field name="certification_authority" attrs="{'required':[('type','in',['user', 'server'])]}" domain="[('type','=', 'authority_root'), ('state','=', 'active')]"/>
+							<field name="certification_authority" attrs="{'required':[('type','in',['user', 'server'])], 'invisible':[('type', 'in', 'authority_root')]}" domain="[('type','=', 'authority_root'), ('state','=', 'active')]"/>
 							<field name="user" select="2" attrs="{'invisible':[('type','in',['authority_root', 'server'])]}" />
 							<field name="name_filep12" readonly="1" invisible="1"/>
 							<field name="certificate_data_p12" readonly="1" filename="name_filep12" attrs="{'invisible':[('state','not in',['active'])]}" domain="[('state','=', 'active')]"/>
@@ -111,7 +110,6 @@
 			<field name="arch" type="xml">
 				<form string="company_ssl_form_user" version="7.0" create="true" edit="false" delete="true">
 					<header>
-						<button name="generate_ssl_revoke_user" icon="STOCK_DIALOG_ERROR" string="Revoke User" type="object" states="active" />
 						<button name="regenerate_certificate" type="object" icon="gtk-jump-to" string="Regenerate Certificate" states="active" />
 						<button name="action_workflow_active" type="object" string="Activate" states="draft" class="oe_highlight"/>
                         <button name="action_workflow_disable" type="object" string="Disable" states="active" class="oe_highlight" />

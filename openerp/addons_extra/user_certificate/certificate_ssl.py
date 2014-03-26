@@ -128,108 +128,12 @@ class certificate_ssl(osv.osv):
         return res
 
     def create(self, cr, uid, values, context=None):
-        certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
-        privatePath = self.pool.get('environment.ssl').get_certificates_path_private(cr, uid, context=context)
-        certsPath = self.pool.get('environment.ssl').get_certificates_path_certs(cr, uid, context=context)
-        certificatesKeysize = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_keysize", context=context)
-        certificatesDays = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_days_root", context=context)
-        
-        domain_ssl = self.pool.get('environment.ssl')
-        domain_ssl.initialize_ssl_environment(cr, uid, [], context=None)
         
         values['state'] = 'draft'
+        
         values['name'] = values['name']
         values['name_file'] = (cr.dbname + '_' + values['name'].strip()).replace (" ", "_")
         values['name_filep12'] = values['name_file'] + ".p12"
-        certificateNameUser =  os.path.join(certsPath, values['name_file'] + ".cert.pem") 
-        certificateP12 = os.path.join(certsPath, values['name_filep12'])
-        privateKeyNameUser =  os.path.join(privatePath, values['name_file'] + ".key.pem")
-        
-        if not 'type' in values:
-            values['type'] = 'user'
-        
-        if values['type'] == 'user':
-            
-            if not 'user' in values or values['user'] == None:
-                user = self.pool.get('res.users').browse(cr, uid, uid)
-                values['user'] = user.id
-            
-            certificationAuthority = self.pool.get('certificate.ssl').browse(cr, uid, values['certification_authority'], context)
-            
-            begin_date = datetime.datetime.strptime(values['begin_date'], "%Y-%m-%d")
-            end_date = datetime.datetime.strptime(values['end_date'], "%Y-%m-%d")
-            
-            p = subprocess.Popen(["sh", "ssl_gen_user.sh",
-                                  values['name_file'],
-                                  values['commonname'],
-                                  values['password'],
-                                  begin_date.strftime("%y%m%d%H%M%S") + 'Z',
-                                  end_date.strftime("%y%m%d%H%M%S") + 'Z',
-                                  values['country'],
-                                  values['city'],
-                                  values['state_place'],
-                                  values['organization'],
-                                  certificatesKeysize,
-                                  certificationAuthority.name_file,
-                                  certificationAuthority.password,
-                                  'openssl_client.cnf'],  cwd=certificatesPath).wait()
-            
-            p = subprocess.Popen(["sh", "ssl_gen_p12.sh",
-                                  values['name_file'],
-                                  certificationAuthority.name_file,
-                                  values['password'],
-                                  certificationAuthority.password],  cwd=certificatesPath).wait()
-            
-        elif values['type'] == 'authority_root':
-            p = subprocess.Popen(["sh", "ssl_root_authority.sh",
-                                  values['name_file'],
-                                  values['commonname'],
-                                  values['password'],
-                                  values['country'],
-                                  values['city'],
-                                  values['state_place'],
-                                  values['organization'],
-                                  certificatesKeysize,
-                                  certificatesDays],  cwd=certificatesPath).wait()
-                                  
-        elif values['type'] == 'server':
-            
-            certificationAuthority = self.pool.get('certificate.ssl').browse(cr, uid, values['certification_authority'], context)
-            
-            begin_date = datetime.datetime.strptime(values['begin_date'], "%Y-%m-%d")
-            end_date = datetime.datetime.strptime(values['end_date'], "%Y-%m-%d")
-            
-            p = subprocess.Popen(["sh", "ssl_gen_server.sh",
-                                  values['name_file'],
-                                  values['commonname'],
-                                  begin_date.strftime("%y%m%d%H%M%S") + 'Z',
-                                  end_date.strftime("%y%m%d%H%M%S") + 'Z',
-                                  values['country'],
-                                  values['city'],
-                                  values['state_place'],
-                                  values['organization'],
-                                  certificatesKeysize,
-                                  certificationAuthority.name_file,
-                                  certificationAuthority.password,
-                                  'openssl_server.cnf'],  cwd=certificatesPath).wait()
-        
-        f = open(certificateNameUser, 'r')
-        certificate_data_pem = f.read()
-        f.close()
-
-        f = open(privateKeyNameUser, 'r')
-        private_key = f.read()
-        f.close() 
-        
-        if values['type'] == 'user':
-            f = open(certificateP12, 'rb')
-            certificate_data_p12 = f.read()
-            f.close()
-            values['certificate_data_p12'] = base64.encodestring(certificate_data_p12)
-        
-        values['create_date'] = datetime.date.today().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        values['private_key'] = private_key
-        values['certificate_data_pem'] = certificate_data_pem
         
         return super(certificate_ssl, self).create(cr, uid, values, context=context)
         
@@ -283,24 +187,6 @@ class certificate_ssl(osv.osv):
                                certificate.password, 
                                'openssl_client.cnf'],  cwd=certificatesPath).wait()
          return
-    
-    def generate_ssl_revoke_user(self, cr, uid, ids, context=None, *args):
-         certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
-         namefileCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
-         certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
-         
-         if certificate.type == 'user' or certificate.type == 'server':
-             p = subprocess.Popen(["sh", 
-                                   "ssl_revoke_user.sh",
-                                   certificate.name_file,
-                                   certificate.certification_authority.password,
-                                   namefileCrl,
-                                   certificate.certification_authority.name_file,
-                                   'openssl_client.cnf'],  cwd=certificatesPath).wait()
-                                   
-             self.write(cr, uid, ids, { 'state' : 'disable' }, context=context)
-         
-         return
      
     def regenerate_certificate(self, cr, uid, ids, context=None, *args):
         certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context=context)
@@ -327,16 +213,157 @@ class certificate_ssl(osv.osv):
         
         return
     
+    def copy_data(self, cr, uid, id, default=None, context=None):
+        """
+        Copy given record's data with all its fields values
+
+        :param cr: database cursor
+        :param uid: current user id
+        :param id: id of the record to copy
+        :param default: field values to override in the original values of the copied record
+        :type default: dictionary
+        :param context: context arguments, like lang, time zone
+        :type context: dictionary
+        :return: dictionary containing all the field values
+        """
+        
+        field_values = super(certificate_ssl, self).copy_data(cr, uid, id, default=default, context=context)
+        
+        field_values.update({'commonname': field_values['commonname'] + ' copy'})
+        field_values.update({'name_file': field_values['name_file'] + 'copy'})
+        field_values.update({'name': field_values['name'] + 'copy'})
+        
+        return field_values
+        
+    
     # Workflow
     def action_workflow_draft(self, cr, uid, ids, context=None):
+        
+        
         self.write(cr, uid, ids, { 'state' : 'draft' }, context=context)
         return True
 
     def action_workflow_active(self, cr, uid, ids, context=None):
-        self.write(cr, uid, ids, { 'state' : 'active' }, context=context)
+        certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
+        privatePath = self.pool.get('environment.ssl').get_certificates_path_private(cr, uid, context=context)
+        certsPath = self.pool.get('environment.ssl').get_certificates_path_certs(cr, uid, context=context)
+        certificatesKeysize = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_keysize", context=context)
+        certificatesDays = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_days_root", context=context)
+        certificate = self.pool.get('certificate.ssl').browse(cr, uid, ids[0], context)
+        
+        domain_ssl = self.pool.get('environment.ssl')
+        domain_ssl.initialize_ssl_environment(cr, uid, [], context=None)
+        
+        certificateNameUser =  os.path.join(certsPath, certificate.name_file + ".cert.pem") 
+        certificateP12 = os.path.join(certsPath, certificate.name_filep12)
+        privateKeyNameUser =  os.path.join(privatePath, certificate.name_file + ".key.pem")
+        
+        values = {}
+        
+        if certificate.type == 'user':
+            
+            if certificate.user == False or certificate.user == None:
+                user = self.pool.get('res.users').browse(cr, uid, uid)
+                values['user'] = user.id
+            
+            certificationAuthority = self.pool.get('certificate.ssl').browse(cr, uid, certificate.certification_authority.id, context)
+            
+            begin_date = datetime.datetime.strptime(certificate.begin_date, "%Y-%m-%d")
+            end_date = datetime.datetime.strptime(certificate.end_date, "%Y-%m-%d")
+            
+            p = subprocess.Popen(["sh", "ssl_gen_user.sh",
+                                  certificate.name_file,
+                                  certificate.commonname,
+                                  certificate.password,
+                                  begin_date.strftime("%y%m%d%H%M%S") + 'Z',
+                                  end_date.strftime("%y%m%d%H%M%S") + 'Z',
+                                  certificate.country,
+                                  certificate.city,
+                                  certificate.state_place,
+                                  certificate.organization,
+                                  certificatesKeysize,
+                                  certificationAuthority.name_file,
+                                  certificationAuthority.password,
+                                  'openssl_client.cnf'],  cwd=certificatesPath).wait()
+            
+            p = subprocess.Popen(["sh", "ssl_gen_p12.sh",
+                                  certificate.name_file,
+                                  certificationAuthority.name_file,
+                                  certificate.password,
+                                  certificationAuthority.password],  cwd=certificatesPath).wait()
+            
+        elif certificate.type == 'authority_root':
+            p = subprocess.Popen(["sh", "ssl_root_authority.sh",
+                                  certificate.name_file,
+                                  certificate.commonname,
+                                  certificate.password,
+                                  certificate.country,
+                                  certificate.city,
+                                  certificate.state_place,
+                                  certificate.organization,
+                                  certificatesKeysize,
+                                  certificatesDays],  cwd=certificatesPath).wait()
+                                  
+        elif certificate.type == 'server':
+            
+            certificationAuthority = self.pool.get('certificate.ssl').browse(cr, uid, certificate.certification_authority, context)
+            
+            begin_date = datetime.datetime.strptime(certificate.begin_date, "%Y-%m-%d")
+            end_date = datetime.datetime.strptime(certificate.end_date, "%Y-%m-%d")
+            
+            p = subprocess.Popen(["sh", "ssl_gen_server.sh",
+                                  certificate.name_file,
+                                  certificate.commonname,
+                                  begin_date.strftime("%y%m%d%H%M%S") + 'Z',
+                                  end_date.strftime("%y%m%d%H%M%S") + 'Z',
+                                  certificate.country,
+                                  certificate.city,
+                                  certificate.state_place,
+                                  certificate.organization,
+                                  certificatesKeysize,
+                                  certificationAuthority.name_file,
+                                  certificationAuthority.password,
+                                  'openssl_server.cnf'],  cwd=certificatesPath).wait()
+        
+        f = open(certificateNameUser, 'r')
+        certificate_data_pem = f.read()
+        f.close()
+
+        f = open(privateKeyNameUser, 'r')
+        private_key = f.read()
+        f.close() 
+        
+        if certificate.type == 'user':
+            f = open(certificateP12, 'rb')
+            certificate_data_p12 = f.read()
+            f.close()
+            values['certificate_data_p12'] = base64.encodestring(certificate_data_p12)
+        
+        values['create_date'] = datetime.date.today().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        values['private_key'] = private_key
+        values['certificate_data_pem'] = certificate_data_pem
+        values['state']  = 'active'
+
+        self.write(cr, uid, ids, values, context=context)
         return True
     
     def action_workflow_disable(self, cr, uid, ids, context=None):
+        certificatesPath = certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
+        namefileCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
+        certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
+        
+        if certificate.type == 'user' or certificate.type == 'server':
+            p = subprocess.Popen(["sh", 
+                                  "ssl_revoke_user.sh",
+                                  certificate.name_file,
+                                  certificate.certification_authority.password,
+                                  namefileCrl,
+                                  certificate.certification_authority.name_file,
+                                  'openssl_client.cnf'],  cwd=certificatesPath).wait()
+                                  
+            self.write(cr, uid, ids, { 'state' : 'disable' }, context=context)
+        
+        
         self.write(cr, uid, ids, { 'state' : 'disable' }, context=context)
         
         return True
