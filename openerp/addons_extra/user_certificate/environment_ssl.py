@@ -11,6 +11,7 @@ class environment_ssl(osv.osv):
          serverDir = os.path.join(currentPath, os.pardir)
          serverDir = os.path.join(serverDir, os.pardir)
          serverDir = os.path.join(serverDir, os.pardir)
+         serverDir = os.path.join(serverDir, os.pardir)
          certificatesPath = os.path.join(serverDir, certificatesPath)
          return certificatesPath
      
@@ -39,14 +40,14 @@ class environment_ssl(osv.osv):
          except OSError:
              pass
          
-         src_files = os.listdir(scriptsPath)
-         for file_name in src_files:
-            full_file_name = os.path.join(scriptsPath, file_name)
-            if (os.path.isfile(full_file_name)):
-                shutil.copy(full_file_name, certificatesPath)
+         #src_files = os.listdir(scriptsPath)
+         #for file_name in src_files:
+         #   full_file_name = os.path.join(scriptsPath, file_name)
+         #   if (os.path.isfile(full_file_name)):
+         #       shutil.copy(full_file_name, certificatesPath)
          
-         if not os.path.isfile(os.path.join(certificatesPath, 'index.txt')):
-             p = subprocess.Popen(["sh", "ssl_initialize.sh"],  cwd=certificatesPath).wait()
+         #if not os.path.isfile(os.path.join(certificatesPath, 'index.txt')):
+         #    p = subprocess.Popen(["sh", "ssl_initialize.sh"],  cwd=certificatesPath).wait()
          
          return
          

@@ -110,10 +110,10 @@ class virtualhost_ssl(osv.osv):
          currentPath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
          absfilePath = os.path.abspath(os.path.join(currentPath, 'templates/'))
          
-         absfilePathCA = os.path.abspath(os.path.join(certificatesPath, "certs", certificationAuthority.name_file + ".cert.pem"))
-         absfilePathCRL = os.path.abspath(os.path.join(certificatesPath, "crl", certificatesCrl + ".pem"))
-         absfilePathCertificateServer = os.path.abspath(os.path.join(certificatesPath, "certs", certificationServer.name_file + ".cert.pem"))
-         absfilePathKeyServer = os.path.abspath(os.path.join(certificatesPath, "private", certificationServer.name_file + ".key.pem"))
+         absfilePathCA = os.path.abspath(os.path.join(certificatesPath, certificationAuthority.name, "certs", certificationAuthority.name_file + ".cert.pem"))
+         absfilePathCRL = os.path.abspath(os.path.join(certificatesPath, certificationAuthority.name,"crl", certificatesCrl + ".pem"))
+         absfilePathCertificateServer = os.path.abspath(os.path.join(certificatesPath, certificationAuthority.name, "certs", certificationServer.name_file + ".cert.pem"))
+         absfilePathKeyServer = os.path.abspath(os.path.join(certificatesPath, certificationAuthority.name, "private", certificationServer.name_file + ".key.pem"))
          absfilePathLog = os.path.abspath(os.path.join(virtualhost.logpath, virtualhost.name + ".log"))
          
          lookup = TemplateLookup(directories=[absfilePath])
