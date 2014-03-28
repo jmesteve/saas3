@@ -148,7 +148,10 @@ class certificate_ssl(osv.osv):
          for file_name in src_files:
             full_file_name = os.path.join(scriptsPath, file_name)
             if (os.path.isfile(full_file_name)):
-                shutil.copy(full_file_name, certificatesPath)
+                try:
+                    shutil.copy(full_file_name, certificatesPath)
+                except OSError:
+                    pass
          
          if not os.path.isfile(os.path.join(certificatesPath, 'index.txt')):
              p = subprocess.Popen(["sh", "ssl_initialize.sh"],  cwd=certificatesPath).wait()
@@ -423,10 +426,10 @@ class certificate_ssl(osv.osv):
         
         if certificate.type == 'user' or certificate.type == 'server':
             certificatesPath = os.path.join(certificatesPath, certificate.certification_authority.name_file)
-            self.initialize_ca(cr, uid, certificate.certification_authority.id, context=context)
+            #self.initialize_ca(cr, uid, certificate.certification_authority.id, context=context)
         else:
             certificatesPath = os.path.join(certificatesPath, certificate.name_file)
-            self.initialize_ca(cr, uid, ids[0], context=context)
+            #self.initialize_ca(cr, uid, ids[0], context=context)
         
         
         if certificate.type == 'user' or certificate.type == 'server':
