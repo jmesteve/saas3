@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+		<record id="view_user_ssl_form_email" model="ir.ui.view">
+			<field name="name">user.ssl.form</field>
+			<field name="model">certificate.ssl</field>
+			<field name="inherit_id" ref="user_certificate.view_user_ssl_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//button[@name='action_workflow_disable']" position="after">
+					<button name="action_send_mail" attrs="{'invisible':['|',('state','not in',['active']), ('type','not in',['user'])]}" string="Send Certificate by Email" type="object" class="oe_highlight"/>
+					<button name="action_send_mail_password" attrs="{'invisible':['|',('state','not in',['active']), ('type','not in',['user'])]}" string="Send Password by Email" type="object" class="oe_highlight"/>
+                </xpath>
+			</field>
+		</record>
+    </data>
+</openerp>
