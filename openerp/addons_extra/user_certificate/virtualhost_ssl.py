@@ -57,6 +57,7 @@ class virtualhost_ssl(osv.osv):
          serverDir = os.path.join(currentPath, os.pardir)
          serverDir = os.path.join(serverDir, os.pardir)
          serverDir = os.path.join(serverDir, os.pardir)
+         serverDir = os.path.join(serverDir, os.pardir)
          virtualhostPath = self.pool.get('ir.config_parameter').get_param(cr, uid, "virtualhost_path", context=context)
          virtualhostPath = os.path.join(serverDir, virtualhostPath)
          return virtualhostPath
