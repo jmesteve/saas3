@@ -136,7 +136,7 @@ class certificate_ssl(osv.osv):
     def initialize_ca(self, cr, uid, ids, context=None):
          certificate = super(certificate_ssl, self).browse(cr, uid, ids, context=context)
          certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context=context)
-         certificatesPath = os.path.join(certificatesPath, certificate.name)
+         certificatesPath = os.path.join(certificatesPath, certificate.name_file)
          scriptsPath = self.pool.get('environment.ssl').get_scripts_path(cr, uid, context=context)
 
          try:
@@ -199,7 +199,7 @@ class certificate_ssl(osv.osv):
          certificatesPath = self.pool.get('environment.ssl').get_certificates_path(cr, uid, context)
          namefileCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
          certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
-         certificatesPath = os.path.join(certificatesPath, certificate.name)
+         certificatesPath = os.path.join(certificatesPath, certificate.name_file)
          
          self.initialize_ca(cr, uid, ids[0], context=context)
          
@@ -239,7 +239,7 @@ class certificate_ssl(osv.osv):
         namefileCrl = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_crl", context=context)
         
         if certificate.type == 'user' or certificate.type == 'server':
-            certificatesPath = os.path.join(certificatesPath, certificate.certification_authority.name)
+            certificatesPath = os.path.join(certificatesPath, certificate.certification_authority.name_file)
             privatePath = os.path.join(certificatesPath,'private/')
             certsPath = os.path.join(certificatesPath,'certs/')            
             
@@ -277,10 +277,10 @@ class certificate_ssl(osv.osv):
         certificate = self.pool.get('certificate.ssl').browse(cr, uid, ids[0], context)
         
         if certificate.type == 'user' or certificate.type == 'server':
-            certificatesPath = os.path.join(certificatesPath, certificate.certification_authority.name)
+            certificatesPath = os.path.join(certificatesPath, certificate.certification_authority.name_file)
             self.initialize_ca(cr, uid, certificate.certification_authority.id, context=context)
         else:
-            certificatesPath = os.path.join(certificatesPath, certificate.name)
+            certificatesPath = os.path.join(certificatesPath, certificate.name_file)
             self.initialize_ca(cr, uid, ids[0], context=context)
         
         values = {}    
@@ -422,10 +422,10 @@ class certificate_ssl(osv.osv):
         certificate = super(certificate_ssl, self).browse(cr, uid, ids[0], context=context)
         
         if certificate.type == 'user' or certificate.type == 'server':
-            certificatesPath = os.path.join(certificatesPath, certificate.certification_authority.name)
+            certificatesPath = os.path.join(certificatesPath, certificate.certification_authority.name_file)
             self.initialize_ca(cr, uid, certificate.certification_authority.id, context=context)
         else:
-            certificatesPath = os.path.join(certificatesPath, certificate.name)
+            certificatesPath = os.path.join(certificatesPath, certificate.name_file)
             self.initialize_ca(cr, uid, ids[0], context=context)
         
         
