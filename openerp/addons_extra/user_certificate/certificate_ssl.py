@@ -121,6 +121,7 @@ class certificate_ssl(osv.osv):
         if 'user' in context:
             user_id = context.get('user', False)
             res['user'] = user_id
+            res['type'] = 'user'
         if 'name' in context:
             name = context.get('name', False)
             res['name'] = name
@@ -166,8 +167,6 @@ class certificate_ssl(osv.osv):
     def create(self, cr, uid, values, context=None):
         
         values['state'] = 'draft'
-        
-        values['name'] = values['name']
         values['name_file'] = (cr.dbname + '_' + values['name'].strip()).replace (" ", "_")
         values['name_filep12'] = values['name_file'] + ".p12"
         

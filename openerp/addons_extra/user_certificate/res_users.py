@@ -14,7 +14,7 @@ class res_users(osv.osv):
         
         user = self.pool.get('res.users').browse(cr, uid, id)
         authority_id = self.pool.get('certificate.ssl').search(cr, uid, [('type', 'ilike', 'authority_root'), ('state', 'ilike', 'active')], context=context)
-        if isinstance(authority_id, list):
+        if isinstance(authority_id, list) and len(authority_id) > 0:
             authority_id = authority_id[0]
         context.update({'user': user.id, 'name': user.name, 'certification_authority':  authority_id})
         return {
