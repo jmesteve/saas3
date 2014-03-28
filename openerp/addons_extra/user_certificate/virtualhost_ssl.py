@@ -65,6 +65,7 @@ class virtualhost_ssl(osv.osv):
      def create(self, cr, uid, values, context=None):
          
          values['state'] = 'draft'
+         values['name'] = values['name'].strip().replace (" ", "_")
          
          return osv.osv.create(self, cr, uid, values, context=context)
      
