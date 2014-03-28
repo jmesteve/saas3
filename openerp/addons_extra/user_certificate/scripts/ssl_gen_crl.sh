@@ -7,4 +7,4 @@ openssl ca -config $configfile -md sha1 -passin pass:$passca -keyfile private/$n
 
 openssl crl -in crl/$namefilecrl.pem -text
 
-/usr/sbin/service apache2 reload
+sudo /usr/sbin/service apache2 reload

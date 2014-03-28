@@ -4,5 +4,5 @@ destination=$3
 
 /usr/sbin/a2dissite $virtualhost
 rm $destination
-/usr/sbin/service apache2 reload
+sudo /usr/sbin/service apache2 reload
 rm $virtualhostsource
