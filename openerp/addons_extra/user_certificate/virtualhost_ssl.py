@@ -82,6 +82,25 @@ class virtualhost_ssl(osv.osv):
          
          return osv.osv.unlink(self, cr, uid, ids, context=context)
      
+     def copy_data(self, cr, uid, id, default=None, context=None):
+        """
+        Copy given record's data with all its fields values
+
+        :param cr: database cursor
+        :param uid: current user id
+        :param id: id of the record to copy
+        :param default: field values to override in the original values of the copied record
+        :type default: dictionary
+        :param context: context arguments, like lang, time zone
+        :type context: dictionary
+        :return: dictionary containing all the field values
+        """
+        
+        field_values = super(virtualhost_ssl, self).copy_data(cr, uid, id, default=default, context=context)
+        field_values.update({'name': field_values['name'] + 'copy'})
+        
+        return field_values
+     
      def regenerate_file(self, cr, uid, ids, context=None):
          
          return

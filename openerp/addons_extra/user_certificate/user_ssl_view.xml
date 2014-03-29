@@ -67,6 +67,7 @@
 			<field name="arch" type="xml">
 				<form string="company_ssl_form" version="7.0" create="true" edit="true" delete="true">
 					<header>
+						<button name="generate_ssl_crl" type="object" string="Generate CRL manual" class="oe_highlight" states="active"/>
 						<button name="action_workflow_active" type="object" string="Activate" states="draft,disable" class="oe_highlight"/>
 						<button name="action_workflow_draft" type="object" string="Draft" states="active" class="oe_highlight" />
                         <button name="action_workflow_disable" type="object" string="Disable" states="active" class="oe_highlight" />
