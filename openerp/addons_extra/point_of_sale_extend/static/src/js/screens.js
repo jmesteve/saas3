@@ -755,7 +755,13 @@ function openerp_pos_screens(instance, module){ //module is instance.point_of_sa
 
         start: function(){ //FIXME this should work as renderElement... but then the categories aren't properly set. explore why
             var self = this;
-
+            
+//*****************inicio cambio*************
+            
+            this._super();
+            
+//*****************fin cambio*************
+            
             this.product_list_widget = new module.ProductListWidget(this,{
                 click_product_action: function(product){
                     if(product.to_weight && self.pos.config.iface_electronic_scale){
@@ -763,6 +769,21 @@ function openerp_pos_screens(instance, module){ //module is instance.point_of_sa
                     }else{
                         self.pos.get('selectedOrder').addProduct(product);
                     }
+                    
+//*****************inicio cambio*************    
+                    
+                  //actualizar cantidad offline
+                    var product_db = self.pos.db.product_by_id[product.get('id')];
+                	var new_qty = product_db['qty_available'] - 1;
+                	product_db['qty_available']=new_qty;
+                	//render
+                	var pos_categ_id = self.product_categories_widget.category.id;
+                	var category = self.pos.db.get_category_by_id(pos_categ_id);
+                	self.product_categories_widget.set_category(category);
+                	self.product_categories_widget.renderElement();
+                	
+//*****************fin cambio*************
+                	
                 },
                 product_list: this.pos.db.get_product_by_category(0)
             });
@@ -936,6 +957,12 @@ function openerp_pos_screens(instance, module){ //module is instance.point_of_sa
             
             document.body.addEventListener('keyup', this.hotkey_handler);
             
+            if(    this.pos.config.iface_cashdrawer 
+                && this.pos.get('selectedOrder').get('paymentLines').find( function(pl){ 
+                           return pl.cashregister.journal.type === 'cash'; 
+                   })){
+                    this.pos.proxy.open_cashbox();
+            }
 
 
             this.add_action_button({
@@ -1137,13 +1164,6 @@ function openerp_pos_screens(instance, module){ //module is instance.point_of_sa
 
             if(!this.is_paid()){
                 return;
-            }
-
-            if(    this.pos.config.iface_cashdrawer 
-                && this.pos.get('selectedOrder').get('paymentLines').find( function(pl){ 
-                           return pl.cashregister.journal.type === 'cash'; 
-                   })){
-                    this.pos.proxy.open_cashbox();
             }
 
             if(options.invoice){

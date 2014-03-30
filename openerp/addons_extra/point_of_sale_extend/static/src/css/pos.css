@@ -1,0 +1,155 @@
+
+.pos-topheader #branding button.cashier-button {
+	color: #273072;
+    height:27px;
+    margin:3px;
+    border: 1px solid #353A7E;
+    font-size:14px;
+    background: #7f82ac;
+    background: -webkit-gradient(linear, left top, left bottom, from(#b2b3d7), to(#7f82ac));
+    background: -moz-linear-gradient(#b2b3d7, #7f82ac);
+    background:  -ms-linear-gradient(#b2b3d7, #7f82ac);
+    background:      linear-gradient(#b2b3d7, #7f82ac);
+    width: 120px;
+    margin-left:4px;
+    margin-right:4px;
+}
+
+.pos-topheader #branding #userlist-select{
+	color: #273072;
+    margin: 3px;
+    width: 120px;
+    height: 27px;
+    border: 1px solid #353A7E;
+    font-size:14px;
+    background: #7f82ac;
+    background: -webkit-gradient(linear, left top, left bottom, from(#b2b3d7), to(#7f82ac));
+    background: -moz-linear-gradient(#b2b3d7, #7f82ac);
+    background:  -ms-linear-gradient(#b2b3d7, #7f82ac);
+    background:      linear-gradient(#b2b3d7, #7f82ac);
+    margin-left:4px;
+    margin-right:4px;
+    appearance:button;
+	-moz-appearance:button; /* Firefox */
+	-webkit-appearance:button; /* Safari and Chrome */
+}
+
+.pos-topheader #branding #stockmin-select{
+	color: #273072;
+	padding-left:4px;
+    margin: 3px;
+    width: 120px;
+    height: 27px;
+    border: 1px solid #353A7E;
+    font-size:14px;
+    background: #7f82ac;
+    background: -webkit-gradient(linear, left top, left bottom, from(#b2b3d7), to(#7f82ac));
+    background: -moz-linear-gradient(#b2b3d7, #7f82ac);
+    background:  -ms-linear-gradient(#b2b3d7, #7f82ac);
+    background:      linear-gradient(#b2b3d7, #7f82ac);
+    margin-left:4px;
+    margin-right:4px;
+    appearance:button;
+	-moz-appearance:button; /* Firefox */
+	-webkit-appearance:button; /* Safari and Chrome */
+}
+
+.oe_application #paypad button {
+    height: 50px;
+    width: 190px;
+    margin: 0px -6px 4px -2px;
+    font-weight: bold;
+    vertical-align: middle;
+    color: #555555;
+    border-top: 1px solid #efefef;
+    font-size: 14px;
+}
+
+
+.oe_application #numpad .mode-button {
+    height: 50px;
+    width: 70px;
+    margin: 0px 0px 4px 0px;
+    font-weight: bold;
+    vertical-align: middle;
+    color: #555555;
+    border-top: 1px solid #efefef;
+}
+
+.oe_application #numpad #numpad-backspace {
+    width: 70px !important;
+}
+
+.oe_application .product .product-stock {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    vertical-align: top;
+    line-height: 13px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    box-shadow: 0px 1px 0px #9A9CC5, 0px 3px 0px #7E86AC, 0px 3px 3px rgba(12, 14, 68, 0.67);
+}
+.oe_application .product .product-stock0 {
+    color: white;
+    background: #FF0000;
+}
+.oe_application .product .product-stock1 {
+    color: blue;
+    background: #FFFF00;
+}
+.poe_application .product .product-stock2 {
+    color: blue;
+    background: #40FF00;
+}
+
+.oe_application .pos-sale-ticket {
+    text-align: left;
+    width: 65mm;
+    background-color: white;
+    margin: 20px;
+    padding: 15px;
+    padding-bottom:30px;
+    display: inline-block;
+    font-family: "Inconsolata";
+    border-radius: 2px;
+    box-shadow: 0px 1px 0px white, 0px 3px 0px #C1B9D6, 0px 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+@media print {
+    .oe_application #topheader, .oe_application #leftpane {
+        display: none !important;
+    }
+    .oe_application #content {
+        top: 0px !important;
+    }
+    .oe_application #rightpane {
+        left: 0px !important;
+        background-color: white;
+    }
+    #receipt-screen header {
+        display: none !important;
+    }
+    #receipt-screen {
+        text-align: left;
+    }
+    .pos-actionbar {
+        display: none !important;
+    }
+    .pos-sale-ticket {
+        margin: 0;
+    }
+    .debug-widget{
+        display: none !important;
+    }
+    .oe_application *{
+        text-shadow: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+    .oe_application .pos-sale-ticket{
+        margin-left: auto !important;
+        margin-right: auto !important;
+        /*border: solid 1px black !important;*/
+    }
+}
