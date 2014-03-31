@@ -1,8 +1,8 @@
 
-.pos-topheader #branding button.cashier-button {
+.cashier-button {
 	color: #273072;
     height:27px;
-    margin:3px;
+    margin:2px;
     border: 1px solid #353A7E;
     font-size:14px;
     background: #7f82ac;
@@ -15,7 +15,7 @@
     margin-right:4px;
 }
 
-.pos-topheader #branding #userlist-select{
+#userlist-select{
 	color: #273072;
     margin: 3px;
     width: 120px;
@@ -34,10 +34,10 @@
 	-webkit-appearance:button; /* Safari and Chrome */
 }
 
-.pos-topheader #branding #stockmin-select{
+#stockmin-select{
 	color: #273072;
 	padding-left:4px;
-    margin: 3px;
+    margin: 2px;
     width: 120px;
     height: 27px;
     border: 1px solid #353A7E;
@@ -54,7 +54,7 @@
 	-webkit-appearance:button; /* Safari and Chrome */
 }
 
-.oe_application #paypad button {
+#paypad button {
     height: 50px;
     width: 190px;
     margin: 0px -6px 4px -2px;
@@ -66,7 +66,7 @@
 }
 
 
-.oe_application #numpad .mode-button {
+#numpad .mode-button {
     height: 50px;
     width: 70px;
     margin: 0px 0px 4px 0px;
@@ -76,11 +76,11 @@
     border-top: 1px solid #efefef;
 }
 
-.oe_application #numpad #numpad-backspace {
+#numpad #numpad-backspace {
     width: 70px !important;
 }
 
-.oe_application .product .product-stock {
+.product .product-stock {
     position: absolute;
     top: 2px;
     left: 2px;
@@ -90,11 +90,11 @@
     border-radius: 3px;
     box-shadow: 0px 1px 0px #9A9CC5, 0px 3px 0px #7E86AC, 0px 3px 3px rgba(12, 14, 68, 0.67);
 }
-.oe_application .product .product-stock0 {
+.product .product-stock0 {
     color: white;
     background: #FF0000;
 }
-.oe_application .product .product-stock1 {
+.product .product-stock1 {
     color: blue;
     background: #FFFF00;
 }
@@ -103,7 +103,7 @@
     background: #40FF00;
 }
 
-.oe_application .pos-sale-ticket {
+.pos-sale-ticket {
     text-align: left;
     width: 65mm;
     background-color: white;
@@ -117,13 +117,13 @@
 }
 
 @media print {
-    .oe_application #topheader, .oe_application #leftpane {
+    #topheader, #leftpane {
         display: none !important;
     }
-    .oe_application #content {
+    #content {
         top: 0px !important;
     }
-    .oe_application #rightpane {
+    #rightpane {
         left: 0px !important;
         background-color: white;
     }
@@ -142,12 +142,12 @@
     .debug-widget{
         display: none !important;
     }
-    .oe_application *{
+    *{
         text-shadow: none !important;
         box-shadow: none !important;
         background: transparent !important;
     }
-    .oe_application .pos-sale-ticket{
+    .pos-sale-ticket{
         margin-left: auto !important;
         margin-right: auto !important;
         /*border: solid 1px black !important;*/

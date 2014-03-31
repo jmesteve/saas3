@@ -31,7 +31,7 @@
     """,
     'website': 'https://github.com/jmesteve',
     'license': 'AGPL-3',
-    'depends' : ['point_of_sale'],
+    'depends' : ['point_of_sale','sale_stock'],
     'images': ['images/default_paid.png'],
     'data': ['point_of_sale_view.xml',
              'point_of_sale_report.xml',],
@@ -41,11 +41,11 @@
         #'static/src/js/widgets.js',
         #'static/src/js/screens.js',
         ],
+    'css':[
+        'static/src/css/pos.css',
+    ],
     'qweb': ['static/src/xml/pos.xml',
              ],
-    'css':[
-        "static/src/css/pos.css"
-    ],
     'demo': [],
     'installable': True,
     'application': True,
