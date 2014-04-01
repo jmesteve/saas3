@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <templates id="template" xml:space="preserve">
+
+	 
 	 <t t-extend="PosWidget">
 	 	<t t-jquery=".pos-branding" t-operation="replace">
 	 		 <!--<img src="/point_of_sale/static/src/img/logo.png" />-->
+	 		 <link rel="stylesheet" href="/point_of_sale_extend/static/src/css/poswidget.css" />
 	 		 	<div id="branding">
-                    <button class="cashier-button">select cashier</button>
-                    <select id="userlist-select" style="display:none;">
-        			</select>
         			<select id="stockmin-select"> 
         				<option value="1" >stock minimum</option>
         				<option value="0" >all the stock</option>
         			</select>
-                    <span class="placeholder-UsernameWidget"></span>
+        			<button class="cashier-button">select cashier</button>
+                    <select id="userlist-select" style="display:none;">
+        			</select>
+        			<div class="username-spam">
+        			<span class="placeholder-UsernameWidget"></span>
+        			</div>
                 </div>
         </t>
      </t>
      
      <t t-extend="Product">
      	<t t-jquery=".product-name" t-operation="after">
+     	
      		<div>
      			<t t-if="product.qty_available==0">
                		<div class="product-stock product-stock0">

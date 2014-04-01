@@ -35,9 +35,6 @@ html_template = """<!DOCTYPE html>
         <link rel="stylesheet" href="/point_of_sale/static/src/fonts/lato/stylesheet.css" /> 
         <link rel="stylesheet" href="/point_of_sale/static/src/fonts/font-awesome-4.0.3/css/font-awesome.min.css" /> 
         <link rel="stylesheet" href="/point_of_sale/static/src/css/pos.css" />
-                
-<link rel="stylesheet" href="/point_of_sale_extend/static/src/css/pos.css" />
-        
         <link rel="stylesheet" href="/point_of_sale/static/src/css/keyboard.css" />
         %(js)s
         <script type="text/javascript">

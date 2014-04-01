@@ -1,5 +1,7 @@
-
 .cashier-button {
+	position:relative;
+	float:left;
+	left:50px;
 	color: #273072;
     height:27px;
     margin:2px;
@@ -16,6 +18,10 @@
 }
 
 #userlist-select{
+	position:relative;
+	float:left;
+	left:50px;
+	padding-left:8px;
 	color: #273072;
     margin: 3px;
     width: 120px;
@@ -35,8 +41,11 @@
 }
 
 #stockmin-select{
+	position:relative;
+	float:left;
+	left:5px;
 	color: #273072;
-	padding-left:4px;
+	padding-left:8px;
     margin: 2px;
     width: 120px;
     height: 27px;
@@ -52,6 +61,15 @@
     appearance:button;
 	-moz-appearance:button; /* Firefox */
 	-webkit-appearance:button; /* Safari and Chrome */
+}
+
+.username-spam{
+	position:relative;
+	float:left;
+	left:70px;
+	top:10px;
+	font-size:14px;
+	width: 100px;
 }
 
 #paypad button {
@@ -116,40 +134,54 @@
     box-shadow: 0px 1px 0px white, 0px 3px 0px #C1B9D6, 0px 8px 16px rgba(0, 0, 0, 0.3);
 }
 
+
 @media print {
-    #topheader, #leftpane {
+    .oe_leftbar,
+    .pos .pos-topheader, 
+    .pos .pos-leftpane, 
+    .pos .keyboard_frame {
         display: none !important;
     }
-    #content {
-        top: 0px !important;
+    .pos,
+    .pos .pos-content,
+    .pos .rightpane,
+    .pos .screen, 
+    .pos .window, 
+    .pos .window .subwindow, 
+    .pos .subwindow .subwindow-container{
+        display: block;
+        position: static;
+        height: auto;
     }
-    #rightpane {
+    .pos{
+        background: white !important;
+    }
+    .pos .rightpane {
         left: 0px !important;
         background-color: white;
     }
-    #receipt-screen header {
+    .pos .receipt-screen header {
         display: none !important;
     }
-    #receipt-screen {
+    .pos .receipt-screen {
         text-align: left;
     }
     .pos-actionbar {
         display: none !important;
     }
-    .pos-sale-ticket {
-        margin: 0;
-    }
     .debug-widget{
         display: none !important;
     }
-    *{
+    .pos *{
         text-shadow: none !important;
         box-shadow: none !important;
         background: transparent !important;
     }
-    .pos-sale-ticket{
-        margin-left: auto !important;
-        margin-right: auto !important;
-        /*border: solid 1px black !important;*/
+    .pos .pos-sale-ticket{
+        margin: 0;
+        border: none !important;
+        font-size: 13px !important;
+        width: 266px !important;
     }
 }
+

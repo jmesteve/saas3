@@ -20,5 +20,3 @@
 ##############################################################################
 import point_of_sale
 import report
-
-import controllers

@@ -25,13 +25,13 @@
     'name': 'Point of Sale Extend',
     'version': '1.0',
     'author': 'jmesteve',
-    'category': 'Point of Sale',    
+    'category': 'Point of Sale', 
     'description': """
         [ENG] Extend Point of Sale .
     """,
     'website': 'https://github.com/jmesteve',
     'license': 'AGPL-3',
-    'depends' : ['point_of_sale','sale_stock'],
+    'depends' : ['point_of_sale'],
     'images': ['images/default_paid.png'],
     'data': ['point_of_sale_view.xml',
              'point_of_sale_report.xml',],
@@ -42,13 +42,13 @@
         'static/src/js/screens.js',
         ],
     'css':[
-        'static/src/css/pos.css',
+        #'static/src/css/pos_extend.css', # reference -> pox.xml
     ],
     'qweb': ['static/src/xml/pos.xml',
              ],
     'demo': [],
     'installable': True,
-    'application': True,
+    'application': False,
     'auto_install': False,
 }
 
