@@ -312,9 +312,9 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
 //*****************inicio cambio*************
             	
                 //this.add_new_order();
-            	lastOrder = this.get('orders').last();
-                var user = this.get('user');
-            	var cashier = lastOrder.get('cashier');
+            	lastOrder = this.orders.last();
+                var user = this.user;
+            	var cashier = lastOrder.cashier;
             	user.name = cashier.name;
             	user.id = cashier.id;
                 this.set({ selectedOrder: lastOrder });
@@ -327,7 +327,7 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
         //creates a new empty order and sets it as the current order
         add_new_order: function(){
             var order = new module.Order({pos:this});
-            this.get('orders').add(order);
+            this.orders.add(order);
 
 //*****************inicio cambio*************
             
