@@ -773,7 +773,7 @@ function openerp_pos_screens(instance, module){ //module is instance.point_of_sa
 //*****************inicio cambio*************    
                     
                   //actualizar cantidad offline
-                    var product_db = self.pos.db.product_by_id[product.get('id')];
+                    var product_db = self.pos.db.product_by_id[product.id];
                 	var new_qty = product_db['qty_available'] - 1;
                 	product_db['qty_available']=new_qty;
                 	console.log(product_db);
