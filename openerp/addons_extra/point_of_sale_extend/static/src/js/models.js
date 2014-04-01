@@ -311,13 +311,18 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
             	
 //*****************inicio cambio*************
             	
-                //this.add_new_order();
-            	lastOrder = this.get('orders').last();
-                var user = this.user;
-            	var cashier = lastOrder.cashier;
-            	user.name = cashier.name;
-            	user.id = cashier.id;
-                this.set({ selectedOrder: lastOrder });
+                this.add_new_order();
+            	
+            	//orders = this.get('orders')
+            	
+            	//lastOrder = this.get('orders').last();
+            	//console.log(lastOrder,this )
+                //var user = this.user;
+            	//var cashier = lastOrder.cashier;
+            	//user.name = cashier.name;
+            	//user.id = cashier.id;
+                //this.set({ selectedOrder: lastOrder });
+            	
                 
 //*****************fin cambio*************
                 
