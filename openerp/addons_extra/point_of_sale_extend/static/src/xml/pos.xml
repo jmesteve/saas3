@@ -18,23 +18,24 @@
      </t>
      
      <t t-extend="Product">
-     	<t t-jquery=".product_name" t-operation="after">
+     	<t t-jquery=".product-name" t-operation="after">
      		<div>
-               	<t t-if="widget.model.get('qty_available')==0">
+     			<t t-if="product.qty_available==0">
                		<div class="product-stock product-stock0">
-                   		<t t-esc="widget.model.get('qty_available')"/>
+                   		<t t-esc="product.qty_available"/>
                    	</div>
-                   </t>
-                   <t t-if="widget.model.get('qty_available')==1">
+                </t>
+                <t t-if="product.qty_available==1">
                    	<div class="product-stock product-stock1">
-                   		<t t-esc="widget.model.get('qty_available')"/>
+                   		<t t-esc="product.qty_available"/>
                    	</div>
                    </t>
-                   <t t-if="widget.model.get('qty_available')>1">
+                   <t t-if="product.qty_available>1">
                    	<div class="product-stock product-stock2">
-                   		<t t-esc="widget.model.get('qty_available')"/>
+                   		<t t-esc="product.qty_available"/>
                    	</div>
                    </t>
+                   
             </div>
        </t>
     </t>

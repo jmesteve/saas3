@@ -776,6 +776,7 @@ function openerp_pos_screens(instance, module){ //module is instance.point_of_sa
                     var product_db = self.pos.db.product_by_id[product.get('id')];
                 	var new_qty = product_db['qty_available'] - 1;
                 	product_db['qty_available']=new_qty;
+                	console.log(product_db);
                 	//render
                 	var pos_categ_id = self.product_categories_widget.category.id;
                 	var category = self.pos.db.get_category_by_id(pos_categ_id);

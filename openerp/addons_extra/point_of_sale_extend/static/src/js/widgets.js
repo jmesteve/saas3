@@ -288,11 +288,10 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
 
 //*****************inicio cambio*************
         	
-        	var user = this.pos.get('user');
-        	var cashier = this.order.get('cashier');
+        	var user = this.pos.user;
+        	var cashier = this.order.attributes.cashier;
         	user.name = cashier.name;
         	user.id = cashier.id;
-        	//console.log(user,this);
 
 //*****************fin cambio*************
         	
@@ -980,8 +979,9 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
 //*****************inicio cambio*************          
                 
                 self.$('.cashier-button').click(function(){
-                    var users = self.pos.get('user_list');
-                    var id = self.pos.get('user').id;
+                    var users = self.pos.users;
+                    //console.log(users);
+                    var id = self.pos.user.id;
                    	$('#userlist-select').empty();
                    	$(".cashier-button").hide();
                    	$("#userlist-select").show();
@@ -999,8 +999,8 @@ function openerp_pos_widgets(instance, module){ //module is instance.point_of_sa
                 
                 self.$('#userlist-select').change(function(event){
                 	var id = event.target.value;
-                	var user = self.pos.get('user');
-                	var users = self.pos.get('user_list');
+                	var user = self.pos.user;
+                	var users = self.pos.users;
                 	for(var i=0;i< users.length;i++){
                 		if(id == users[i].id){
                 			user.name = users[i].name;

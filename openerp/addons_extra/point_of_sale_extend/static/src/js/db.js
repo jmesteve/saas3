@@ -227,7 +227,7 @@ function openerp_pos_db(instance, module){
         
 //*****************inicio cambio*************
         
-        /*get_product_by_category: function(category_id){
+        /*get_product_by_category2: function(category_id){
             var product_ids  = this.product_by_category_id[category_id];
             var list = [];
             if (product_ids) {
@@ -241,7 +241,8 @@ function openerp_pos_db(instance, module){
         	//console.log(this.product_by_category_id);
             var product_ids  = this.product_by_category_id[category_id];
             var list = [];
-            var stockmin = $("#stockmin-select").val();            var limit = this.limit;
+            var stockmin = $("#stockmin-select").val();            
+            var limit = this.limit;
             if (product_ids) {
                 for (var i = 0, len = product_ids.length; limit>0 && i < len; i++) {
                 	product = this.product_by_id[product_ids[i]];
@@ -257,7 +258,6 @@ function openerp_pos_db(instance, module){
                 	}
                 }
             }
-            console.log(product,list);
             return list;
         },
         

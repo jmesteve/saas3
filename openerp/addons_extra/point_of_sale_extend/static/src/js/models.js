@@ -223,8 +223,9 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
 
                     return self.fetch(
                         'product.product', 
+                      //*****************cambio añadido campo qty_available*************
                         ['name', 'list_price','price','public_categ_id', 'taxes_id', 'ean13', 'default_code',
-                         'to_weight', 'uom_id', 'uos_id', 'uos_coeff', 'mes_type', 'description_sale', 'description'],
+                         'to_weight', 'uom_id', 'uos_id', 'uos_coeff', 'mes_type', 'description_sale', 'description','qty_available'],
                         [['sale_ok','=',true],['available_in_pos','=',true]],
                         {pricelist: self.pricelist.id} // context for price
                     );
@@ -233,11 +234,11 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
 
                     return self.fetch(
                         'account.bank.statement',
-                      //*****************cambio añadido campo qty_available*************
-                        ['account_id','currency','journal_id','state','name','user_id','pos_session_id','qty_available'],
+                        ['account_id','currency','journal_id','state','name','user_id','pos_session_id'],
                         [['state','=','open'],['pos_session_id', '=', self.pos_session.id]]
                     );
                 }).then(function(bankstatements){
+                	//console.log(bankstatements);
                     var journals = [];
                     _.each(bankstatements,function(statement) {
                         journals.push(statement.journal_id[0])
@@ -330,7 +331,7 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
 
 //*****************inicio cambio*************
             
-            var user = this.get('user');
+            var user = this.user;
             var cashier_object = {
             		'id':user.id,
             		'name':user.name,
@@ -822,7 +823,7 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
                 name:           "Ticket " + this.uid,
                 cashier:        null,
             });
-                var user = attributes.pos.get('user');
+                var user = attributes.pos.user;
                 var cashier_object = {
                 		'id':user.id,
                 		'name':user.name,

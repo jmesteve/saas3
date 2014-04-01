@@ -36,10 +36,10 @@
     'data': ['point_of_sale_view.xml',
              'point_of_sale_report.xml',],
     'js': [
-        #'static/src/js/db.js',
-        #'static/src/js/models.js',
-        #'static/src/js/widgets.js',
-        #'static/src/js/screens.js',
+        'static/src/js/db.js',
+        'static/src/js/models.js',
+        'static/src/js/widgets.js',
+        'static/src/js/screens.js',
         ],
     'css':[
         'static/src/css/pos.css',
