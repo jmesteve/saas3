@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    	<record model="ir.ui.view" id="view_partner_form_map_wizard">
+            <field name="name">res.partner.form.map.wizard</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form string="open_map_partners_wizard_form" version="7.0">
+					<field name="id" widget="location_map_partners" nolabel="1"></field>
+				</form>
+            </field>
+        </record>
+    
+        <record model="ir.ui.view" id="view_partner_form_extend">
+            <field name="name">res.partner.form.extend</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath expr="/form/sheet" position="before">
+                    <button name="open_map_partners_wizard" string="Open Map Wizard" type="object" icon="gtk-zoom-in"/>
+                </xpath>
+                <xpath expr="//field[@name='id_commercial']" position="after">
+                	<field name="googlemap_visited" widget="website_button"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

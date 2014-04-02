@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="ir_config_parameter_kml_path" model="ir.config_parameter">
+            <field name="key">kml_path</field>
+            <field name="value">kml</field>
+        </record>
+	</data>
+</openerp>
