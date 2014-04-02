@@ -21,4 +21,30 @@
 #
 ##############################################################################
 
-import account_invoice
+{
+    'name': 'Account Invoice',
+    'version': '1.0',
+    'author': 'jmesteve',
+    'category' : 'Accounting & Finance',
+    'description': """
+        [ENG] Extend module Account part Invoice .
+    """,
+    'website': 'https://github.com/jmesteve',
+    'license': 'AGPL-3',
+    'images': [],
+    'depends': ['account'],
+    'data': ['account_invoice.xml'],
+    'demo': [],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}
+
+
+
+
+
+
+
+
+

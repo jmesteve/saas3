@@ -20,31 +20,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-{
-    'name': 'account invoice extend',
-    'version': '1.0',
-    'author': 'jmesteve',
-    'category': 'Hidden',    
-    'description': """
-        [ENG] Extend module account part account_invoice .
-    """,
-    'website': 'https://github.com/jmesteve',
-    'license': 'AGPL-3',
-    'images': [],
-    'depends' : ['account'],
-    'data': [],
-    'demo': [],
-    'installable': True,
-    'application': True,
-    'auto_install': False,
-}
-
-
-
-
-
-
-
-
+import report
+import account_invoice
 
