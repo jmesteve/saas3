@@ -1,0 +1,61 @@
+#. module: account_vat_extend
+#: report:account.vat.declaration_extend:0
+msgid "Chart of Tax"
+msgstr "Plan de impuestos"
+
+#. module: account_vat_extend
+#: report:account.vat.declaration_extend:0
+msgid "Fiscal Year"
+msgstr "Año Fiscal"
+
+#. module: account_vat_extend
+#: report:account.vat.declaration_extend:0
+msgid "Periods"
+msgstr "Periodos"
+
+#. module: account_vat_extend
+#: report:account.vat.declaration_extend:0
+msgid "Start Period"
+msgstr "Periodo inicial"
+
+#. module: account_vat_extend
+#: report:account.vat.declaration_extend:0
+msgid "End Period"
+msgstr "Periodo final"
+
+#. module: account_vat_extend
+#: report:account.vat.declaration_extend:0
+msgid "Based On"
+msgstr "Basado con"
+
+#. module: account_vat_extend
+#: report:account.vat.declaration_extend:0
+msgid "Tax Name"
+msgstr "Nombre Impuesto"
+
+#. module: account_vat_extend
+#: report:account.vat.declaration_extend:0
+msgid "Debit"
+msgstr "Debe"
+
+#. module: account_vat_extend
+#: report:account.vat.declaration_extend:0
+msgid "Credit"
+msgstr "Haber"
+
+#. module: account_vat_extend
+#: report:account.vat.declaration_extend:0
+msgid "Tax Amount"
+msgstr "Importe impuesto"
+
+#. module: account_vat_extend
+#: report:account.vat.declaration_extend:0
+msgid "Tax Statement"
+msgstr "Declaración de impuestos"
+
+#. module: account_var_extend
+#: view:account.vat.declaration_extend:0
+#: model:ir.actions.report.xml,name:account.account_vat_declaration_extend
+msgid "Taxes Report"
+msgstr "Informe impuestos"
+
