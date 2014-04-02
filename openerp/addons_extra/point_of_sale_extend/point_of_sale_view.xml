@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    
+    	<record model="ir.ui.view" id="product_normal_form_view_extend">
+            <field name="name">product.normal.form.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="point_of_sale.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <button name="edit_ean" position="replace">
+                    <button name="edit_ean" type="object" string="Set a Custom EAN"/>
+                </button>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_pos_config_form_extend">
+            <field name="name">pos.config.form.view.extend</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_config_form"/>
+            <field name="arch" type="xml">
+            	<field name="iface_electronic_scale" position="after">
+                    <field name="iface_payment_terminal" />
+                </field>
+            
+            </field>
+       </record>
+        
+    </data>
+</openerp>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<openerp>
+    <data>
+    	<delete model="ir.actions.report.xml" search="[('report_name','=','pos.receipt')]" />
+		<report
+            id="pos_receipt"
+            string="Receipt"
+            model="pos.order"
+            name="pos.receipt"
+            auto="False"
+            multi="True"
+            rml="point_of_sale_extend/report/pos_receipt.rml"
+             />
+    </data>
+</openerp>

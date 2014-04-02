@@ -122,7 +122,11 @@ class product_product(orm.Model):
             help="Medium-sized image of the product. It is automatically "\
                  "resized as a 128x128px image, with aspect ratio preserved, "\
                  "only when the image exceeds one of those sizes. Use this field in form views or some kanban views."),
-        
+        'image_small': fields.function(_get_image, fnct_inv=_set_image,
+            string="Small-sized image", type="binary",     
+            help="Small-sized image of the category. It is automatically "\
+                 "resized as a 64x64px image, with aspect ratio preserved. "\
+                 "Use this field anywhere a small image is required."),
     }
 
     def write(self, cr, uid, ids, vals, context=None):

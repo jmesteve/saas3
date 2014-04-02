@@ -40,6 +40,7 @@
     ],
     'js': [
         'static/src/js/announcement.js',
+        "static/lib/jquery.printarea/jquery.PrintArea.js",
     ],
     "active": False,
     "installable": True
