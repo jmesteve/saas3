@@ -1,0 +1,88 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* google_map_kml
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.saas~3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-03 11:49+0000\n"
+"PO-Revision-Date: 2014-04-03 11:49+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: google_map_kml
+#: field:googlemap.kml,kml_file:0
+msgid "KML file"
+msgstr "KML file"
+
+#. module: google_map_kml
+#: field:googlemap.kml,link:0
+msgid "KML Url"
+msgstr "KML Url"
+
+#. module: google_map_kml
+#: field:googlemap.kml,name_file:0
+msgid "KML File name"
+msgstr "KML File name"
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "open_map_partners_wizard_form"
+msgstr "open_map_partners_wizard_form"
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "Open Map Wizard"
+msgstr "Abrir mapa"
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "Geo Localization"
+msgstr "Geo Localización"
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "Open Map Wizard Big"
+msgstr "Abrir Mapa Grande"
+
+#. module: google_map_kml
+#: field:res.partner,date_localization:0
+msgid "Geo Localization Date"
+msgstr "Geo Localization Date"
+
+#. module: google_map_kml
+#: field:res.partner,partner_latitude:0
+msgid "Geo Latitude"
+msgstr "Geo Latitud"
+
+#. module: google_map_kml
+#: field:res.partner,googlemap_visited:0
+msgid "Visited"
+msgstr "Visitado"
+
+#. module: google_map_kml
+#: model:ir.model,name:google_map_kml.model_res_partner
+#: model:ir.model,name:google_map_kml.model_res_partner_extend
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "Geo Localize"
+msgstr "Geo Localizar"
+
+#. module: google_map_kml
+#: field:res.partner,partner_longitude:0
+msgid "Geo Longitude"
+msgstr "Geo Longitud"
+
+#. module: google_map_kml
+#: model:ir.model,name:google_map_kml.model_googlemap_kml
+msgid "googlemap.kml"
+msgstr "googlemap.kml"
+
