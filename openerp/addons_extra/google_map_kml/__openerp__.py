@@ -32,7 +32,7 @@
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
     'images': [],
-    'depends' : ['web', 'base'],
+    'depends' : ['web', 'website', 'base'],
     'data': ['data/google_map_kml_data.xml','google_map_kml_view.xml'],
     'js': ['https://maps.googleapis.com/maps/api/js?sensor=false',
            'static/src/js/location_map_partners.js'],
