@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		<record id="view_account_vat_declaration_extend" model="ir.ui.view">
+            <field name="name">Account Tax Declaration Extend</field>
+            <field name="model">account.vat.declaration</field>
+            <field name="inherit_id" ref="account.view_account_vat_declaration"/>
+            <field name="arch" type="xml">
+                <field name="display_detail" position="after">
+                   <field name="display_no_movement"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
