@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates>
-    <t t-name="location_map_partners">
-    	<div style="position: relative; width:850px;height:600px;">
+    <t t-name="location_map.partners">
+    	<div style="position: relative; width:100%;height:100%;">
         	<div id="location_map_partners" style="position: relative;width: 100%; height: 100%"></div>
+        </div>
+    </t>
+    
+    <t t-name="location_map.partners_new_window">
+    	<div style="position: relative; width:800px;height:600px;margin: 0 auto;">
+        	<div id="location_map_partners2" style="position: relative;width: 100%; height: 100%"></div>
         </div>
     </t>
 </templates>

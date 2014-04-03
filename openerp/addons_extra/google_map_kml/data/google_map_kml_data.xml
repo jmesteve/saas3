@@ -6,5 +6,10 @@
             <field name="key">kml_path</field>
             <field name="value">kml</field>
         </record>
+        
+        <record id="ir_config_parameter_kml_geocode_key" model="ir.config_parameter">
+            <field name="key">geocode_key</field>
+            <field name="value">AIzaSyBK-i_zxF6ANP_8xJL5ezQaJxz13vyXqK0</field>
+        </record>
 	</data>
 </openerp>
