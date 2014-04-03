@@ -10,7 +10,6 @@ import urllib
 class google_map_partner(osv.osv):
 
     _inherit = "res.partner"
-    _name = "res.partner"
     
     _columns = {
         'googlemap_visited': fields.boolean('Visited'),
