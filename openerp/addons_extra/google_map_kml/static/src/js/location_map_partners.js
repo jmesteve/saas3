@@ -51,7 +51,7 @@ openerp.google_map_kml = function (instance)
 								this.markers[i] = marker;
 								
 					            var infoWindow = new google.maps.InfoWindow({
-					                content: partners[i].name
+					                content: '<div><span style="display: inline-block">' + partners[i].name + '</span></div>'
 					            });
 					            
 					            infoWindow.open(this.map, this.markers[i]);
