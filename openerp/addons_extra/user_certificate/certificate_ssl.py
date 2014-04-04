@@ -245,14 +245,16 @@ class certificate_ssl(osv.osv):
             certificatesPath = os.path.join(certificatesPath, certificate.certification_authority.name_file)
             privatePath = os.path.join(certificatesPath,'private/')
             certsPath = os.path.join(certificatesPath,'certs/')            
-            
-            p = subprocess.Popen(["sh", 
+            try:
+                p = subprocess.Popen(["sh", 
                                   "ssl_revoke_user.sh",
                                   certificate.name_file,
                                   certificate.certification_authority.password,
                                   namefileCrl,
                                   certificate.certification_authority.name_file,
                                   'openssl_client.cnf'],  cwd=certificatesPath).wait()
+            except OSError:
+                pass
                                   
             self.generate_ssl_crl(cr, uid, [certificate.certification_authority.id], context=context)
             
@@ -435,13 +437,17 @@ class certificate_ssl(osv.osv):
         if certificate.type == 'user' or certificate.type == 'server':
             privatePath = os.path.join(certificatesPath,'private/')
             certsPath = os.path.join(certificatesPath,'certs/')
-            p = subprocess.Popen(["sh", 
+            try:
+                p = subprocess.Popen(["sh", 
                                   "ssl_revoke_user.sh",
                                   certificate.name_file,
                                   certificate.certification_authority.password,
                                   namefileCrl,
                                   certificate.certification_authority.name_file,
                                   'openssl_client.cnf'],  cwd=certificatesPath).wait()
+            except OSError:
+                pass
+                
                                   
             self.generate_ssl_crl(cr, uid, [certificate.certification_authority.id], context=context)
         
