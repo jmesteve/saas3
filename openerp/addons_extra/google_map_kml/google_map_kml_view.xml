@@ -26,7 +26,7 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <xpath expr="/form/sheet" position="before">
-                    <button name="open_map_partners_wizard" string="Open Map Wizard Big" type="object" icon="gtk-zoom-in"/>
+<!--                     <button name="open_map_partners_wizard" string="Open Map Wizard Big" type="object" icon="gtk-zoom-in"/> -->
                     <button name="open_map_partners_wizard_new" string="Open Map Wizard" type="object" icon="gtk-zoom-in"/>
                 </xpath>
                 <xpath expr="//field[@name='website']" position="after">
@@ -58,5 +58,13 @@
                 </xpath>
             </field>
         </record>
+        
+       	<record id="action_open_map" model="ir.actions.client">
+            <field name="name">Partners Map</field>
+            <field name="type">ir.actions.client</field>
+            <field name="tag">location_map.partners</field>
+        </record>
+        
+        <menuitem id="menu_partner_map" parent="base.menu_sales" action="action_open_map" sequence="2"/>
     </data>
 </openerp>

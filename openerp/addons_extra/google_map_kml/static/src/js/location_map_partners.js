@@ -71,7 +71,7 @@ openerp.google_map_kml = function (instance)
 				        var zoomLevel = map.getZoom();
 				        
 				        for (var i=0; i < infowindows.length; i++){
-				        	if(zoomLevel < 15){
+				        	if(zoomLevel < 17){
 				        		infowindows[i].close();
 				        		console.log("entra zoom 1");
 				        	}
@@ -164,7 +164,7 @@ openerp.google_map_kml = function (instance)
 					        var zoomLevel = map.getZoom();
 					        
 					        for (var i=0; i < infowindows.length; i++){
-					        	if(zoomLevel < 15){
+					        	if(zoomLevel < 17){
 					        		infowindows[i].close();
 					        		console.log("entra zoom 1");
 					        	}
