@@ -24,6 +24,8 @@ openerp.google_map_kml = function (instance)
 					// create markers
 					var bounds = new google.maps.LatLngBounds();
 					var map = this.map;
+					var infowindows = [];
+					var markersinfo = [];
 					for(var i=0; i < partners.length; i++){
 						var lat = partners[i].partner_latitude;
 						var lng = partners[i].partner_longitude;
@@ -49,6 +51,7 @@ openerp.google_map_kml = function (instance)
 									raiseOnDrag : true});
 								
 								this.markers[i] = marker;
+								markersinfo.push(marker);
 								
 					            var infoWindow = new google.maps.InfoWindow({
 					                content: '<div><span style="display: inline-block">' + partners[i].name + '</span></div>'
@@ -58,9 +61,27 @@ openerp.google_map_kml = function (instance)
 					            google.maps.event.addListener(this.markers[i], 'click', function () {
 					                infoWindow.open(map, marker);
 					            });
+					            
+					            infowindows.push(infoWindow);
 							}
 						}
 					}
+					
+					google.maps.event.addListener(map, 'zoom_changed', function() {
+				        var zoomLevel = map.getZoom();
+				        
+				        for (var i=0; i < infowindows.length; i++){
+				        	if(zoomLevel < 15){
+				        		infowindows[i].close();
+				        		console.log("entra zoom 1");
+				        	}
+				        	else{
+				        		infowindows[i].open(map, markersinfo[i]);
+				        		console.log("entra zoom 2");
+				        	}
+				        }
+				      });
+					
 					this.map.fitBounds(bounds);
 				}, this));
 			}
@@ -98,6 +119,8 @@ openerp.google_map_kml = function (instance)
 					// create markers
 					var bounds = new google.maps.LatLngBounds();
 					var map = this.map;
+					var infowindows = [];
+					var markersinfo = [];
 					for(var i=0; i < partners.length; i++){
 						var lat = partners[i].partner_latitude;
 						var lng = partners[i].partner_longitude;
@@ -123,17 +146,34 @@ openerp.google_map_kml = function (instance)
 									raiseOnDrag : true});
 								
 								this.markers[i] = marker;
+								markersinfo.push(marker);
 								
 					            var infoWindow = new google.maps.InfoWindow({
-					                content: partners[i].name
+					                content: '<div><span style="display: inline-block">' + partners[i].name + '</span></div>'
 					            });
 					            
 					            infoWindow.open(this.map, this.markers[i]);
 					            google.maps.event.addListener(this.markers[i], 'click', function () {
 					                infoWindow.open(map, marker);
 					            });
+					            infowindows.push(infoWindow);
 							}
 						}
+						
+						google.maps.event.addListener(map, 'zoom_changed', function() {
+					        var zoomLevel = map.getZoom();
+					        
+					        for (var i=0; i < infowindows.length; i++){
+					        	if(zoomLevel < 15){
+					        		infowindows[i].close();
+					        		console.log("entra zoom 1");
+					        	}
+					        	else{
+					        		infowindows[i].open(map, markersinfo[i]);
+					        		console.log("entra zoom 2");
+					        	}
+					        }
+					      });
 					}
 					this.map.fitBounds(bounds);
 				}, this));
