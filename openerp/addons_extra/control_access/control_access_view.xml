@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    	<record id="view_control_access_tree" model="ir.ui.view">
+            <field name="name">control.access.tree</field>
+            <field name="model">control.access</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="control_access_tree" create="false" delete="false">
+                	<field name="type"/>
+                	<field name="create_date"/>
+                    <field name="user_id"/>
+                    <field name="user_name"/>  
+	            	<field name="ip"/>
+	            	<field name="url"/>  
+	            	<field name="db"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record model='ir.actions.act_window' id='action_menu_control_access'>
+            <field name="name">Control Access</field>
+            <field name="res_model">control.access</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    
+     	<menuitem id="menu_control_access" name="Control Access" parent="base.menu_administration" />
+     		<menuitem id="menu_control_access_history" name="History" parent="menu_control_access" action='action_menu_control_access' />
+     		
+  
+    </data>
+</openerp>
