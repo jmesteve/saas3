@@ -2,13 +2,51 @@
 <templates>
     <t t-name="location_map.partners">
     	<div style="position: relative; width:100%;height:100%;">
-        	<div id="location_map_partners" style="position: relative;width: 100%; height: 100%"></div>
+    		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        	<div id="location_map_partners" class="map-div"></div>
         </div>
     </t>
     
     <t t-name="location_map.partners_new_window">
-    	<div style="position: relative; width:800px;height:600px;margin: 0 auto;">
-        	<div id="location_map_partners2" style="position: relative;width: 100%; height: 100%"></div>
+    	<div class="map-window">
+    		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        	<div id="location_map_partners2" class="map-div"></div>
         </div>
+    </t>
+    
+    <t t-name="location_map.partners_new_window_company">
+    	<div class="map-window">
+    		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        	<div id="location_map_partners3" class="map-div"></div>
+        </div>
+    </t>
+    
+    <t t-name="location_map.partners_new_window_one">
+    	<div class="map-window">
+    		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        	<div id="location_map_partners4" class="map-div"></div>
+        </div>
+    </t>
+    
+    <t t-name="location_map.website_button_visited">
+
+        <div class="btn-group oe_WidgetWebsiteButton">
+            <button class="btn btn-sm btn-success">
+                <span class="oe_unpublish">Not Published in Map</span>
+                <span class="oe_publish">Published in Map</span>
+            </button>
+        </div>
+
+    </t>
+    
+    <t t-name="location_map.website_button_selectimage">
+
+        <div class="btn-group oe_WidgetWebsiteButton">
+            <button class="btn btn-sm btn-success">
+                <span class="oe_unpublish">Marker</span>
+                <span class="oe_publish">Logo</span>
+            </button>
+        </div>
+
     </t>
 </templates>

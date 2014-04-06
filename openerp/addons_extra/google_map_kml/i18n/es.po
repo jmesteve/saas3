@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.saas~3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-03 11:49+0000\n"
-"PO-Revision-Date: 2014-04-03 11:49+0000\n"
+"POT-Creation-Date: 2014-04-06 22:10+0000\n"
+"PO-Revision-Date: 2014-04-06 22:10+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,65 +16,75 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: google_map_kml
-#: field:googlemap.kml,kml_file:0
-msgid "KML file"
-msgstr "KML file"
+#: selection:res.partner,googlemap_marker_color:0
+msgid "Blue"
+msgstr "Azul"
 
 #. module: google_map_kml
-#: field:googlemap.kml,link:0
-msgid "KML Url"
-msgstr "KML Url"
+#: field:res.partner,image_small_map:0
+msgid "Small-sized image"
+msgstr "Small-sized image"
 
 #. module: google_map_kml
-#: field:googlemap.kml,name_file:0
-msgid "KML File name"
-msgstr "KML File name"
+#: model:ir.actions.client,name:google_map_kml.action_open_map
+#: model:ir.ui.menu,name:google_map_kml.menu_partner_map
+msgid "Partners Map"
+msgstr "Mapa de Clientes"
 
 #. module: google_map_kml
-#: view:res.partner:0
-msgid "open_map_partners_wizard_form"
-msgstr "open_map_partners_wizard_form"
-
-#. module: google_map_kml
-#: view:res.partner:0
-msgid "Open Map Wizard"
-msgstr "Abrir mapa"
+#: selection:res.partner,googlemap_marker_color:0
+msgid "Purple"
+msgstr "Morado"
 
 #. module: google_map_kml
 #: view:res.partner:0
-msgid "Geo Localization"
-msgstr "Geo Localización"
-
-#. module: google_map_kml
-#: view:res.partner:0
-msgid "Open Map Wizard Big"
-msgstr "Abrir Mapa Grande"
+msgid "Geolocalize"
+msgstr "Geolocalizar"
 
 #. module: google_map_kml
 #: field:res.partner,date_localization:0
 msgid "Geo Localization Date"
-msgstr "Geo Localization Date"
+msgstr "Fecha de Geolocalización"
 
 #. module: google_map_kml
-#: field:res.partner,partner_latitude:0
-msgid "Geo Latitude"
-msgstr "Geo Latitud"
-
-#. module: google_map_kml
-#: field:res.partner,googlemap_visited:0
-msgid "Visited"
-msgstr "Visitado"
-
-#. module: google_map_kml
-#: model:ir.model,name:google_map_kml.model_res_partner
-#: model:ir.model,name:google_map_kml.model_res_partner_extend
-msgid "Partner"
-msgstr "Empresa"
+#: selection:res.partner,googlemap_marker_color:0
+msgid "Pale Blue"
+msgstr "Azul pálido"
 
 #. module: google_map_kml
 #: view:res.partner:0
-msgid "Geo Localize"
-msgstr "Geo Localizar"
+msgid "Open Map All"
+msgstr "Abrir Mapa Entero"
+
+#. module: google_map_kml
+#: selection:res.partner,googlemap_marker_color:0
+msgid "Orange"
+msgstr "Naranja"
+
+#. module: google_map_kml
+#: selection:res.partner,googlemap_marker_color:0
+msgid "Red"
+msgstr "Rojo"
+
+#. module: google_map_kml
+#: selection:res.partner,googlemap_marker_color:0
+msgid "Brown"
+msgstr "Marrón"
+
+#. module: google_map_kml
+#: model:ir.model,name:google_map_kml.model_googlemap_kml
+msgid "googlemap.kml"
+msgstr "googlemap.kml"
+
+#. module: google_map_kml
+#: field:res.partner,googlemap_marker_letter:0
+msgid "Letter"
+msgstr "Letra"
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "Open Map Company"
+msgstr "Abrir Mapa Empresa"
 
 #. module: google_map_kml
 #: field:res.partner,partner_longitude:0
@@ -82,7 +92,92 @@ msgid "Geo Longitude"
 msgstr "Geo Longitud"
 
 #. module: google_map_kml
-#: model:ir.model,name:google_map_kml.model_googlemap_kml
-msgid "googlemap.kml"
-msgstr "googlemap.kml"
+#: field:res.partner,id_maps:0
+msgid "Id Maps"
+msgstr "Id Maps"
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "Map"
+msgstr "Mapa"
+
+#. module: google_map_kml
+#: help:res.partner,image_small_map:0
+msgid "Small-sized image of this contact. It is automatically resized as a 64x64px image, with aspect ratio preserved. Use this field anywhere a small image is required."
+msgstr "Small-sized image of this contact. It is automatically resized as a 64x64px image, with aspect ratio preserved. Use this field anywhere a small image is required."
+
+#. module: google_map_kml
+#: field:res.partner,partner_latitude:0
+msgid "Geo Latitude"
+msgstr "Geo Latitud"
+
+#. module: google_map_kml
+#: selection:res.partner,googlemap_marker_color:0
+msgid "Green"
+msgstr "Verde"
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "Geolocalization"
+msgstr "Geolocalización"
+
+#. module: google_map_kml
+#: field:res.partner,googlemap_visited:0
+msgid "Visited"
+msgstr "Visitado"
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "Open Map One"
+msgstr "Abrir Mapa 1"
+
+#. module: google_map_kml
+#: field:res.partner,googlemap_select_image:0
+msgid "Marker Image"
+msgstr "Imagen de Marcador"
+
+#. module: google_map_kml
+#: field:res.partner,height_image_small_map:0
+msgid "Height logo (px)"
+msgstr "Altura del logo (px)"
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "Partners Map All"
+msgstr "Mapa de todos los clientes"
+
+#. module: google_map_kml
+#: field:res.partner,googlemap_marker_color:0
+msgid "Color"
+msgstr "Color"
+
+#. module: google_map_kml
+#: selection:res.partner,googlemap_marker_color:0
+msgid "Yellow"
+msgstr "Amarillo"
+
+#. module: google_map_kml
+#: field:res.partner,width_image_small_map:0
+msgid "Width logo (px) "
+msgstr "Anchura del logo (px) "
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "Partners Map One"
+msgstr "Mapa de 1"
+
+#. module: google_map_kml
+#: model:ir.model,name:google_map_kml.model_res_partner
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "Partners Map Company"
+msgstr "Mapa de la Empresa"
+
+#. module: google_map_kml
+#: selection:res.partner,googlemap_marker_color:0
+msgid "Dark Green"
+msgstr "Verda oscuro"
 

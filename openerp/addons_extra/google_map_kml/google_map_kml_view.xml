@@ -12,12 +12,33 @@
            	<field name="model">res.partner</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-            	<form string="open_map_partners_wizard_form">
-					<field name="googlemap_visited" widget="google_map_partner" nolabel="1"></field>
+            	<form string="Partners Map All">
+					<field name="id_maps" widget="google_map_partner" nolabel="1"/>
 				</form>
             </field>
         </record>
-    
+        
+        <record model="ir.ui.view" id="view_partner_form_map_wizard_company">
+            <field name="name">res.partner.form.map.wizard.company</field>
+           	<field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form string="Partners Map Company">
+          			<field name="id_maps" widget="google_map_partner_company" nolabel="1" />
+          		</form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_partner_form_map_wizard_one">
+            <field name="name">res.partner.form.map.wizard.company</field>
+           	<field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form string="Partners Map One">
+          			<field name="id_maps" widget="google_map_partner_one" nolabel="1" />
+          		</form>
+            </field>
+        </record>
 
         <record model="ir.ui.view" id="view_partner_form_extend">
             <field name="name">res.partner.form.extend</field>
@@ -27,11 +48,16 @@
             <field name="arch" type="xml">
                 <xpath expr="/form/sheet" position="before">
 <!--                     <button name="open_map_partners_wizard" string="Open Map Wizard Big" type="object" icon="gtk-zoom-in"/> -->
-                    <button name="open_map_partners_wizard_new" string="Open Map Wizard" type="object" icon="gtk-zoom-in"/>
+                    <button name="open_map_partners_wizard_new" string="Open Map All" type="object" icon="gtk-zoom-in"/>
+                    <button name="open_map_partners_wizard_new_one" string="Open Map One" type="object" icon="gtk-zoom-in"/>
+                    <button name="open_map_partners_wizard_new_company" attrs="{'invisible':[('is_company','=', False)]}" string="Open Map Company" type="object" icon="gtk-zoom-in"/>
                 </xpath>
-                <xpath expr="//field[@name='website']" position="after">
-                	<field name="googlemap_visited" widget="website_button"/>
-                </xpath>
+<!--                 <xpath expr="//field[@name='website']" position="after"> -->
+<!--                 	<field name="googlemap_visited" widget="google_map_partner_website_button_visited"/> -->
+<!--                 	<field name="googlemap_marker_color"  attrs="{'invisible':[('is_company','=', False)]}"/> -->
+<!-- 					<field name="googlemap_marker_letter" attrs="{'invisible':[('is_company','=', False)]}"/> -->
+<!-- 					<field name="googlemap_select_image" attrs="{'invisible':[('is_company','=', False)]}" widget="google_map_partner_website_button_select_image" /> -->
+<!--                 </xpath> -->
             </field>
         </record>
         
@@ -41,18 +67,29 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//notebook[last()]" position="inside">
-                    <page string="Geo Localization" name="geo_localization" groups="base.group_no_one">
+                    <page string="Geolocalization" name="geo_localization" groups="base.group_no_one">
                         <group colspan="2" col="2">
-                            <separator string="Geo Localization" colspan="2"/>
-                            <button
-                                string="Geo Localize"
-                                name="geo_localize"
-                                colspan="2"
-                                icon="gtk-apply"
-                                type="object"/>
-                            <field name="partner_latitude"/>
-                            <field name="partner_longitude"/>
-                            <field name="date_localization"/>
+                        	<group>
+	                            <separator string="Geolocalization" colspan="2"/>
+	                            <button
+	                                string="Geolocalize"
+	                                name="geo_localize"
+	                                colspan="2"
+	                                icon="gtk-apply"
+	                                type="object"/>
+	                            <field name="partner_latitude"/>
+	                            <field name="partner_longitude"/>
+	                            <field name="date_localization"/>
+                            </group>
+                            <group>
+	                            <separator string="Map" col="2" colspan="2"/>
+	                            <field name="googlemap_visited" widget="google_map_partner_website_button_visited"/>
+	                			<field name="googlemap_marker_color"  attrs="{'invisible':[('is_company','=', False)]}"/>
+								<field name="googlemap_marker_letter" attrs="{'invisible':[('is_company','=', False)]}"/>
+								<field name="googlemap_select_image" attrs="{'invisible':[('is_company','=', False)]}" widget="google_map_partner_website_button_select_image" />
+								<field name="height_image_small_map" attrs="{'invisible':[('is_company','=', False)]}" />
+								<field name="width_image_small_map" attrs="{'invisible':[('is_company','=', False)]}" />
+							</group>
                         </group>
                     </page>
                 </xpath>
