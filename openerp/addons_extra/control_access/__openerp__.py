@@ -25,7 +25,7 @@
     'name': 'Control access users',
     'version': '1.0',
     'author': 'ErpAndCloud',
-    'category': 'Extend addon Web',    
+    'category': 'Base',    
     'description': """
         [ENG] Control access users by public ip.
     """,
@@ -33,7 +33,11 @@
     'license': 'AGPL-3',
     'images': [],
     'depends' : ['base'],
-    'data': ['control_access_view.xml'],
+    'data': [
+             'security/groups.xml',
+             'control_access_view.xml',
+             'security/ir.model.access.csv',
+             ],
     'js': [],
     'qweb' : [],
     'demo': [],

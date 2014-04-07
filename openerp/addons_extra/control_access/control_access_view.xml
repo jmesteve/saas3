@@ -18,6 +18,21 @@
             </field>
         </record>
         
+        <record id="view_control_access_search" model="ir.ui.view">
+            <field name="name">control.access.search</field>
+            <field name="model">control.access</field>
+            <field name="arch" type="xml">
+                <search string="Search Control Access">
+                    <group expand="0" string="Group By...">
+                        <filter string="Type" icon="terp-gtk-jump-to-rtl" name="typefilter" context="{'group_by':'type'}"/>
+                        <filter string="IP" icon="terp-gtk-jump-to-rtl" context="{'group_by':'ip'}"/>
+                        <filter string="User Id" icon="terp-gtk-jump-to-rtl" context="{'group_by':'user_id'}"/>
+                        <filter string="User Name" icon="terp-gtk-jump-to-rtl" context="{'group_by':'user_name'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
         <record model='ir.actions.act_window' id='action_menu_control_access'>
             <field name="name">Control Access</field>
             <field name="res_model">control.access</field>
@@ -25,8 +40,9 @@
             <field name="view_mode">tree,form</field>
         </record>
     
-     	<menuitem id="menu_control_access" name="Control Access" parent="base.menu_administration" />
-     		<menuitem id="menu_control_access_history" name="History" parent="menu_control_access" action='action_menu_control_access' />
+    <menuitem id="menu_control" name="Control" groups="group_control_access"/>
+     	<menuitem id="menu_control_access" name="Control Access" parent="menu_control"  groups="group_control_access"/>
+     		<menuitem id="menu_control_access_history" name="History" parent="menu_control_access" action='action_menu_control_access'  groups="group_control_access"/>
      		
   
     </data>

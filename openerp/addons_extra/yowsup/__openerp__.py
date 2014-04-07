@@ -33,6 +33,7 @@
     'license': 'AGPL-3',
     "depends": ['base','warning_box'],
     "data": ['security/groups.xml',
+             'security/ir.model.access.csv',
              'yowsup_view.xml',
              'yowsup_partner_send_view.xml'
              ],

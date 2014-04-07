@@ -31,7 +31,7 @@
     'author': 'jmesteve',
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
-    "depends": ['website'],
+    "depends": ['web','website'],
     'data': [
         'views/website_templates.xml',
     ],

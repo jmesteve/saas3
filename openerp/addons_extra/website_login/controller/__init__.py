@@ -2,9 +2,9 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (c) 2013 jmesteve All Rights Reserved
+#    Copyright (c) 2013 ErpAndCloud All Rights Reserved
 #                       https://github.com/jmesteve
-#                       <jmesteve@me.com>
+#                       <engineering@erpandcloud.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -21,4 +21,4 @@
 #
 ##############################################################################
 
-import controller
+import main

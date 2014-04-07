@@ -17,17 +17,20 @@ class res_users(osv.osv):
         """
         uid = self.login(db, login, password)
         superuser = openerp.SUPERUSER_ID
-        cr = self.pool.db.cursor()
-        
-        self.pool.get('control.access').create(cr, superuser,{'user_id': uid,
-                                                              'user_name':login,
-                                                              'url':user_agent_env.get('base_location'),
-                                                              'ip':user_agent_env.get('REMOTE_ADDR'),
-                                                              'db':db,
-                                                              'type':'IN'
-                                                                        }
-                                              )
-        cr.commit()
+        try:
+            cr = self.pool.db.cursor()
+            
+            self.pool.get('control.access').create(cr, superuser,{'user_id': uid,
+                                                                  'user_name':login,
+                                                                  'url':user_agent_env.get('base_location'),
+                                                                  'ip':user_agent_env.get('REMOTE_ADDR'),
+                                                                  'db':db,
+                                                                  'type':'IN'
+                                                                            }
+                                                  )
+            cr.commit()
+        except:
+            print "error authetificate"
         
         if uid == superuser:
             # Successfully logged in as admin!
