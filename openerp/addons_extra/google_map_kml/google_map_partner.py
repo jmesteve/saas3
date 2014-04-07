@@ -32,7 +32,7 @@ class google_map_partner(osv.osv):
                 yield chr(number)
     
     def _generate_letters(self, cr, uid, context=None):
-        return zip(self._getAllTheLetters(), self._getAllTheLetters(upper=True))
+        return zip(self._getAllTheLetters(upper=True), self._getAllTheLetters(upper=True))
 
     def _get_id_maps(self, cr, uid, ids,name, arg, context=None):
         res = dict.fromkeys(ids, False)
