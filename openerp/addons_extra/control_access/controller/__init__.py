@@ -21,7 +21,4 @@
 #
 ##############################################################################
 
-import res_users
-import control_access
-
-import controller
+import main

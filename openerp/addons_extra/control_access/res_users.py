@@ -1,5 +1,6 @@
 from openerp.osv import fields,osv
 import openerp
+from openerp.http import request
 
 
 class res_users(osv.osv):
@@ -19,18 +20,23 @@ class res_users(osv.osv):
         superuser = openerp.SUPERUSER_ID
         try:
             cr = self.pool.db.cursor()
-            
+            if uid == 0:
+                type = 'Fail'
+            else:
+                type = 'IN' 
+            session_id = request.session_id
             self.pool.get('control.access').create(cr, superuser,{'user_id': uid,
                                                                   'user_name':login,
                                                                   'url':user_agent_env.get('base_location'),
                                                                   'ip':user_agent_env.get('REMOTE_ADDR'),
                                                                   'db':db,
-                                                                  'type':'IN'
+                                                                  'type': type,
+                                                                  'session': session_id,
                                                                             }
                                                   )
             cr.commit()
         except:
-            print "error authetificate"
+            print "error login"
         
         if uid == superuser:
             # Successfully logged in as admin!
