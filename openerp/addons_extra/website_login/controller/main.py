@@ -26,4 +26,4 @@ class Home_extend(main.Home):
             if uid is not False:
                 return http.redirect_with_hash(redirect)
             values['error'] = "Wrong login/password"
-        return main.render_bootstrap_template(request.session.db, 'web.login_layout', values, lazy=True)
+        return main.render_bootstrap_template(request.session.db, 'web.login', values, lazy=True)
