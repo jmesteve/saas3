@@ -10,7 +10,7 @@
          <field name="arch" type="xml">            
                <xpath expr="//a[@t-attf-href='/web/login']" position="replace">
                		<t t-if="request.httprequest.url_root[:5] != 'https'">
-			            <a t-attf-href="/login">
+			            <a t-attf-href="/shop/login">
 			                <b>Sign in</b>
 			            </a>
 			         </t>
