@@ -54,7 +54,7 @@ msgstr "Azul pálido"
 #. module: google_map_kml
 #: view:res.partner:0
 msgid "Open Map All"
-msgstr "Abrir Mapa Entero"
+msgstr "Abrir Mapa Global"
 
 #. module: google_map_kml
 #: selection:res.partner,googlemap_marker_color:0
@@ -129,7 +129,7 @@ msgstr "Visitado"
 #. module: google_map_kml
 #: view:res.partner:0
 msgid "Open Map One"
-msgstr "Abrir Mapa 1"
+msgstr "Abrir Mapa Local"
 
 #. module: google_map_kml
 #: field:res.partner,googlemap_select_image:0
@@ -164,7 +164,7 @@ msgstr "Anchura del logo (px) "
 #. module: google_map_kml
 #: view:res.partner:0
 msgid "Partners Map One"
-msgstr "Mapa de 1"
+msgstr "Mapa Local"
 
 #. module: google_map_kml
 #: model:ir.model,name:google_map_kml.model_res_partner

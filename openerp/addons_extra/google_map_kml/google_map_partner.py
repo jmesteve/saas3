@@ -71,7 +71,7 @@ class google_map_partner(osv.osv):
     
     _defaults = {
         'googlemap_visited': True,
-        'googlemap_marker_letter': 'a',
+        'googlemap_marker_letter': 'A',
         'googlemap_marker_color': 'red',
         'googlemap_select_image': False,
         'width_image_small_map': 64,
