@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <openerp>
-    <data>
+    <data noupdate="0">
 <!--         <record model="ir.actions.client" id="view_partner_form_map_wizard_client"> -->
 <!--             <field name="name">res.partner.form.map.wizard.client</field> -->
 <!-- 			<field name="tag">location_map.partners</field> -->

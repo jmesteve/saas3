@@ -231,4 +231,6 @@ class google_map_partner(osv.osv):
              'view_mode': 'form',
              'context': ctx
         }
+        
+google_map_partner()
 
