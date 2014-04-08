@@ -9,7 +9,6 @@ except ImportError:
 import urllib
 
 class google_map_partner(osv.osv):
-
     _inherit = "res.partner"
     
     def _get_image_map(self, cr, uid, ids, name, args, context=None):
