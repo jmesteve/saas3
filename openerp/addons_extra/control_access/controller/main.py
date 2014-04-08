@@ -4,6 +4,9 @@ import werkzeug.utils
 import openerp.addons.web.controllers.main as main
 import openerp
 from openerp import pooler, sql_db
+import logging
+
+_logger = logging.getLogger(__name__)
 
         
 class Session_extend(main.Session):
