@@ -4,7 +4,6 @@
 #    OpenERP, Open Source Management Solution
 #    Copyright (c) 2013 ErpAndCloud All Rights Reserved
 #                       https://github.com/jmesteve
-#                       https://github.com/escrichov
 #                       <engineering@erpandcloud.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -21,30 +20,5 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-    'name': 'Google Map KML',
-    'version': '1.0',
-    'author': 'ErpAndCloud',
-    'category': 'Customer Relationship Management',    
-    'description': """
-        [ENG] View all customers on Google maps.
-    """,
-    'website': 'http://www.erpandcloud.com',
-    'license': 'AGPL-3',
-    'images': [],
-    'depends' : ['base','web', 'website'],
-    'data': [
-             'google_map_kml_view.xml',
-             'data/google_map_kml_data.xml'
-             ],
-    'css': ['static/src/css/location_map_partner.css'],
-    'js': ['https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places',
-           'static/src/js/location_map_partners.js'],
-    'qweb' : ['static/src/xml/templates.xml'],
-    'demo': [],
-    'installable': True,
-    'application': True,
-    'auto_install': False,
-}
 
-
+import main
