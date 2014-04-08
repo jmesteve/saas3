@@ -2,6 +2,10 @@ from openerp.osv import fields,osv
 import openerp
 from openerp.http import request
 
+import logging
+_logger = logging.getLogger(__name__)
+
+
 
 class res_users(osv.osv):
     _inherit = "res.users"
