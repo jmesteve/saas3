@@ -1,0 +1,5 @@
+#add permissions sudo with visudo
+visudo
+#add this 2 lines in the file
+openerp ALL = NOPASSWD : /usr/bin/service openerp-* *
+openerp ALL = NOPASSWD : /usr/sbin/update-rc.d * openerp-* *
