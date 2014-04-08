@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data noupdate="1"> 
+    <data> 
 		<!-- Email template for send p12 certificate -->
         <record id="email_template_ssl" model='email.template'>
 	        <field name="name">Certificate SSL - Send P12 by mail</field>
@@ -25,10 +25,16 @@
 	            <field name="model_id" ref="user_certificate.model_certificate_ssl"/>
 	            <field name="auto_delete" eval="True"/>
 				<field name="lang">${object.user.lang}</field>
-	            <field name="body_html"><![CDATA[
-<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+	            <field name="body_html">
+<![CDATA[<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
 		<p>Hello ${object.user.name}, I send you the password for the ssl certificate.</p>
 		<p>Password: ${object.password}</p>
+		% for certificate in object.certification_authority.certificates:
+		% if certificate.type == 'server':
+		<p>Web: https://${certificate.commonname}</p>
+		% endif
+		% endfor
+		
 </div>]]></field>
 		</record>
 		
