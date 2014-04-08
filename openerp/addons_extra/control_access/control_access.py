@@ -15,4 +15,16 @@ class control_access(osv.osv):
                 }
     _order = 'create_date desc'
     
-  
+    def button_form(self, cr, uid, ids, context=None):
+        return {
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': False,
+            'res_id': ids[0],
+            'res_model': 'control.access',
+            'type': 'ir.actions.act_window',
+            'context': context,
+            'target':'new',
+            'nodestroy': True,
+         }
+       
