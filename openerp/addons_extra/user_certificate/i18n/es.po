@@ -1,0 +1,358 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* user_certificate
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.saas~3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-06 22:29+0000\n"
+"PO-Revision-Date: 2014-04-06 22:29+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: user_certificate
+#: field:certificate.ssl,city:0
+msgid "City"
+msgstr "Ciudad"
+
+#. module: user_certificate
+#: field:virtualhost.ssl,servername:0
+msgid "Server Name"
+msgstr "Server Name"
+
+#. module: user_certificate
+#: field:domain.ssl,certificate_id:0
+msgid "Certificate"
+msgstr "Certificado"
+
+#. module: user_certificate
+#: model:res.groups,name:user_certificate.group_user_certificate_all
+msgid "User Certificate All"
+msgstr "User Certificate All"
+
+#. module: user_certificate
+#: sql_constraint:certificate.ssl:0
+msgid "Item Common Name must be unique!"
+msgstr "El elemento Common Name debe ser único!"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+msgid "Group By..."
+msgstr "Agrupar por..."
+
+#. module: user_certificate
+#: field:certificate.ssl,state:0
+#: field:certificate.ssl,state_place:0
+#: field:virtualhost.ssl,state:0
+msgid "State"
+msgstr "Estado o provincia"
+
+#. module: user_certificate
+#: field:certificate.ssl,domains:0
+msgid "Alternate Domains"
+msgstr "Alternate Domains"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+#: selection:certificate.ssl,state:0
+#: view:virtualhost.ssl:0
+#: selection:virtualhost.ssl,state:0
+msgid "Draft"
+msgstr "Draft"
+
+#. module: user_certificate
+#: field:certificate.ssl,certificates:0
+#: view:res.users:0
+msgid "Certificates"
+msgstr "Certificados"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+msgid "Search Certificate SSL"
+msgstr "Buscar Certificado SSL"
+
+#. module: user_certificate
+#: field:certificate.ssl,crlnumber:0
+msgid "CRL Number"
+msgstr "CRL Number"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+#: field:certificate.ssl,type:0
+msgid "Type"
+msgstr "Tipo"
+
+#. module: user_certificate
+#: field:virtualhost.ssl,serveralias:0
+msgid "Server Alias"
+msgstr "Server Alias"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+#: field:certificate.ssl,name:0
+#: field:domain.ssl,name:0
+#: field:virtualhost.ssl,name:0
+msgid "Name"
+msgstr "Nombre"
+
+#. module: user_certificate
+#: field:certificate.ssl,begin_date:0
+msgid "Begin Date"
+msgstr "Fecha de comienzo"
+
+#. module: user_certificate
+#: model:ir.model,name:user_certificate.model_res_users
+msgid "Users"
+msgstr "Usuarios"
+
+#. module: user_certificate
+#: field:virtualhost.ssl,logpath:0
+msgid "Log Path"
+msgstr "Log Path"
+
+#. module: user_certificate
+#: field:certificate.ssl,certificate_data_p12:0
+msgid "Download Certificate"
+msgstr "Descargar certificado"
+
+#. module: user_certificate
+#: field:certificate.ssl,name_file:0
+#: field:certificate.ssl,name_filep12:0
+msgid "Name File"
+msgstr "Nombre del archivo"
+
+#. module: user_certificate
+#: field:certificate.ssl,private_key:0
+msgid "Data PrivateKey"
+msgstr "Data PrivateKey"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+#: selection:certificate.ssl,state:0
+#: view:virtualhost.ssl:0
+#: selection:virtualhost.ssl,state:0
+msgid "Disable"
+msgstr "Desabilitado"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+msgid "Generate CRL manual"
+msgstr "Generar CRL manual"
+
+#. module: user_certificate
+#: field:virtualhost.ssl,ip:0
+msgid "IP"
+msgstr "IP"
+
+#. module: user_certificate
+#: selection:certificate.ssl,state:0
+#: selection:virtualhost.ssl,state:0
+msgid "Active"
+msgstr "Activo"
+
+#. module: user_certificate
+#: sql_constraint:certificate.ssl:0
+msgid "Item Name File must be unique!"
+msgstr "Elemento Nombre del archivo debe ser unique!"
+
+#. module: user_certificate
+#: field:certificate.ssl,password:0
+msgid "Password"
+msgstr "Password"
+
+#. module: user_certificate
+#: view:environment.ssl:0
+msgid "Initialize SSL Environment"
+msgstr "Inicializar SSL Environment"
+
+#. module: user_certificate
+#: field:certificate.ssl,end_date:0
+msgid "End Date"
+msgstr "Fecha de finalización"
+
+#. module: user_certificate
+#: model:ir.model,name:user_certificate.model_domain_ssl
+msgid "domain.ssl"
+msgstr "domain.ssl"
+
+#. module: user_certificate
+#: view:res.users:0
+msgid "Certificates HTTPS"
+msgstr "Certificados HTTPS"
+
+#. module: user_certificate
+#: model:ir.model,name:user_certificate.model_environment_ssl
+msgid "environment.ssl"
+msgstr "environment.ssl"
+
+#. module: user_certificate
+#: field:certificate.ssl,country:0
+msgid "Country"
+msgstr "País"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+msgid "company_ssl_form_user"
+msgstr "company_ssl_form_user"
+
+#. module: user_certificate
+#: model:ir.actions.act_window,help:user_certificate.action_user_ssl
+msgid "Manage SSL Company certificates."
+msgstr "Gestionar Certificados SSL de la Empresa."
+
+#. module: user_certificate
+#: view:virtualhost.ssl:0
+msgid "virtualhost_ssl_tree"
+msgstr "virtualhost_ssl_tree"
+
+#. module: user_certificate
+#: model:ir.actions.act_window,name:user_certificate.action_user_ssl
+#: model:ir.ui.menu,name:user_certificate.menu_action_user_ssl
+#: field:res.users,certificates:0
+msgid "Certificates SSL"
+msgstr "Certificados SSL"
+
+#. module: user_certificate
+#: selection:certificate.ssl,type:0
+msgid "Server"
+msgstr "Servidor"
+
+#. module: user_certificate
+#: field:certificate.ssl,certificate_data_pem:0
+msgid "Data PEM"
+msgstr "Data PEM"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+#: field:certificate.ssl,certification_authority:0
+msgid "Certification Authority"
+msgstr "Autoridad Certificadora"
+
+#. module: user_certificate
+#: field:certificate.ssl,organization:0
+msgid "Organization"
+msgstr "Organización"
+
+#. module: user_certificate
+#: model:ir.actions.act_window,name:user_certificate.act_company_ssl_view
+#: model:ir.ui.menu,name:user_certificate.menu_action_company_ssl2
+msgid "SSL Environment"
+msgstr "Entorno SSL"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+#: field:certificate.ssl,commonname:0
+msgid "Common Name"
+msgstr "Common Name"
+
+#. module: user_certificate
+#: selection:certificate.ssl,type:0
+msgid "Certification ROOT authority"
+msgstr "Certification ROOT authority"
+
+#. module: user_certificate
+#: model:ir.model,name:user_certificate.model_virtualhost_ssl
+msgid "virtualhost.ssl"
+msgstr "virtualhost.ssl"
+
+#. module: user_certificate
+#: model:ir.model,name:user_certificate.model_certificate_ssl
+msgid "certificate.ssl"
+msgstr "certificate.ssl"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+#: view:virtualhost.ssl:0
+msgid "Activate"
+msgstr "Activar"
+
+#. module: user_certificate
+#: model:ir.actions.act_window,name:user_certificate.action_virtualhost_ssl
+#: model:ir.ui.menu,name:user_certificate.menu_action_virtualhost_ssl
+msgid "Virtualhost SSL"
+msgstr "Virtualhost SSL"
+
+#. module: user_certificate
+#: view:virtualhost.ssl:0
+msgid "virtualhost_ssl_form"
+msgstr "virtualhost_ssl_form"
+
+#. module: user_certificate
+#: view:environment.ssl:0
+msgid "Remove SSL Environment"
+msgstr "Eliminar Entorno SSL"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+msgid "company_ssl_form"
+msgstr "company_ssl_form"
+
+#. module: user_certificate
+#: model:ir.actions.act_window,help:user_certificate.action_virtualhost_ssl
+msgid "Manage Virtualhosts."
+msgstr "Gestionar Virtualhosts."
+
+#. module: user_certificate
+#: help:certificate.ssl,state:0
+#: help:virtualhost.ssl,state:0
+msgid "The state."
+msgstr "The state."
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+msgid "user_ssl_tree"
+msgstr "user_ssl_tree"
+
+#. module: user_certificate
+#: field:certificate.ssl,create_date:0
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+#: selection:certificate.ssl,type:0
+#: field:certificate.ssl,user:0
+msgid "User"
+msgstr "Usuario"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+msgid "Certificate Fields"
+msgstr "Campos del Certificado"
+
+#. module: user_certificate
+#: view:certificate.ssl:0
+msgid "Certificate Data"
+msgstr "Datos del certificado"
+
+#. module: user_certificate
+#: field:virtualhost.ssl,certificateserver:0
+msgid "Certificate Server"
+msgstr "Certificado del Servidor"
+
+#. module: user_certificate
+#: model:res.groups,name:user_certificate.group_user_certificate
+msgid "User Certificate Read Only"
+msgstr "Certificado de usuario Solo Lectura"
+
+#. module: user_certificate
+#: view:res.users:0
+msgid "Generate Certificate"
+msgstr "Generar Certificado"
+
+#. module: user_certificate
+#: field:virtualhost.ssl,port:0
+msgid "Port"
+msgstr "Puerto"
+
+#. module: user_certificate
+#: sql_constraint:certificate.ssl:0
+#: sql_constraint:virtualhost.ssl:0
+msgid "Item Name must be unique!"
+msgstr "El elemento nombre debe ser único!"
+

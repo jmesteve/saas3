@@ -281,6 +281,8 @@ class certificate_ssl(osv.osv):
         certificatesDays = self.pool.get('ir.config_parameter').get_param(cr, uid, "certificates_days_root", context=context)
         certificate = self.pool.get('certificate.ssl').browse(cr, uid, ids[0], context)
         
+        self.pool.get('environment.ssl').initialize_ssl_environment(cr, uid, ids, context=context)
+        
         if certificate.type == 'user' or certificate.type == 'server':
             certificatesPath = os.path.join(certificatesPath, certificate.certification_authority.name_file)
             self.initialize_ca(cr, uid, certificate.certification_authority.id, context=context)

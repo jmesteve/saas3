@@ -29,6 +29,7 @@ class certificate_ssl_extend_mail(osv.osv):
             email_obj = self.pool.get('email.template')  
             #get the object corresponding to template_id
             email = email_obj.browse(cr, uid, template_id)
+            src_obj = email.model_id.model
             #get the id of the document, stored into field scanned
             attachment_id = attachment_ids[0]
             #write the new attachment to mail template
@@ -51,6 +52,7 @@ class certificate_ssl_extend_mail(osv.osv):
         return {
             'name': 'Compose Email',
             'type': 'ir.actions.act_window',
+            'src_model': src_obj,
             'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'mail.compose.message',

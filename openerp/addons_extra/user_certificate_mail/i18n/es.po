@@ -1,0 +1,74 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* user_certificate_mail
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.saas~3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-08 16:05+0000\n"
+"PO-Revision-Date: 2014-04-08 16:05+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: user_certificate_mail
+#: model:email.template,subject:user_certificate_mail.email_template_ssl
+msgid "Certificate SSL"
+msgstr "Certificado SSL"
+
+#. module: user_certificate_mail
+#: model:ir.model,name:user_certificate_mail.model_certificate_ssl
+msgid "certificate.ssl"
+msgstr "certificate.ssl"
+
+#. module: user_certificate_mail
+#: view:certificate.ssl:0
+msgid "Send Certificate by Email"
+msgstr "Enviar el Certificado por Email"
+
+#. module: user_certificate_mail
+#: view:certificate.ssl:0
+msgid "Send Password by Email"
+msgstr "Enviar Contraseña por Email"
+
+#. module: user_certificate_mail
+#: model:email.template,subject:user_certificate_mail.email_template_ssl_password
+msgid "Certificate SSL Password"
+msgstr "Contraseña Certificado SSL"
+
+#. module: user_certificate_mail
+#: model:email.template,body_html:user_certificate_mail.email_template_ssl
+msgid "<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
+"		<p>Hello ${object.user.name}, I send you the ssl certificate.</p>\n"
+"</div>"
+msgstr "<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
+"		<p>Hola ${object.user.name}, te envío adjunto el certificado SSL.</p>\n"
+"</div>"
+
+#. module: user_certificate_mail
+#: model:email.template,body_html:user_certificate_mail.email_template_ssl_password
+msgid "<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
+"		<p>Hello ${object.user.name}, I send you the password for the ssl certificate.</p>\n"
+"		<p>Password: ${object.password}</p>\n"
+"		% for certificate in object.certification_authority.certificates:\n"
+"		% if certificate.type == 'server':\n"
+"		<p>Web: https://${certificate.commonname}</p>\n"
+"		% endif\n"
+"		% endfor\n"
+"		\n"
+"</div>"
+msgstr "<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
+"		<p>Hola ${object.user.name}, te envío la contraseña del certificado SSL.</p>\n"
+"		<p>Contraseña: ${object.password}</p>\n"
+"		% for certificate in object.certification_authority.certificates:\n"
+"		% if certificate.type == 'server':\n"
+"		<p>Web: https://${certificate.commonname}</p>\n"
+"		% endif\n"
+"		% endfor\n"
+"		\n"
+"</div>"
+
