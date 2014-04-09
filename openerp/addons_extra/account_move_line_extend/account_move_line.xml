@@ -50,7 +50,7 @@
 		                    <filter string="Month" icon="terp-go-month" domain="[]" context="{'group_by':'date:month'}"/>
 		                    <filter string="Week" icon="terp-go-week" domain="[]" context="{'group_by':'date:week'}"/>
 		                    <filter string="Day" icon="terp-go-today" domain="[]" context="{'group_by':'date:day'}"/>
-		                    
+		                    <filter string="tax_code_id" domain="[]" context="{'group_by':'tax_code_id'}"/>
 		                </xpath>
 					</field>
 		</record>
