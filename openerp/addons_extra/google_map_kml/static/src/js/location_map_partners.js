@@ -76,13 +76,13 @@ openerp.google_map_kml = function (instance)
 							this.markers[i] = marker;
 							markersinfo.push(marker);
 				            
-							if(partner_main.googlemap_select_image === false){
-					            infoWindow.open(this.map, this.markers[i]);
-					        }
+							//if(partner_main.googlemap_select_image === false){
+					        //    infoWindow.open(this.map, this.markers[i]);
+					        //}
 				            infowindows.push(infoWindow);
 						}
 					}
-					
+					/*
 					google.maps.event.addListener(map, 'zoom_changed', function() {
 				        var zoomLevel = map.getZoom();
 				        
@@ -95,6 +95,7 @@ openerp.google_map_kml = function (instance)
 				        	}
 				        }
 				      });
+				      */
 				}
 				this.map.fitBounds(bounds);
 			}, this));
@@ -151,13 +152,13 @@ openerp.google_map_kml = function (instance)
 							this.markers[i] = marker;
 							markersinfo.push(marker);
 				            
-							if(partner_main.googlemap_select_image === false){
-					            infoWindow.open(this.map, this.markers[i]);
-					        }
+							//if(partner_main.googlemap_select_image === false){
+					        //    infoWindow.open(this.map, this.markers[i]);
+					        //}
 				            infowindows.push(infoWindow);
 						}
 					}
-					
+					/*
 					google.maps.event.addListener(map, 'zoom_changed', function() {
 				        var zoomLevel = map.getZoom();
 				        
@@ -170,6 +171,7 @@ openerp.google_map_kml = function (instance)
 				        	}
 				        }
 				      });
+				      */
 				}
 				this.map.fitBounds(bounds);
 			}, this));
@@ -216,14 +218,14 @@ openerp.google_map_kml = function (instance)
 								this.markers[i] = marker;
 								markersinfo.push(marker);
 								
-					            if(partner_main.googlemap_select_image === false){
-					            	infoWindow.open(this.map, this.markers[i]);
-					            }
+					            //if(partner_main.googlemap_select_image === false){
+					            //	infoWindow.open(this.map, this.markers[i]);
+					            //}
 					            
 					            infowindows.push(infoWindow);
 							}
 						}
-						
+						/*
 						google.maps.event.addListener(map, 'zoom_changed', function() {
 					        var zoomLevel = map.getZoom();
 					        for (var i=0; i < infowindows.length; i++){
@@ -235,6 +237,7 @@ openerp.google_map_kml = function (instance)
 					        	}
 					        }
 					      });
+					      */
 					}
 					this.map.fitBounds(bounds);
 				}, this));
