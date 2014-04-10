@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+   
+		<record id="view_shop_redirect_tree" model="ir.ui.view">
+            <field name="name">shop.redirect.tree</field>
+            <field name="model">shop.redirect</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Shop Redirect Tree">
+                    <field name="serverhost"/>
+                    <field name="route"/>
+                </tree>
+            </field>
+        </record>
+        
+    	<record model="ir.ui.view" id="view_shop_redirect_form">
+            <field name="name">shop.redirect.form</field>
+            <field name="model">shop.redirect</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form string="Shop Redirect Form">
+            		<group>
+            			<group>
+                    		<field name="serverhost"/>
+                    		<field name="route"/>  
+            			</group>
+            		</group>
+            	</form>
+            </field>
+       	</record>
+   		
+   
+    	<record model='ir.actions.act_window' id='action_shop_redirect'>
+            <field name="name">Home Shop Redirect</field>
+            <field name="res_model">shop.redirect</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    
+     	<menuitem id="shop_redirect" name="Shop Redirect" parent="base.menu_config" action='action_shop_redirect' />
+    
+    </data>
+</openerp>

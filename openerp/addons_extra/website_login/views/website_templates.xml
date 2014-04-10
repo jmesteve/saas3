@@ -9,12 +9,12 @@
          <field name="inherit_id" ref="website.show_sign_in"/>       
          <field name="arch" type="xml">            
                <xpath expr="//a[@t-attf-href='/web/login']" position="replace">
-               		<t t-if="request.httprequest.url_root[:5] != 'https'">
+               		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
 			            <a t-attf-href="/shop/login">
 			                <b>Sign in</b>
 			            </a>
 			         </t>
-			         <t t-if="request.httprequest.url_root[:5] == 'https'">
+			         <t t-if="request.httprequest.url_root[:5] == 'https' or request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False">
 			            <a t-attf-href="/web/login">
 			                <b>Admin</b>
 			            </a>
@@ -29,7 +29,7 @@
          <field name="inherit_id" ref="web.login"/>       
          <field name="arch" type="xml">            
                <xpath expr="//form[@class='oe_login_form']" position="replace">
-               		<t t-if="request.httprequest.url_root[:5] != 'https'">
+               		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
 			            <form class="oe_login_form" role="form" t-attf-action="/shop/login{{ '?debug' if debug else '' }}" method="post">
 		
 		                    <t t-call="web.database_select"/>
@@ -58,7 +58,7 @@
 		
 		                </form>
 			         </t>
-			         <t t-if="request.httprequest.url_root[:5] == 'https'">
+			         <t t-if="request.httprequest.url_root[:5] == 'https' or request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False">
 			            <form class="oe_login_form" role="form" t-attf-action="/web/login{{ '?debug' if debug else '' }}" method="post">
 		
 		                    <t t-call="web.database_select"/>
@@ -98,7 +98,7 @@
          <field name="inherit_id" ref="website.layout"/>       
          <field name="arch" type="xml">            
                <xpath expr="//li[@class='dropdown']" position="replace">
-               		<t t-if="request.httprequest.url_root[:5] != 'https'">
+               		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
 			            <li class="dropdown" t-ignore="true" groups="base.group_user,base.group_portal">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <b>
@@ -113,7 +113,7 @@
                             </ul>
                         </li>
 			         </t>
-			         <t t-if="request.httprequest.url_root[:5] == 'https'">
+			         <t t-if="request.httprequest.url_root[:5] == 'https' or request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False">
 			            <li class="dropdown" t-ignore="true" groups="base.group_user,base.group_portal">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <b>
@@ -130,8 +130,99 @@
 			         </t>
     			</xpath>
     			
+    			<xpath expr="//ul[@name='products']" position="replace">
+               		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
+			            <ul class="list-unstyled" name="products">
+                        	<li><a href="/home">Home</a></li>
+                        </ul>
+			         </t>
+			         <t t-if="request.httprequest.url_root[:5] == 'https' or request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False">
+			            <ul class="list-unstyled" name="products">
+                        	<li><a href="/">Home</a></li>
+                        </ul>
+			         </t>
+    			</xpath>
+    			
+         </field>
+      </record>
+      
+      <record model="ir.ui.view" id="500_extend">
+         <field name="name">500 extend</field>
+         <field name="type">qweb</field>     
+         <field name="inherit_id" ref="website.500"/>       
+         <field name="arch" type="xml">            
+               <xpath expr="//a[@href='/']" position="replace">
+               		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
+						<a href="/home">Home</a>
+			         </t>
+			         <t t-if="request.httprequest.url_root[:5] == 'https' or request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False">
+						<a href="/">Home</a>
+			         </t>
+    			</xpath>
          </field>
       </record>
  
+ 	  <record model="ir.ui.view" id="400_extend">
+         <field name="name">404 extend</field>
+         <field name="type">qweb</field>     
+         <field name="inherit_id" ref="website.404"/>       
+         <field name="arch" type="xml">            
+               <xpath expr="//a[@href='/']" position="replace">
+               		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
+						<a href="/home">Homepage</a>
+			         </t>
+			         <t t-if="request.httprequest.url_root[:5] == 'https' or request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False">
+						<a href="/">Homepage</a>
+			         </t>
+    			</xpath>
+         </field>
+      </record>
+      
+      <record model="ir.ui.view" id="footer_custom_extend">
+         <field name="name">Footer Custom extend</field>
+         <field name="type">qweb</field>     
+         <field name="inherit_id" ref="website.footer_custom"/>       
+         <field name="arch" type="xml">            
+               <xpath expr="//a[@href='/']" position="replace">
+               		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
+						<a href="/home">Homepage</a>
+			         </t>
+			         <t t-if="request.httprequest.url_root[:5] == 'https' or request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False">
+						<a href="/">Homepage</a>
+			         </t>
+    			</xpath>
+         </field>
+      </record>
+      
+      <record model="ir.ui.view" id="website_submenu_extend">
+         <field name="name">Submenu extend</field>
+         <field name="type">qweb</field>     
+         <field name="inherit_id" ref="website.submenu"/>       
+         <field name="arch" type="xml">            
+               <xpath expr="//ul[@class='dropdown-menu']" position="replace">
+               		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
+						<t t-foreach="submenu.child_id" t-as="submenu">
+							<t t-if="submenu.name != 'Home'">
+               					<t t-call="website.submenu"/>
+               				</t>
+           				</t>
+			         </t>
+			         <t t-if="request.httprequest.url_root[:5] == 'https' or request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False">
+						<t t-foreach="submenu.child_id" t-as="submenu">
+                			<t t-call="website.submenu"/>
+            			</t>
+			         </t>
+    			</xpath>
+         </field>
+      </record>
+      
+      <delete model="website.menu" id="website.menu_homepage"/>
+      
+      <record id="menu_homepage_extend" model="website.menu">
+            <field name="name">Home</field>
+            <field name="url">/home</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">10</field>
+        </record>
    </data>
 </openerp>
