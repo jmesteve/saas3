@@ -55,17 +55,20 @@ class Home_extend(web.Home):
         context = request.session.context
         serverhost = request.httprequest.host
         # Get database connexion
-        db = sql_db.db_connect(dbname) # You can get the db name from config
-        cr = db.cursor()
-        pool = pooler.get_pool(cr.dbname)
-        ids = pool.get('shop.redirect').search(cr, uid, [('serverhost','ilike', serverhost)], limit=1, context=context)
-        shop_redirect = pool.get('shop.redirect').browse(cr, uid, ids,context=context)[0]
-        redirection_url = shop_redirect.route if shop_redirect != None else None
-    
-        default_shop_redirect = pool.get('ir.config_parameter').get_param(cr, uid, 'default_shop_redirect', context=context)
-        redirection_url = default_shop_redirect if not redirection_url and default_shop_redirect else redirection_url
-        cr.close()
+        try:
+            db = sql_db.db_connect(dbname) # You can get the db name from config
+            cr = db.cursor()
+            pool = pooler.get_pool(cr.dbname)
+            ids = pool.get('shop.redirect').search(cr, uid, [('serverhost','ilike', serverhost)], limit=1, context=context)
+            shop_redirect = pool.get('shop.redirect').browse(cr, uid, ids,context=context)[0]
+            redirection_url = shop_redirect.route if shop_redirect != None else None
         
+            default_shop_redirect = pool.get('ir.config_parameter').get_param(cr, uid, 'default_shop_redirect', context=context)
+            redirection_url = default_shop_redirect if not redirection_url and default_shop_redirect else redirection_url
+            cr.close()
+        except:
+            pass
+            
         if not redirection_url:
             '/home'
         

@@ -32,8 +32,8 @@
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
     "depends": ['web','website'],
-    'data': ['views/website_templates.xml',
-             'views/shop_redirect_view.xml',
+    'data': ['views/shop_redirect_view.xml',
+             'views/website_templates.xml',
              'data/website_login_data.xml'
     ],
     "active": True,

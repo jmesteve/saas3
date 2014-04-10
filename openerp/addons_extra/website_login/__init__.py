@@ -21,5 +21,5 @@
 #
 ##############################################################################
 
-import controller
 import shop_redirect
+import controller
