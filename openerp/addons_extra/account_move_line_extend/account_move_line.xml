@@ -22,6 +22,8 @@
 		                    <field name="accumulated"/>
 		                    <field name="notes"/>
 		                    <field name="code"/>
+		                    <field name="tax_code_id"/>
+		                    
 		                </xpath>
 					</field>
 		</record>
@@ -35,6 +37,20 @@
 		                </xpath>
 		                <xpath expr="//field[@name='name']" position="attributes"> 
 		                	<attribute name="readonly">False</attribute>
+		                </xpath>
+					</field>
+		</record>
+		<record id="view_account_move_line_filter_extend" model="ir.ui.view">
+		            <field name="name">Journal Items Extend</field>
+		            <field name="model">account.move.line</field>
+		            <field name="inherit_id" ref="account.view_account_move_line_filter" />
+		            <field name="arch" type="xml">
+		            	<xpath expr="//filter[@string='Period']" position="after">
+		                    <filter string="Year" icon="terp-go-year" domain="[]" context="{'group_by':'date:year'}"/>
+		                    <filter string="Month" icon="terp-go-month" domain="[]" context="{'group_by':'date:month'}"/>
+		                    <filter string="Week" icon="terp-go-week" domain="[]" context="{'group_by':'date:week'}"/>
+		                    <filter string="Day" icon="terp-go-today" domain="[]" context="{'group_by':'date:day'}"/>
+		                    <filter string="tax_code_id" domain="[]" context="{'group_by':'tax_code_id'}"/>
 		                </xpath>
 					</field>
 		</record>

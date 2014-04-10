@@ -1,4 +1,4 @@
-# Añadir al final de /etc/sudoers:  openerp ALL = NOPASSWD : /usr/bin/service apache2 *
+# AÃ±adir al final de /etc/sudoers:  openerp ALL = NOPASSWD : /usr/bin/service apache2 *
 # Modificar permisos de la carpeta de apache sites-available.
 # Modificar permisos de la carpeta de apache sites-enabled.
 # Modificar permisos de la carpeta de openerp

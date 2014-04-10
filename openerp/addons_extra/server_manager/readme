@@ -3,3 +3,13 @@ visudo
 #add this 2 lines in the file
 openerp ALL = NOPASSWD : /usr/bin/service openerp-* *
 openerp ALL = NOPASSWD : /usr/sbin/update-rc.d * openerp-* *
+
+
+#cambiar OWN y  GROUP
+
+chown openerp /etc/ini.d/
+chgrp openerp /etc/init.d/
+
+chown openerp /etc/openerp/
+chgrp openerp /etc/openerp/
+ 
