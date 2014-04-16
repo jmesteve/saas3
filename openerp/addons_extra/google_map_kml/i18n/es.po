@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.saas~3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-06 22:10+0000\n"
-"PO-Revision-Date: 2014-04-06 22:10+0000\n"
+"POT-Creation-Date: 2014-04-16 14:23+0000\n"
+"PO-Revision-Date: 2014-04-16 14:23+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -38,8 +38,8 @@ msgstr "Morado"
 
 #. module: google_map_kml
 #: view:res.partner:0
-msgid "Geolocalize"
-msgstr "Geolocalizar"
+msgid "Open Large Map Company "
+msgstr "Abrir Mapa Empresa Grande"
 
 #. module: google_map_kml
 #: field:res.partner,date_localization:0
@@ -100,6 +100,11 @@ msgstr "Id Maps"
 #: view:res.partner:0
 msgid "Map"
 msgstr "Mapa"
+
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "Geolocalize"
+msgstr "Geolocalizar"
 
 #. module: google_map_kml
 #: help:res.partner,image_small_map:0
@@ -179,5 +184,5 @@ msgstr "Mapa de la Empresa"
 #. module: google_map_kml
 #: selection:res.partner,googlemap_marker_color:0
 msgid "Dark Green"
-msgstr "Verda oscuro"
+msgstr "Verde oscuro"
 

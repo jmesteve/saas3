@@ -1,7 +1,7 @@
 from openerp.osv import fields, osv
 from openerp.addons.web.http import request
 
-class server_manager(osv.osv):
+class shop_redirect(osv.osv):
     _name = 'shop.redirect'
     
     _columns = {
@@ -23,3 +23,5 @@ class server_manager(osv.osv):
     
     def action_autostart(self, cr, uid, ids, context=None):
         return False
+
+shop_redirect()

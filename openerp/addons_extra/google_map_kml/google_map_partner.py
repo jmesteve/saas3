@@ -231,5 +231,18 @@ class google_map_partner(osv.osv):
              'context': ctx
         }
         
+    def open_map_partners_company(self, cr, uid, ids, context=None):
+        ctx = dict(context)
+        ctx.update({
+            'default_id_maps': ids[0]
+        })
+        
+        return {
+             'name': 'Google Maps Company',
+             'type': 'ir.actions.client',
+             'tag': 'location_map.partners_company',
+             'context': ctx
+        }
+        
 google_map_partner()
 

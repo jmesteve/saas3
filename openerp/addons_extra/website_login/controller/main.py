@@ -41,8 +41,8 @@ class Home_extend(web.Home):
             main_menu = request.registry['ir.model.data'].get_object(request.cr, request.uid, 'website', 'main_menu')
             first_menu = main_menu.child_id and main_menu.child_id[0]
             # Dont 302 loop on /
-            if first_menu and not ((first_menu.url == '/home') or first_menu.url.startswith('/home#') or first_menu.url.startswith('/home?')):
-                return request.redirect(first_menu.url)
+            #if first_menu and not ((first_menu.url == '/home') or first_menu.url.startswith('/home#') or first_menu.url.startswith('/home?')):
+            #    return request.redirect(first_menu.url)
         except:
             pass
         return self.page("website.homepage")
@@ -70,7 +70,7 @@ class Home_extend(web.Home):
             pass
             
         if not redirection_url:
-            '/home'
+            redirection_url = '/home'
         
         return request.redirect(redirection_url)
     

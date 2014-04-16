@@ -51,6 +51,7 @@
                     <button name="open_map_partners_wizard_new" string="Open Map All" type="object" icon="gtk-zoom-in"/>
                     <button name="open_map_partners_wizard_new_one" string="Open Map One" type="object" icon="gtk-zoom-in"/>
                     <button name="open_map_partners_wizard_new_company" attrs="{'invisible':[('is_company','=', False)]}" string="Open Map Company" type="object" icon="gtk-zoom-in"/>
+                    <button name="open_map_partners_company" attrs="{'invisible':[('is_company','=', False)]}" string="Open Large Map Company " type="object" icon="gtk-zoom-in"/>
                 </xpath>
 <!--                 <xpath expr="//field[@name='website']" position="after"> -->
 <!--                 	<field name="googlemap_visited" widget="google_map_partner_website_button_visited"/> -->

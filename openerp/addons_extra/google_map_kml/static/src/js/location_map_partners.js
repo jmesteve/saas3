@@ -313,7 +313,7 @@ openerp.google_map_kml = function (instance)
 		id_maps: null,
 		template: 'location_map.partners_new_window_one',
 		createMarker: createMarker,
-		createMarkers: createMarkersCompany,
+		createMarkers: createMarkersOne,
 		setSearchBox: setSearchBox,
 	});
 	
@@ -341,6 +341,44 @@ openerp.google_map_kml = function (instance)
 			
 			this._super(parent);
 			this.name = name;
+		},
+		start: function(){
+			var self = this;
+			// initialize the widget with new map
+			if(typeof google !== "undefined") { // clear offline usage errors....
+				    this.map = new google.maps.Map(document.getElementById(this.mapElementId), 
+									{zoom: 6, mapTypeId: google.maps.MapTypeId.ROADMAP});			
+				    this.setSearchBox();
+				    this.create_markers();
+			} else {
+				this.$el.text("Couldn't load Goole Map API. Please check internet connection and reload the page.");
+			}
+		},
+	});
+	
+	
+	instance.google_map_kml.OpenMapCompany = instance.web.Widget.extend({
+		mapElementId: 'location_map_partners_company',
+		map: null, // google.maps.Map instance
+		markers: [], // partner's location marker
+		template: 'location_map.partners_company',
+		createMarker: createMarker,
+		create_markers: createMarkersCompany,
+		setSearchBox: setSearchBox,
+		init: function(parent, name) {
+			//location_map_widget = this; // needed for workaround below
+			// load google's api
+			
+			this._super(parent);
+			this.name = name;
+			
+			this.id_maps = this.name.context.default_id_maps;
+			if(typeof this.id_maps === "undefined" && typeof this.name.params.id !== "undefined"){
+				this.id_maps = this.name.params.id;
+			}
+			else if(typeof this.id_maps === "undefined" && typeof this.name.params.active_id !== "undefined"){
+				this.id_maps = this.name.params.active_id;
+			}
 		},
 		start: function(){
 			var self = this;
@@ -385,6 +423,7 @@ openerp.google_map_kml = function (instance)
 	});
 	
 	instance.web.client_actions.add('location_map.partners', 'instance.google_map_kml.OpenMap');
+	instance.web.client_actions.add('location_map.partners_company', 'instance.google_map_kml.OpenMapCompany');
 	instance.web.form.widgets.add('google_map_partner', 'instance.google_map_kml.MapPartner');
 	instance.web.form.widgets.add('google_map_partner_one', 'instance.google_map_kml.MapPartnerOne');
 	instance.web.form.widgets.add('google_map_partner_company', 'instance.google_map_kml.MapPartnerCompany');

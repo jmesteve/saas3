@@ -7,6 +7,14 @@
         </div>
     </t>
     
+    <t t-name="location_map.partners_company">
+    	<div style="position: relative; width:100%;height:100%;">
+    		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        	<div id="location_map_partners_company" class="map-div"></div>
+        </div>
+    </t>
+    
+    
     <t t-name="location_map.partners_new_window">
     	<div class="map-window">
     		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
