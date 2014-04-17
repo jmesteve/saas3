@@ -246,6 +246,94 @@ openerp.google_map_kml = function (instance)
 		
 	};
 	
+	
+	var createMarkersComparison = function() {
+		if(this.map != null) {
+			var Partner = new instance.web.Model('res.partner');
+			var Comparison = new instance.web.Model('map.partner.comparison');
+			var id_maps = this.id_maps;
+			
+			Comparison.query(['partners']).filter([['id','=', this.id_maps]]).limit(1).all().done($.proxy(function(partners_comparison) {
+			
+				console.log(partners_comparison);
+				Partner.query(['child_ids']).filter([['id','in', partners_comparison[0].partners]]).all().done($.proxy(function(partners_id) {
+					// create markers
+					var child_ids = partners_comparison[0].partners;
+					console.log(child_ids);
+					for(var i=0; i < partners_id.length; i++){
+						child_ids = child_ids.concat(partners_id[i].child_ids);
+					}
+					
+					Partner.query(['id','parent_id', 'has_image', 'googlemap_marker_letter', 'googlemap_marker_color', 'googlemap_select_image', 'partner_latitude', 'partner_longitude', 'name', 'googlemap_visited']).filter([['id','in', child_ids]]).all().done($.proxy(function(partners) {
+						var partner_main = partners[0];
+						var bounds = new google.maps.LatLngBounds();
+						var map = this.map;
+						var infowindows = [];
+						var markersinfo = [];
+						for(var i=0; i < partners.length; i++){
+							var lat = partners[i].partner_latitude;
+							var lng = partners[i].partner_longitude;
+							var pos = new google.maps.LatLng(lat, lng);
+							if(lat != 0 && lng != 0 && partners[i].googlemap_visited === true){
+								bounds.extend(pos);
+							}
+							if(this.map) {
+								if(lat != 0.0 & lng != 0.0 && partners[i].googlemap_visited === true) {									
+									if(typeof this.markers[i] !== "undefined" && this.markers[i] != null) {
+										this.markers[i].setMap(null);
+										delete this.markers;									
+									}
+									
+									for(var j=0; j < partners.length; j++){
+										if(partners[i].parent_id[0] === partners[j].id){
+											partner_main = partners[j];
+											break;
+										}
+									}
+									
+									
+									var image = instance.session.origin + "/google_map_kml/static/src/img/" + partner_main.googlemap_marker_color + "_Marker" + partner_main.googlemap_marker_letter + ".png";
+									if(partner_main.googlemap_select_image && partner_main.has_image){
+										image = instance.session.url('/web/binary/image', {model:'res.partner', field: 'image_small_map', id: partner_main.id})
+									}									
+									
+						            var infoWindow = new google.maps.InfoWindow({
+						                content: '<div><span style="display: inline-block">' + partners[i].name + '</span></div>'
+						            });
+									
+									var marker = this.createMarker(map, new google.maps.LatLng(lat, lng), partners[i].name, image, infoWindow);
+									this.markers[i] = marker;
+									markersinfo.push(marker);
+									
+						            //if(partner_main.googlemap_select_image === false){
+						            //	infoWindow.open(this.map, this.markers[i]);
+						            //}
+						            
+						            infowindows.push(infoWindow);
+								}
+							}
+							/*
+							google.maps.event.addListener(map, 'zoom_changed', function() {
+						        var zoomLevel = map.getZoom();
+						        for (var i=0; i < infowindows.length; i++){
+						        	if(zoomLevel < 15){
+						        		infowindows[i].close();
+						        	}
+						        	else{
+						        		infowindows[i].open(map, markersinfo[i]);
+						        	}
+						        }
+						      });
+						      */
+						}
+						this.map.fitBounds(bounds);
+					}, this));
+				}, this));
+			}, this));
+		}
+		
+	};
+	
 	var setSearchBox = function setSearchBox(){
 		// Create the search box and link it to the UI element.
 	    var input = /** @type {HTMLInputElement} */(
@@ -326,6 +414,14 @@ openerp.google_map_kml = function (instance)
 		setSearchBox: setSearchBox,
 	});
 	
+	instance.google_map_kml.MapPartnerComparison = instance.google_map_kml.MapPartner.extend({
+		mapElementId: 'location_map_partnerscomparison',
+		id_maps: null,
+		template: 'location_map.partners_comparison_wizard',
+		createMarker: createMarker,
+		createMarkers: createMarkersComparison,
+		setSearchBox: setSearchBox,
+	});
 	
 	instance.google_map_kml.OpenMap = instance.web.Widget.extend({
 		mapElementId: 'location_map_partners',
@@ -394,6 +490,15 @@ openerp.google_map_kml = function (instance)
 		},
 	});
 	
+	instance.google_map_kml.OpenMapComparison = instance.google_map_kml.OpenMapCompany.extend({
+		mapElementId: 'location_map_partners_comparison',
+		map: null, // google.maps.Map instance
+		markers: [], // partner's location marker
+		template: 'location_map.partners_comparison',
+		createMarker: createMarker,
+		create_markers: createMarkersComparison,
+		setSearchBox: setSearchBox
+	});
 	
 	instance.google_map_kml.WebsiteButtonVisited = instance.web.form.AbstractField.extend({
 	    template: 'location_map.website_button_visited',
@@ -424,9 +529,12 @@ openerp.google_map_kml = function (instance)
 	
 	instance.web.client_actions.add('location_map.partners', 'instance.google_map_kml.OpenMap');
 	instance.web.client_actions.add('location_map.partners_company', 'instance.google_map_kml.OpenMapCompany');
+	instance.web.client_actions.add('location_map.partners_comparison', 'instance.google_map_kml.OpenMapComparison');
+	
 	instance.web.form.widgets.add('google_map_partner', 'instance.google_map_kml.MapPartner');
 	instance.web.form.widgets.add('google_map_partner_one', 'instance.google_map_kml.MapPartnerOne');
 	instance.web.form.widgets.add('google_map_partner_company', 'instance.google_map_kml.MapPartnerCompany');
+	instance.web.form.widgets.add('google_map_partner_comparison', 'instance.google_map_kml.MapPartnerComparison');
 	instance.web.form.widgets.add('google_map_partner_website_button_visited', 'instance.google_map_kml.WebsiteButtonVisited');
 	instance.web.form.widgets.add('google_map_partner_website_button_select_image', 'instance.google_map_kml.WebsiteButtonSelectImage');
 }

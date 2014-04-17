@@ -66,6 +66,7 @@ class google_map_partner(osv.osv):
         'partner_longitude': fields.float('Geo Longitude'),
         'date_localization': fields.date('Geo Localization Date'),
         'id_maps': fields.function(_get_id_maps, type='integer', string='Id Maps'),
+        'certification_authority': fields.many2one('certificate.ssl', string='Certification Authority', required=False),
     }
     
     _defaults = {

@@ -39,6 +39,17 @@
           		</form>
             </field>
         </record>
+        
+        <record model="ir.ui.view" id="view_partner_form_map_wizard_comparison">
+            <field name="name">res.partner.form.map.wizard</field>
+           	<field name="model">map.partner.comparison</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form string="Partners Map">
+					<field name="id_maps" widget="google_map_partner_comparison" nolabel="1"/>
+				</form>
+            </field>
+        </record>
 
         <record model="ir.ui.view" id="view_partner_form_extend">
             <field name="name">res.partner.form.extend</field>
@@ -97,12 +108,42 @@
             </field>
         </record>
         
+        
+        <record model="ir.ui.view" id="view_open_map_comparison_form">
+            <field name="name">open_map_comparison.form</field>
+            <field name="model">map.partner.comparison</field>
+            <field name="arch" type="xml">
+                <form string="Partner Map Comparison" version="7.0">
+                	<header>
+                		<button name="open_map_partners_wizard" string="Open Map" type="object" icon="gtk-zoom-in"/>
+                		<button name="open_map_partners" string="Open Large Map" type="object" icon="gtk-zoom-in"/>
+                	</header>
+         			<group>
+         				<field name="name" />
+         			</group>
+         			<group>
+         				<field domain="[('is_company', '=', True)]" name="partners" nolabel="1"/>
+         			</group>
+                </form>
+            </field>
+        </record>
+        
        	<record id="action_open_map" model="ir.actions.client">
             <field name="name">Partners Map</field>
             <field name="type">ir.actions.client</field>
             <field name="tag">location_map.partners</field>
         </record>
         
+        <record id="action_open_map_comparison" model="ir.actions.act_window">
+            <field name="name">Map Partner Comparison</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">map.partner.comparison</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help">Map Partner Comparison.</field>
+        </record>
+        
         <menuitem id="menu_partner_map" parent="base.menu_sales" action="action_open_map" sequence="2"/>
+        <menuitem id="menu_partner_map_comparison" parent="base.menu_sales" action="action_open_map_comparison" sequence="3"/>
     </data>
 </openerp>

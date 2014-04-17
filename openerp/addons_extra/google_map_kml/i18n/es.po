@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.saas~3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-16 14:23+0000\n"
-"PO-Revision-Date: 2014-04-16 14:23+0000\n"
+"POT-Creation-Date: 2014-04-17 08:25+0000\n"
+"PO-Revision-Date: 2014-04-17 08:25+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,6 +21,11 @@ msgid "Blue"
 msgstr "Azul"
 
 #. module: google_map_kml
+#: field:map.partner.comparison,partners:0
+msgid "Partners"
+msgstr "Clientes"
+
+#. module: google_map_kml
 #: field:res.partner,image_small_map:0
 msgid "Small-sized image"
 msgstr "Small-sized image"
@@ -28,6 +33,7 @@ msgstr "Small-sized image"
 #. module: google_map_kml
 #: model:ir.actions.client,name:google_map_kml.action_open_map
 #: model:ir.ui.menu,name:google_map_kml.menu_partner_map
+#: view:map.partner.comparison:0
 msgid "Partners Map"
 msgstr "Mapa de Clientes"
 
@@ -67,9 +73,24 @@ msgid "Red"
 msgstr "Rojo"
 
 #. module: google_map_kml
+#: view:map.partner.comparison:0
+msgid "Partner Map Comparison"
+msgstr "Mapa de Clientes Comparación"
+
+#. module: google_map_kml
 #: selection:res.partner,googlemap_marker_color:0
 msgid "Brown"
 msgstr "Marrón"
+
+#. module: google_map_kml
+#: view:map.partner.comparison:0
+msgid "Open Map"
+msgstr "Abrir Mapa"
+
+#. module: google_map_kml
+#: model:ir.model,name:google_map_kml.model_map_partner_comparison
+msgid "map.partner.comparison"
+msgstr "map.partner.comparison"
 
 #. module: google_map_kml
 #: model:ir.model,name:google_map_kml.model_googlemap_kml
@@ -92,14 +113,25 @@ msgid "Geo Longitude"
 msgstr "Geo Longitud"
 
 #. module: google_map_kml
+#: field:map.partner.comparison,id_maps:0
 #: field:res.partner,id_maps:0
 msgid "Id Maps"
 msgstr "Id Maps"
 
 #. module: google_map_kml
+#: field:map.partner.comparison,name:0
+msgid "Name"
+msgstr "Nombre"
+
+#. module: google_map_kml
 #: view:res.partner:0
 msgid "Map"
 msgstr "Mapa"
+
+#. module: google_map_kml
+#: model:ir.actions.act_window,help:google_map_kml.action_open_map_comparison
+msgid "Map Partner Comparison."
+msgstr "Mapa de Clientes Comparación"
 
 #. module: google_map_kml
 #: view:res.partner:0
@@ -120,6 +152,16 @@ msgstr "Geo Latitud"
 #: selection:res.partner,googlemap_marker_color:0
 msgid "Green"
 msgstr "Verde"
+
+#. module: google_map_kml
+#: view:map.partner.comparison:0
+msgid "Open Large Map"
+msgstr "Abrir Mapa Grande"
+
+#. module: google_map_kml
+#: field:res.partner,certification_authority:0
+msgid "Certification Authority"
+msgstr "Certification Authority"
 
 #. module: google_map_kml
 #: view:res.partner:0
@@ -162,6 +204,12 @@ msgid "Yellow"
 msgstr "Amarillo"
 
 #. module: google_map_kml
+#: model:ir.actions.act_window,name:google_map_kml.action_open_map_comparison
+#: model:ir.ui.menu,name:google_map_kml.menu_partner_map_comparison
+msgid "Map Partner Comparison"
+msgstr "Mapa de Clientes Comparación"
+
+#. module: google_map_kml
 #: field:res.partner,width_image_small_map:0
 msgid "Width logo (px) "
 msgstr "Anchura del logo (px) "
@@ -184,5 +232,5 @@ msgstr "Mapa de la Empresa"
 #. module: google_map_kml
 #: selection:res.partner,googlemap_marker_color:0
 msgid "Dark Green"
-msgstr "Verde oscuro"
+msgstr "Verda oscuro"
 
