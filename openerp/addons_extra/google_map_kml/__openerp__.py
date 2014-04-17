@@ -35,7 +35,9 @@
     'depends' : ['base','web', 'website'],
     'data': [
              'google_map_kml_view.xml',
-             'data/google_map_kml_data.xml'
+             'data/google_map_kml_data.xml',
+             'security/groups.xml',
+             'security/ir.model.access.csv',
              ],
     'css': ['static/src/css/location_map_partner.css'],
     'js': ['https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places',

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+       <!-- http://toolkt.com/site/security-in-openerp/ -->
+        <record id="group_google_map_comparison" model="res.groups">
+            <field name="name">Google map comparison</field>
+        </record>
+
+    </data>
+</openerp>
