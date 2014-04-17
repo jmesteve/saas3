@@ -255,11 +255,9 @@ openerp.google_map_kml = function (instance)
 			
 			Comparison.query(['partners']).filter([['id','=', this.id_maps]]).limit(1).all().done($.proxy(function(partners_comparison) {
 			
-				console.log(partners_comparison);
 				Partner.query(['child_ids']).filter([['id','in', partners_comparison[0].partners]]).all().done($.proxy(function(partners_id) {
 					// create markers
 					var child_ids = partners_comparison[0].partners;
-					console.log(child_ids);
 					for(var i=0; i < partners_id.length; i++){
 						child_ids = child_ids.concat(partners_id[i].child_ids);
 					}

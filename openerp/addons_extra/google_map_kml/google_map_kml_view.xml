@@ -122,9 +122,20 @@
          				<field name="name" />
          			</group>
          			<group>
-         				<field domain="[('is_company', '=', True)]" name="partners" nolabel="1"/>
+         				<field domain="[('is_company', '=', True)]" name="partners"/>
          			</group>
                 </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_open_map_comparison_tree">
+            <field name="name">open_map_comparison.tree</field>
+            <field name="model">map.partner.comparison</field>
+            <field name="arch" type="xml">
+                <tree string="Partner Map Comparison" >
+         				<field name="name" />
+         				<field name="partners" />
+                </tree>
             </field>
         </record>
         
@@ -135,9 +146,16 @@
         </record>
         
         <record model="ir.actions.act_window.view" id="action_open_map_comparison_view">
-		    <field eval="1" name="sequence"/>
+		    <field eval="2" name="sequence"/>
 		    <field name="view_mode">form</field>
 		    <field name="view_id" ref="view_open_map_comparison_form"/>
+		    <field name="act_window_id" ref="action_open_map_comparison"/>
+		</record>
+		
+		<record model="ir.actions.act_window.view" id="action_open_map_comparison_view_tree">
+		    <field eval="1" name="sequence"/>
+		    <field name="view_mode">tree</field>
+		    <field name="view_id" ref="view_open_map_comparison_tree"/>
 		    <field name="act_window_id" ref="action_open_map_comparison"/>
 		</record>
         
