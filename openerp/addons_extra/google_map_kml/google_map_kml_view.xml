@@ -122,7 +122,7 @@
          				<field name="name" />
          			</group>
          			<group>
-         				<field domain="[('is_company', '=', True)]" name="partners"/>
+         				<field domain="[('is_company', '=', True), ('customer', '=', True)]" name="partners"/>
          			</group>
                 </form>
             </field>
