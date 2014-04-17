@@ -134,6 +134,13 @@
             <field name="tag">location_map.partners</field>
         </record>
         
+        <record model="ir.actions.act_window.view" id="action_open_map_comparison_view">
+		    <field eval="1" name="sequence"/>
+		    <field name="view_mode">form</field>
+		    <field name="view_id" ref="view_open_map_comparison_form"/>
+		    <field name="act_window_id" ref="action_open_map_comparison"/>
+		</record>
+        
         <record id="action_open_map_comparison" model="ir.actions.act_window">
             <field name="name">Map Partner Comparison</field>
             <field name="type">ir.actions.act_window</field>
