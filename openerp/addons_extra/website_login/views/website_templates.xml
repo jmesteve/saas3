@@ -9,12 +9,12 @@
          <field name="inherit_id" ref="website.show_sign_in"/>       
          <field name="arch" type="xml">            
                <xpath expr="//a[@t-attf-href='/web/login']" position="replace">
-               		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
+               		<t t-if="request.httprequest.url_root[:5] != 'https'">
 			            <a t-attf-href="/shop/login">
 			                <b>Sign in</b>
 			            </a>
 			         </t>
-			         <t t-if="request.httprequest.url_root[:5] == 'https' or request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False">
+			         <t t-if="request.httprequest.url_root[:5] == 'https'">
 			            <a t-attf-href="/web/login">
 			                <b>Admin</b>
 			            </a>
