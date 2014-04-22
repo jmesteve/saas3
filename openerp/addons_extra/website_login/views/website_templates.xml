@@ -26,7 +26,7 @@
       <record model="ir.ui.view" id="web_login_extend">
          <field name="name">Login extend</field>
          <field name="type">qweb</field>     
-         <field name="inherit_id" ref="web.login"/>       
+         <field name="inherit_id" ref="auth_signup.login"/>       
          <field name="arch" type="xml">            
                <xpath expr="//form[@class='oe_login_form']" position="replace">
                		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
