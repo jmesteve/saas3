@@ -31,6 +31,12 @@ class Home_extend(web.Home):
         values = request.params.copy()
         if not redirect:
             redirect = '/shop?' + request.httprequest.query_string
+        values['redirect'] = redirect
+        if request.httprequest.method == 'POST':
+            uid = request.session.authenticate(request.session.db, request.params['login'], request.params['password'])
+            if uid is not False:
+                return http.redirect_with_hash(redirect)
+            values['error'] = "Wrong login/password"
             
         response = auth_signup.Home().web_login(redirect, **kw)
         if isinstance(response, LazyResponse):
