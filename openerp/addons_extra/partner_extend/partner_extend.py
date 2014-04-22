@@ -45,7 +45,7 @@ class res_partner(osv.osv):
         'presidency': fields.boolean('Presidency'),                 
         }
     
-    _sql_constraints = [('number_collegiate_no_uniq','unique(number_collegiate)', 'number collegiate must be unique!')]
+    #_sql_constraints = [('number_collegiate_no_uniq','unique(number_collegiate)', 'number collegiate must be unique!')]
 
 res_partner()    
     
