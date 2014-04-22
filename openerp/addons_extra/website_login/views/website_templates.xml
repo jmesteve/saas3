@@ -26,7 +26,7 @@
       <record model="ir.ui.view" id="web_login_extend">
          <field name="name">Login extend</field>
          <field name="type">qweb</field>     
-         <field name="inherit_id" ref="auth_signup.login"/>       
+         <field name="inherit_id" ref="web.login"/>       
          <field name="arch" type="xml">            
                <xpath expr="//form[@class='oe_login_form']" position="replace">
                		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
@@ -54,6 +54,8 @@
 		                    <input type="hidden" name="redirect" t-att-value="redirect"/>
 		                    <div class="clearfix oe_login_buttons">
 		                        <button type="submit" class="btn btn-primary">Log in</button>
+		                        <a t-if="signup" t-attf-href="?mode=signup{{ '&amp;debug' if debug else '' }}" class="btn btn-link pull-right">Sign up</a>
+                				<a t-if="reset" t-attf-href="?mode=reset{{ '&amp;debug' if debug else '' }}" class="btn btn-link pull-right">Reset Password</a>
 		                    </div>
 		
 		                </form>
@@ -83,6 +85,8 @@
 		                    <input type="hidden" name="redirect" t-att-value="redirect"/>
 		                    <div class="clearfix oe_login_buttons">
 		                        <button type="submit" class="btn btn-primary">Log in</button>
+		                        <a t-if="signup" t-attf-href="?mode=signup{{ '&amp;debug' if debug else '' }}" class="btn btn-link pull-right">Sign up</a>
+                				<a t-if="reset" t-attf-href="?mode=reset{{ '&amp;debug' if debug else '' }}" class="btn btn-link pull-right">Reset Password</a>
 		                    </div>
 		
 		                </form>
@@ -224,5 +228,113 @@
             <field name="parent_id" ref="website.main_menu"/>
             <field name="sequence" type="int">10</field>
         </record>
+        
+      <record model="ir.ui.view" id="signup_extend">
+         <field name="name">Show sign in extend</field>
+         <field name="type">qweb</field>     
+         <field name="inherit_id" ref="auth_signup.signup"/>       
+         <field name="arch" type="xml">            
+               <xpath expr="//form[@class='oe_signup_form']" position="replace">
+               		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
+			        	<form class="oe_signup_form" role="form" t-attf-action="/shop/login{{ '?debug' if debug else '' }}" method="post">
+		                    <t t-call="web.database_select"/>
+		
+		                    <div class="form-group field-name" t-if="not reset_without_token">
+		                        <label for="name" class="control-label">Your Name</label>
+		                        <input type="text" name="name" t-att-value="name" id="name" class="form-control" placeholder="e.g. John Doe"
+		                            required="required" autofocus="autofocus" t-att-disabled="'disabled' if mode == 'reset' and token else None"/>
+		                    </div>
+		
+		                    <div class="form-group field-login">
+		                        <label for="login" class="control-label">Your Email</label>
+		                        <input type="text" name="login" t-att-value="login" id="login" class="form-control"
+		                            t-att-autofocus="'autofocus' if reset_without_token else None"
+		                            required="required" t-att-disabled="'disabled' if mode == 'reset' and token else None"/>
+		                        <input type="hidden" name="login" t-att-value="login" t-if="mode == 'reset' and token"/>
+		                    </div>
+		
+		                    <div class="form-group field-password" t-if="not reset_without_token">
+		                        <label for="password" class="control-label">Password</label>
+		                        <input type="password" name="password" id="password" class="form-control"
+		                            required="required" t-att-autofocus="'autofocus' if mode == 'reset' and token else None"/>
+		                    </div>
+		
+		                    <div class="form-group field-confirm_password" t-if="not reset_without_token">
+		                        <label for="confirm_password" class="control-label">Confirm Password</label>
+		                        <input type="password" name="confirm_password" id="confirm_password" class="form-control" required="required"/>
+		                    </div>
+		
+		                    <p class="alert alert-danger" t-if="error">
+		                        <t t-esc="error"/>
+		                    </p>
+		                    <p class="alert alert-success" t-if="message">
+		                        <t t-esc="message"/>
+		                    </p>
+		
+		                    <input type="hidden" name="redirect" t-att-value="redirect"/>
+		                    <input type="hidden" name="mode" t-att-value="mode"/>
+		                    <input type="hidden" name="token" t-att-value="token"/>
+		                    <div class="clearfix oe_login_buttons">
+		                        <a href="/shop/login" class="btn btn-link pull-right">Back to Login</a>
+		                        <button type="submit" class="btn btn-primary pull-left">
+		                            <t t-if="mode == 'signup'">Sign up</t>
+		                            <t t-if="mode == 'reset'">Reset password</t>
+		                        </button>
+		                    </div>
+		
+		                </form>
+			         </t>
+			         <t t-if="request.httprequest.url_root[:5] == 'https' or (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
+			         	<form class="oe_signup_form" role="form" t-attf-action="/web/login{{ '?debug' if debug else '' }}" method="post">
+                    <t t-call="web.database_select"/>
+
+                    <div class="form-group field-name" t-if="not reset_without_token">
+                        <label for="name" class="control-label">Your Name</label>
+                        <input type="text" name="name" t-att-value="name" id="name" class="form-control" placeholder="e.g. John Doe"
+                            required="required" autofocus="autofocus" t-att-disabled="'disabled' if mode == 'reset' and token else None"/>
+                    </div>
+
+                    <div class="form-group field-login">
+                        <label for="login" class="control-label">Your Email</label>
+                        <input type="text" name="login" t-att-value="login" id="login" class="form-control"
+                            t-att-autofocus="'autofocus' if reset_without_token else None"
+                            required="required" t-att-disabled="'disabled' if mode == 'reset' and token else None"/>
+                        <input type="hidden" name="login" t-att-value="login" t-if="mode == 'reset' and token"/>
+                    </div>
+
+                    <div class="form-group field-password" t-if="not reset_without_token">
+                        <label for="password" class="control-label">Password</label>
+                        <input type="password" name="password" id="password" class="form-control"
+                            required="required" t-att-autofocus="'autofocus' if mode == 'reset' and token else None"/>
+                    </div>
+
+                    <div class="form-group field-confirm_password" t-if="not reset_without_token">
+                        <label for="confirm_password" class="control-label">Confirm Password</label>
+                        <input type="password" name="confirm_password" id="confirm_password" class="form-control" required="required"/>
+                    </div>
+
+                    <p class="alert alert-danger" t-if="error">
+                        <t t-esc="error"/>
+                    </p>
+                    <p class="alert alert-success" t-if="message">
+                        <t t-esc="message"/>
+                    </p>
+
+                    <input type="hidden" name="redirect" t-att-value="redirect"/>
+                    <input type="hidden" name="mode" t-att-value="mode"/>
+                    <input type="hidden" name="token" t-att-value="token"/>
+                    <div class="clearfix oe_login_buttons">
+                        <a href="/web/login" class="btn btn-link pull-right">Back to Login</a>
+                        <button type="submit" class="btn btn-primary pull-left">
+                            <t t-if="mode == 'signup'">Sign up</t>
+                            <t t-if="mode == 'reset'">Reset password</t>
+                        </button>
+                    </div>
+                </form>
+			         	
+			         </t>
+    			</xpath>
+         </field>
+      </record>
    </data>
 </openerp>

@@ -5,6 +5,7 @@ import openerp.addons.website.controllers.main as website
 import openerp.addons.web.controllers.main as web
 from openerp import pooler, sql_db
 import openerp
+import openerp.addons.auth_signup.controllers.main as auth_signup
 
 class Home_extend(web.Home):
     
@@ -23,8 +24,15 @@ class Home_extend(web.Home):
         return web.render_bootstrap_template(request.session.db, 'web.login', values, lazy=True)
     
     @http.route('/shop/login', type='http', auth='public', website=True, multilang=True)
-    def login_shop(self, *args, **kw):
-        response = self.web_login_shop(*args, **kw)
+    def login_shop(self, redirect=None, **kw):
+        #response = self.web_login_shop(*args, **kw)
+        web.ensure_db()
+
+        values = request.params.copy()
+        if not redirect:
+            redirect = '/shop?' + request.httprequest.query_string
+            
+        response = auth_signup.Home().web_login(redirect, **kw)
         if isinstance(response, LazyResponse):
             values = dict(response.params['values'], disable_footer=True)
             response = request.website.render(response.params['template'], values)
