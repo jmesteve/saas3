@@ -38,7 +38,7 @@ class Home_extend(web.Home):
                 return http.redirect_with_hash(redirect)
             values['error'] = "Wrong login/password"
             
-        response = auth_signup.Home().web_login(redirect=None, **kw)
+        response = auth_signup.Home().web_login(redirect=redirect, **kw)
         if isinstance(response, LazyResponse):
             values = dict(response.params['values'], disable_footer=True)
             response = request.website.render(response.params['template'], values)
