@@ -201,7 +201,7 @@ msgstr "Altura del logo (px)"
 #. module: google_map_kml
 #: view:map.partner.comparison:0
 msgid "Open Map Points"
-msgstr "Open Map Points"
+msgstr "Abrir Mapa Puntos"
 
 #. module: google_map_kml
 #: view:res.partner:0
