@@ -191,6 +191,26 @@ class google_map_partner(osv.osv):
              'context': ctx
         }
         
+    def open_map_partners_wizard_new_point(self, cr, uid, ids, context=None):
+        
+        view_ref = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'google_map_kml', 'view_partner_form_map_wizard_point')
+        view_id = view_ref and view_ref[1] or False
+        
+        ctx = dict(context)
+        ctx.update({
+            'default_id_maps': ids[0]
+        })
+        
+        return {
+             'name': 'Google Maps All',
+             'type': 'ir.actions.act_window',
+             'res_model': 'res.partner',
+             'view_id': view_id,
+             'target': 'new',
+             'view_mode': 'form',
+             'context': ctx
+        }
+        
     def open_map_partners_wizard_new_company(self, cr, uid, ids, context=None):
         
         view_ref = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'google_map_kml', 'view_partner_form_map_wizard_company')
@@ -241,6 +261,19 @@ class google_map_partner(osv.osv):
              'name': 'Google Maps Company',
              'type': 'ir.actions.client',
              'tag': 'location_map.partners_company',
+             'context': ctx
+        }
+        
+    def open_map_partners_company_point(self, cr, uid, ids, context=None):
+        ctx = dict(context)
+        ctx.update({
+            'default_id_maps': ids[0]
+        })
+        
+        return {
+             'name': 'Google Maps Company Points',
+             'type': 'ir.actions.client',
+             'tag': 'location_map.partners_company_point',
              'context': ctx
         }
         

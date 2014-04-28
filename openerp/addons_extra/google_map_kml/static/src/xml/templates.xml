@@ -7,6 +7,13 @@
         </div>
     </t>
     
+    <t t-name="location_map.partners_point">
+    	<div style="position: relative; width:100%;height:100%;">
+    		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        	<div id="location_map_partners_point" class="map-div"></div>
+        </div>
+    </t>
+    
     <t t-name="location_map.partners_company">
     	<div style="position: relative; width:100%;height:100%;">
     		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
@@ -14,10 +21,24 @@
         </div>
     </t>
     
+    <t t-name="location_map.partners_company_point">
+    	<div style="position: relative; width:100%;height:100%;">
+    		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        	<div id="location_map_partners_company_point" class="map-div"></div>
+        </div>
+    </t>
+    
     <t t-name="location_map.partners_comparison">
     	<div style="position: relative; width:100%;height:100%;">
     		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
         	<div id="location_map_partners_comparison" class="map-div"></div>
+        </div>
+    </t>
+    
+    <t t-name="location_map.partners_comparison_point">
+    	<div style="position: relative; width:100%;height:100%;">
+    		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        	<div id="location_map_partners_comparison_point" class="map-div"></div>
         </div>
     </t>
     
@@ -36,6 +57,13 @@
         </div>
     </t>
     
+    <t t-name="location_map.partners_new_window_company_point">
+    	<div class="map-window">
+    		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        	<div id="location_map_partners3_point" class="map-div"></div>
+        </div>
+    </t>
+    
     <t t-name="location_map.partners_new_window_one">
     	<div class="map-window">
     		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
@@ -43,10 +71,24 @@
         </div>
     </t>
     
+    <t t-name="location_map.partners_new_window_point">
+    	<div class="map-window">
+    		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        	<div id="location_map_partners_point" class="map-div"></div>
+        </div>
+    </t>
+    
     <t t-name="location_map.partners_comparison_wizard">
     	<div class="map-window">
     		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
         	<div id="location_map_partnerscomparison" class="map-div"></div>
+        </div>
+    </t>
+    
+    <t t-name="location_map.partners_comparison_wizard_point">
+    	<div class="map-window">
+    		<input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+        	<div id="location_map_partnerscomparison_point" class="map-div"></div>
         </div>
     </t>
     

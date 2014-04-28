@@ -18,6 +18,17 @@
             </field>
         </record>
         
+        <record model="ir.ui.view" id="view_partner_form_map_wizard_point">
+            <field name="name">res.partner.form.map.wizard.point</field>
+           	<field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form string="Partners Map All Points">
+					<field name="id_maps" widget="google_map_partner_point" nolabel="1"/>
+				</form>
+            </field>
+        </record>
+        
         <record model="ir.ui.view" id="view_partner_form_map_wizard_company">
             <field name="name">res.partner.form.map.wizard.company</field>
            	<field name="model">res.partner</field>
@@ -50,6 +61,17 @@
 				</form>
             </field>
         </record>
+        
+        <record model="ir.ui.view" id="view_partner_form_map_wizard_comparison_point">
+            <field name="name">res.partner.form.map.wizard.point</field>
+           	<field name="model">map.partner.comparison</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form string="Partners Map Points">
+					<field name="id_maps" widget="google_map_partner_comparison_point" nolabel="1"/>
+				</form>
+            </field>
+        </record>
 
         <record model="ir.ui.view" id="view_partner_form_extend">
             <field name="name">res.partner.form.extend</field>
@@ -60,9 +82,11 @@
                 <xpath expr="/form/sheet" position="before">
 <!--                     <button name="open_map_partners_wizard" string="Open Map Wizard Big" type="object" icon="gtk-zoom-in"/> -->
                     <button name="open_map_partners_wizard_new" string="Open Map All" type="object" icon="gtk-zoom-in"/>
+                    <button name="open_map_partners_wizard_new_point" string="Open Map Point" type="object" icon="gtk-zoom-in"/>
                     <button name="open_map_partners_wizard_new_one" string="Open Map One" type="object" icon="gtk-zoom-in"/>
                     <button name="open_map_partners_wizard_new_company" attrs="{'invisible':[('is_company','=', False)]}" string="Open Map Company" type="object" icon="gtk-zoom-in"/>
                     <button name="open_map_partners_company" attrs="{'invisible':[('is_company','=', False)]}" string="Open Large Map Company " type="object" icon="gtk-zoom-in"/>
+                    <button name="open_map_partners_company_point" attrs="{'invisible':[('is_company','=', False)]}" string="Open Large Map Company Points" type="object" icon="gtk-zoom-in"/>
                 </xpath>
 <!--                 <xpath expr="//field[@name='website']" position="after"> -->
 <!--                 	<field name="googlemap_visited" widget="google_map_partner_website_button_visited"/> -->
@@ -116,7 +140,9 @@
                 <form string="Partner Map Comparison" version="7.0">
                 	<header>
                 		<button name="open_map_partners_wizard" string="Open Map" type="object" icon="gtk-zoom-in"/>
+                		<button name="open_map_partners_wizard_point" string="Open Map Points" type="object" icon="gtk-zoom-in"/>
                 		<button name="open_map_partners" string="Open Large Map" type="object" icon="gtk-zoom-in"/>
+                		<button name="open_map_partners_point" string="Open Large Map Points" type="object" icon="gtk-zoom-in"/>
                 	</header>
          			<group>
          				<field name="name" />
@@ -145,6 +171,12 @@
             <field name="tag">location_map.partners</field>
         </record>
         
+        <record id="action_open_map_point" model="ir.actions.client">
+            <field name="name">Partners Map Points</field>
+            <field name="type">ir.actions.client</field>
+            <field name="tag">location_map.partners_point</field>
+        </record>
+        
         <record model="ir.actions.act_window.view" id="action_open_map_comparison_view">
 		    <field eval="2" name="sequence"/>
 		    <field name="view_mode">form</field>
@@ -169,6 +201,7 @@
         </record>
         
         <menuitem id="menu_partner_map" parent="base.menu_sales" action="action_open_map" sequence="2"/>
-        <menuitem id="menu_partner_map_comparison" parent="base.menu_sales" action="action_open_map_comparison" sequence="3"/>
+        <menuitem id="menu_partner_map_point" parent="base.menu_sales" action="action_open_map_point" sequence="3"/>
+        <menuitem id="menu_partner_map_comparison" parent="base.menu_sales" action="action_open_map_comparison" sequence="4"/>
     </data>
 </openerp>

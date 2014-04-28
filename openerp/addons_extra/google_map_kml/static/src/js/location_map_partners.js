@@ -26,7 +26,7 @@ openerp.google_map_kml = function (instance)
 	    return marker;  
 	};
 	
-	var createMarkers = function(){
+	var createMarkers = function(isPoint){
 		if(this.map != null) {
 			var Partner = new instance.web.Model('res.partner');
 			Partner.query(['is_company', 'id', 'parent_id', 'has_image', 'googlemap_marker_letter', 'googlemap_marker_color', 'googlemap_select_image', 'partner_latitude', 'partner_longitude', 'name', 'googlemap_visited']).all().done($.proxy(function(partners) {
@@ -64,9 +64,13 @@ openerp.google_map_kml = function (instance)
 							}
 							
 							var image = instance.session.origin + "/google_map_kml/static/src/img/" + partner_main.googlemap_marker_color + "_Marker" + partner_main.googlemap_marker_letter + ".png";
-							if(partner_main.googlemap_select_image && partner_main.has_image){
+							if(isPoint){
+								image = instance.session.origin + "/google_map_kml/static/src/img/points/" + partner_main.googlemap_marker_color + "_point.png"
+							}
+							else if(partner_main.googlemap_select_image && partner_main.has_image){
 								image = instance.session.url('/web/binary/image', {model:'res.partner', field: 'image_small_map', id: partner_main.id})
 							}
+
 							
 				            var infoWindow = new google.maps.InfoWindow({
 				                content: '<div><span style="display: inline-block">' + partners[i].name + '</span></div>'
@@ -178,7 +182,7 @@ openerp.google_map_kml = function (instance)
 		}
 	};
 	
-	var createMarkersCompany = function() {
+	var createMarkersCompany = function(isPoint) {
 		if(this.map != null) {
 			var Partner = new instance.web.Model('res.partner');
 			var id_maps = this.id_maps;
@@ -206,9 +210,12 @@ openerp.google_map_kml = function (instance)
 								}
 								
 								var image = instance.session.origin + "/google_map_kml/static/src/img/" + partner_main.googlemap_marker_color + "_Marker" + partner_main.googlemap_marker_letter + ".png";
-								if(partner_main.googlemap_select_image && partner_main.has_image){
+								if(isPoint){
+									image = instance.session.origin + "/google_map_kml/static/src/img/points/" + partner_main.googlemap_marker_color + "_point.png";
+								}
+								else if(partner_main.googlemap_select_image && partner_main.has_image){
 									image = instance.session.url('/web/binary/image', {model:'res.partner', field: 'image_small_map', id: partner_main.id})
-								}									
+								}								
 								
 					            var infoWindow = new google.maps.InfoWindow({
 					                content: '<div><span style="display: inline-block">' + partners[i].name + '</span></div>'
@@ -247,7 +254,7 @@ openerp.google_map_kml = function (instance)
 	};
 	
 	
-	var createMarkersComparison = function() {
+	var createMarkersComparison = function(isPoint) {
 		if(this.map != null) {
 			var Partner = new instance.web.Model('res.partner');
 			var Comparison = new instance.web.Model('map.partner.comparison');
@@ -289,9 +296,11 @@ openerp.google_map_kml = function (instance)
 										}
 									}
 									
-									
 									var image = instance.session.origin + "/google_map_kml/static/src/img/" + partner_main.googlemap_marker_color + "_Marker" + partner_main.googlemap_marker_letter + ".png";
-									if(partner_main.googlemap_select_image && partner_main.has_image){
+									if(isPoint){
+										image = instance.session.origin + "/google_map_kml/static/src/img/points/" + partner_main.googlemap_marker_color + "_point.png";
+									}
+									else if(partner_main.googlemap_select_image && partner_main.has_image){
 										image = instance.session.url('/web/binary/image', {model:'res.partner', field: 'image_small_map', id: partner_main.id})
 									}									
 									
@@ -387,7 +396,38 @@ openerp.google_map_kml = function (instance)
 				    this.map = new google.maps.Map(document.getElementById(this.mapElementId), 
 									{zoom: 6, mapTypeId: google.maps.MapTypeId.ROADMAP});
 				    this.setSearchBox();
-					this.createMarkers();
+					this.createMarkers(false);
+			} else {
+				this.$el.text("Couldn't load Goole Map API. Please check internet connection and reload the page.");
+			}
+		},
+	});
+	
+	instance.google_map_kml.MapPartnerPoint = instance.web.form.AbstractField.extend({
+		mapElementId: 'location_map_partners_point',
+		map: null, // google.maps.Map instance
+		markers: [], // partner's location marker
+		template: 'location_map.partners_new_window_point',
+		createMarker: createMarker,
+		createMarkers: createMarkers,
+		setSearchBox: setSearchBox,
+		init: function(field_manager, node) {
+			this._super(field_manager, node);
+		},
+		render_value: function() {
+	        this._super();
+	        this.id_maps = this.get_value();
+	    },
+		start: function(){
+			var self = this;
+			this._super.apply(this, arguments);
+			
+			// initialize the widget with new map
+			if(typeof google !== "undefined") { // clear offline usage errors....
+				    this.map = new google.maps.Map(document.getElementById(this.mapElementId), 
+									{zoom: 6, mapTypeId: google.maps.MapTypeId.ROADMAP});
+				    this.setSearchBox();
+					this.createMarkers(true);
 			} else {
 				this.$el.text("Couldn't load Goole Map API. Please check internet connection and reload the page.");
 			}
@@ -412,6 +452,29 @@ openerp.google_map_kml = function (instance)
 		setSearchBox: setSearchBox,
 	});
 	
+	instance.google_map_kml.MapPartnerCompanyPoint = instance.google_map_kml.MapPartner.extend({
+		mapElementId: 'location_map_partners3_point',
+		id_maps: null,
+		template: 'location_map.partners_new_window_company_point',
+		createMarker: createMarker,
+		createMarkers: createMarkersCompany,
+		setSearchBox: setSearchBox,
+		start: function(){
+			var self = this;
+			this._super.apply(this, arguments);
+			
+			// initialize the widget with new map
+			if(typeof google !== "undefined") { // clear offline usage errors....
+				    this.map = new google.maps.Map(document.getElementById(this.mapElementId), 
+									{zoom: 6, mapTypeId: google.maps.MapTypeId.ROADMAP});
+				    this.setSearchBox();
+					this.createMarkers(true);
+			} else {
+				this.$el.text("Couldn't load Goole Map API. Please check internet connection and reload the page.");
+			}
+		},
+	});
+	
 	instance.google_map_kml.MapPartnerComparison = instance.google_map_kml.MapPartner.extend({
 		mapElementId: 'location_map_partnerscomparison',
 		id_maps: null,
@@ -419,6 +482,29 @@ openerp.google_map_kml = function (instance)
 		createMarker: createMarker,
 		createMarkers: createMarkersComparison,
 		setSearchBox: setSearchBox,
+	});
+	
+	instance.google_map_kml.MapPartnerComparisonPoint = instance.google_map_kml.MapPartner.extend({
+		mapElementId: 'location_map_partnerscomparison_point',
+		id_maps: null,
+		template: 'location_map.partners_comparison_wizard_point',
+		createMarker: createMarker,
+		createMarkers: createMarkersComparison,
+		setSearchBox: setSearchBox,
+		start: function(){
+			var self = this;
+			this._super.apply(this, arguments);
+			
+			// initialize the widget with new map
+			if(typeof google !== "undefined") { // clear offline usage errors....
+				    this.map = new google.maps.Map(document.getElementById(this.mapElementId), 
+									{zoom: 6, mapTypeId: google.maps.MapTypeId.ROADMAP});
+				    this.setSearchBox();
+					this.createMarkers(true);
+			} else {
+				this.$el.text("Couldn't load Goole Map API. Please check internet connection and reload the page.");
+			}
+		},
 	});
 	
 	instance.google_map_kml.OpenMap = instance.web.Widget.extend({
@@ -443,13 +529,29 @@ openerp.google_map_kml = function (instance)
 				    this.map = new google.maps.Map(document.getElementById(this.mapElementId), 
 									{zoom: 6, mapTypeId: google.maps.MapTypeId.ROADMAP});			
 				    this.setSearchBox();
-				    this.create_markers();
+				    this.create_markers(false);
 			} else {
 				this.$el.text("Couldn't load Goole Map API. Please check internet connection and reload the page.");
 			}
 		},
 	});
 	
+	instance.google_map_kml.OpenMapPoint = instance.google_map_kml.OpenMap.extend({
+		mapElementId: 'location_map_partners_point',
+		template: 'location_map.partners_point',
+		start: function(){
+			var self = this;
+			// initialize the widget with new map
+			if(typeof google !== "undefined") { // clear offline usage errors....
+				    this.map = new google.maps.Map(document.getElementById(this.mapElementId), 
+									{zoom: 6, mapTypeId: google.maps.MapTypeId.ROADMAP});			
+				    this.setSearchBox();
+				    this.create_markers(true);
+			} else {
+				this.$el.text("Couldn't load Goole Map API. Please check internet connection and reload the page.");
+			}
+		}
+	});
 	
 	instance.google_map_kml.OpenMapCompany = instance.web.Widget.extend({
 		mapElementId: 'location_map_partners_company',
@@ -481,7 +583,24 @@ openerp.google_map_kml = function (instance)
 				    this.map = new google.maps.Map(document.getElementById(this.mapElementId), 
 									{zoom: 6, mapTypeId: google.maps.MapTypeId.ROADMAP});			
 				    this.setSearchBox();
-				    this.create_markers();
+				    this.create_markers(false);
+			} else {
+				this.$el.text("Couldn't load Goole Map API. Please check internet connection and reload the page.");
+			}
+		},
+	});
+	
+	instance.google_map_kml.OpenMapCompanyPoint = instance.google_map_kml.OpenMapCompany.extend({
+		mapElementId: 'location_map_partners_company_point',
+		template: 'location_map.partners_company_point',
+		start: function(){
+			var self = this;
+			// initialize the widget with new map
+			if(typeof google !== "undefined") { // clear offline usage errors....
+				    this.map = new google.maps.Map(document.getElementById(this.mapElementId), 
+									{zoom: 6, mapTypeId: google.maps.MapTypeId.ROADMAP});			
+				    this.setSearchBox();
+				    this.create_markers(true);
 			} else {
 				this.$el.text("Couldn't load Goole Map API. Please check internet connection and reload the page.");
 			}
@@ -496,6 +615,23 @@ openerp.google_map_kml = function (instance)
 		createMarker: createMarker,
 		create_markers: createMarkersComparison,
 		setSearchBox: setSearchBox
+	});
+	
+	instance.google_map_kml.OpenMapComparisonPoint = instance.google_map_kml.OpenMapComparison.extend({
+		mapElementId: 'location_map_partners_comparison_point',
+		template: 'location_map.partners_comparison_point',
+		start: function(){
+			var self = this;
+			// initialize the widget with new map
+			if(typeof google !== "undefined") { // clear offline usage errors....
+				    this.map = new google.maps.Map(document.getElementById(this.mapElementId), 
+									{zoom: 6, mapTypeId: google.maps.MapTypeId.ROADMAP});			
+				    this.setSearchBox();
+				    this.create_markers(true);
+			} else {
+				this.$el.text("Couldn't load Goole Map API. Please check internet connection and reload the page.");
+			}
+		},
 	});
 	
 	instance.google_map_kml.WebsiteButtonVisited = instance.web.form.AbstractField.extend({
@@ -526,13 +662,19 @@ openerp.google_map_kml = function (instance)
 	});
 	
 	instance.web.client_actions.add('location_map.partners', 'instance.google_map_kml.OpenMap');
+	instance.web.client_actions.add('location_map.partners_point', 'instance.google_map_kml.OpenMapPoint');
 	instance.web.client_actions.add('location_map.partners_company', 'instance.google_map_kml.OpenMapCompany');
+	instance.web.client_actions.add('location_map.partners_company_point', 'instance.google_map_kml.OpenMapCompanyPoint');
 	instance.web.client_actions.add('location_map.partners_comparison', 'instance.google_map_kml.OpenMapComparison');
+	instance.web.client_actions.add('location_map.partners_comparison_point', 'instance.google_map_kml.OpenMapComparisonPoint');
 	
 	instance.web.form.widgets.add('google_map_partner', 'instance.google_map_kml.MapPartner');
+	instance.web.form.widgets.add('google_map_partner_point', 'instance.google_map_kml.MapPartnerPoint');
 	instance.web.form.widgets.add('google_map_partner_one', 'instance.google_map_kml.MapPartnerOne');
 	instance.web.form.widgets.add('google_map_partner_company', 'instance.google_map_kml.MapPartnerCompany');
+	instance.web.form.widgets.add('google_map_partner_company_point', 'instance.google_map_kml.MapPartnerCompany');
 	instance.web.form.widgets.add('google_map_partner_comparison', 'instance.google_map_kml.MapPartnerComparison');
+	instance.web.form.widgets.add('google_map_partner_comparison_point', 'instance.google_map_kml.MapPartnerComparisonPoint');
 	instance.web.form.widgets.add('google_map_partner_website_button_visited', 'instance.google_map_kml.WebsiteButtonVisited');
 	instance.web.form.widgets.add('google_map_partner_website_button_select_image', 'instance.google_map_kml.WebsiteButtonSelectImage');
 }

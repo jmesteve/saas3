@@ -40,6 +40,25 @@ class google_map_partner_comparison(osv.osv):
              'view_mode': 'form',
              'context': ctx
         }
+        
+    def open_map_partners_wizard_point(self, cr, uid, ids, context=None):
+        view_ref = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'google_map_kml', 'view_partner_form_map_wizard_comparison_point')
+        view_id = view_ref and view_ref[1] or False
+        
+        ctx = dict(context)
+        ctx.update({
+            'default_id_maps': ids[0]
+        })
+        
+        return {
+             'name': 'Google Maps',
+             'type': 'ir.actions.act_window',
+             'res_model': 'map.partner.comparison',
+             'view_id': view_id,
+             'target': 'new',
+             'view_mode': 'form',
+             'context': ctx
+        }
     
     def open_map_partners(self, cr, uid, ids, context=None):
         ctx = dict(context)
@@ -51,6 +70,19 @@ class google_map_partner_comparison(osv.osv):
              'name': 'Google Maps',
              'type': 'ir.actions.client',
              'tag': 'location_map.partners_comparison',
+             'context': ctx
+        }
+        
+    def open_map_partners_point(self, cr, uid, ids, context=None):
+        ctx = dict(context)
+        ctx.update({
+            'default_id_maps': ids[0]
+        })
+        
+        return {
+             'name': 'Google Maps Points',
+             'type': 'ir.actions.client',
+             'tag': 'location_map.partners_comparison_point',
              'context': ctx
         }
 
