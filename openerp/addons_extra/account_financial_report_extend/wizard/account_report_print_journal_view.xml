@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="account.account_report_print_journal" model="ir.ui.view">
+            <field name="name">Account Print Journal</field>
+            <field name="model">account.print.journal</field>
+            <field name="inherit_id" ref="account.account_common_report_view" />
+            <field name="arch" type="xml">
+            <data>
+           
+            <xpath expr="//field[@name='target_move']" position="replace">
+                <newline/>
+            	<field name="target_move"/>
+            	<newline/>
+                <field name="group_journal"/>
+                <field name="amount_currency"/>
+	            <newline/>
+	            <field name="sort_selection"/>
+	              
+                <!-- 
+                <newline/>
+                <field name="filter" on_change="onchange_filter(filter, fiscalyear_id)" colspan="4" invisible="1"/>
+                <separator string="Periods"  colspan="4"/>
+                <field name="period_from" domain="[('fiscalyear_id', '=', fiscalyear_id)]" required="1" colspan="4"/>
+                <field name="period_to" domain="[('fiscalyear_id', '=', fiscalyear_id)]" required="1" colspan="4"/>
+                <separator string="Journals"  colspan="4"/>
+                <field name="journal_ids" colspan="4" nolabel="1"/>
+                 -->
+            </xpath>
+            <!-- 
+            <xpath expr="//page[@name='filters']" position="replace">
+            </xpath>
+            <xpath expr="//page[@name='journal_ids']" position="replace">
+            </xpath>
+            -->
+            </data>
+            </field>
+        </record>
+
+      
+    </data>
+</openerp>
