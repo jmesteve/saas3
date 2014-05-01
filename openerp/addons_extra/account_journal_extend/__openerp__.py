@@ -22,7 +22,7 @@
 #
 ##############################################################################
 {
-    'name': 'account financial report extend',
+    'name': 'account journal extend',
     'version': '1.0',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
@@ -34,6 +34,8 @@
     'images': [],
     'depends': ['account'],
     'data' : [
+              'security/account_security.xml',
+              'security/ir.model.access.csv',
               'wizard/account_report_print_journal_view.xml',
         ],
     'demo': [],

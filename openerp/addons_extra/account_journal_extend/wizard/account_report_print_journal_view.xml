@@ -37,6 +37,38 @@
             </data>
             </field>
         </record>
+            
+        <menuitem
+            parent="account.menu_finance_legal_statement"
+            id="account.menu_journals_report"
+            groups="account.group_account_user,account.group_account_manager"
+            name="Journals Old"/>
+            
+        <menuitem
+            parent="account.menu_finance_legal_statement"
+            id="menu_journals_report_new"
+            action="account.action_account_print_journal"
+            name="Journals"/>
+ 		
+		<record id="account.menu_account_central_journal" model="ir.ui.menu">
+    		<field name="groups_id" eval="[(5), (4,ref('group_account_menu_old'))]"/>
+		</record>
+		
+		<record id="account.menu_account_general_journal" model="ir.ui.menu">
+    		<field name="groups_id" eval="[(5), (4,ref('group_account_menu_old'))]"/>
+		</record>
+		
+		<record id="account.menu_account_print_journal" model="ir.ui.menu">
+    		<field name="groups_id" eval="[(5), (4,ref('group_account_menu_old'))]"/>
+		</record>
+		
+		<record id="account.menu_account_print_sale_purchase_journal" model="ir.ui.menu">
+    		<field name="groups_id" eval="[(5), (4,ref('group_account_menu_old'))]"/>
+		</record>
+		
+		<record id="account.menu_journals_report" model="ir.ui.menu">
+    		<field name="groups_id" eval="[(5), (4,ref('group_account_menu_old'))]"/>
+		</record>
 
       
     </data>
