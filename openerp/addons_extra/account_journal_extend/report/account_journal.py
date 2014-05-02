@@ -126,6 +126,9 @@ class journal_print(report_sxw.rml_parse, common_report_header):
         move_state = ['draft','posted']
         if self.target_move == 'posted':
             move_state = ['posted']
+            
+        if self.group_journal and not self.period_ids:
+            return []
 
         self.cr.execute('SELECT SUM(debit) FROM account_move_line l, account_move am '
                         'WHERE l.move_id=am.id AND am.state IN %s AND l.period_id IN %s AND l.journal_id IN %s ' + self.query_get_clause + ' ',
@@ -146,6 +149,9 @@ class journal_print(report_sxw.rml_parse, common_report_header):
         move_state = ['draft','posted']
         if self.target_move == 'posted':
             move_state = ['posted']
+            
+        if self.group_journal and not self.period_ids:
+            return []
 
         self.cr.execute('SELECT SUM(l.credit) FROM account_move_line l, account_move am '
                         'WHERE l.move_id=am.id AND am.state IN %s AND l.period_id IN %s AND l.journal_id IN %s '+ self.query_get_clause+'',
@@ -158,13 +164,23 @@ class journal_print(report_sxw.rml_parse, common_report_header):
         else:
             journal_id = [journal_id]
         obj_mline = self.pool.get('account.move.line')
-        self.cr.execute('update account_journal_period set state=%s where journal_id IN %s and period_id=%s and state=%s', ('printed', self.journal_ids, period_id, 'draft'))
+        
+        if self.group_journal and not self.period_ids:
+            return []
+        
+        if self.group_journal:
+            self.cr.execute('update account_journal_period set state=%s where journal_id IN %s and period_id IN %s and state=%s', ('printed', self.journal_ids, self.period_ids, 'draft'))
+        else:
+            self.cr.execute('update account_journal_period set state=%s where journal_id IN %s and period_id IN %s and state=%s', ('printed', self.journal_ids, period_id, 'draft'))
 
         move_state = ['draft','posted']
         if self.target_move == 'posted':
             move_state = ['posted']
 
-        self.cr.execute('SELECT l.id FROM account_move_line l, account_move am WHERE l.move_id=am.id AND am.state IN %s AND l.period_id=%s AND l.journal_id IN %s ' + self.query_get_clause + ' ORDER BY '+ self.sort_selection + ', l.move_id',(tuple(move_state), period_id, tuple(journal_id) ))
+        if self.group_journal:
+            self.cr.execute('SELECT l.id FROM account_move_line l, account_move am WHERE l.move_id=am.id AND am.state IN %s AND l.period_id IN %s AND l.journal_id IN %s ' + self.query_get_clause + ' ORDER BY '+ self.sort_selection + ', l.move_id',(tuple(move_state), self.period_ids, tuple(journal_id) ))
+        else:
+            self.cr.execute('SELECT l.id FROM account_move_line l, account_move am WHERE l.move_id=am.id AND am.state IN %s AND l.period_id=%s AND l.journal_id IN %s ' + self.query_get_clause + ' ORDER BY '+ self.sort_selection + ', l.move_id',(tuple(move_state), period_id, tuple(journal_id) ))
         ids = map(lambda x: x[0], self.cr.fetchall())
         return obj_mline.browse(self.cr, self.uid, ids)
 

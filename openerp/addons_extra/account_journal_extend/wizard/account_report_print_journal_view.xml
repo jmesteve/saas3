@@ -17,7 +17,7 @@
                 <field name="amount_currency"/>
 	            <newline/>
 	            <field name="sort_selection"/>
-	              
+	             
                 <!-- 
                 <newline/>
                 <field name="filter" on_change="onchange_filter(filter, fiscalyear_id)" colspan="4" invisible="1"/>
@@ -27,6 +27,10 @@
                 <separator string="Journals"  colspan="4"/>
                 <field name="journal_ids" colspan="4" nolabel="1"/>
                  -->
+            </xpath>
+            
+            <xpath expr="//field[@name='fiscalyear_id']" position="attributes">
+            	<attribute name="on_change">onchange_filter(filter, fiscalyear_id)</attribute>
             </xpath>
             <!-- 
             <xpath expr="//page[@name='filters']" position="replace">
