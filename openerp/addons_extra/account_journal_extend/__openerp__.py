@@ -34,6 +34,7 @@
     'images': [],
     'depends': ['account'],
     'data' : [
+              'account_report.xml',
               'security/account_security.xml',
               'security/ir.model.access.csv',
               'wizard/account_report_print_journal_view.xml',

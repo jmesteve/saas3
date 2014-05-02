@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report auto="False" id="account_journal_extend" model="account.journal.period" name="account.journal.period.print.extend" rml="account_journal_extend/report/account_journal.rml" string="Journal" header="False"/>
+        <!--  <report auto="False" id="account_journal_sale_purchase_extend" model="account.journal.period" name="account.journal.period.print.sale.purchase" rml="account_journal_extend/report/account_journal_sale_purchase.rml" string="Sale/Purchase Journal" header="False"/>-->
+    </data>
+</openerp>
