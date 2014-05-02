@@ -212,6 +212,16 @@ class journal_print(report_sxw.rml_parse, common_report_header):
     def _display_group(self, data):
         return data['form']['group_journal']
 
+    def get_start_period(self, data):
+        if data.get('form', False) and data['form'].get('period_from', False):
+            return self.pool.get('account.period').browse(self.cr,self.uid,data['form']['period_from']).date_start
+        return ''
+
+    def get_end_period(self, data):
+        if data.get('form', False) and data['form'].get('period_to', False):
+            return self.pool.get('account.period').browse(self.cr, self.uid, data['form']['period_to']).date_stop
+        return ''
+
     def _get_sortby(self, data):
         # TODO: deprecated, to remove in trunk
         if self.sort_selection == 'date':
