@@ -354,7 +354,7 @@
         </blockTable>
         <para style="terp_default_8">[[ set_last_move_id(line.move_id.id) ]]</para>
       </section>
-      <blockTable rowHeights="0.55cm" colWidths="55.0,45.0,50.0,130.0,70.0,70.0,70.0" style="Table4Total">
+      <blockTable rowHeights="0.55cm" colWidths="70.0,45.0,50.0,130.0,70.0,70.0,70.0" style="Table4Total">
         <tr>
           <td><para style="P11"></para></td>
           <td><para style="P11"></para></td>
@@ -401,7 +401,7 @@
         </blockTable>
         <para style="terp_default_8">[[ set_last_move_id(line.move_id.id) ]]</para>
       </section>
-      <blockTable rowHeights="0.55cm" colWidths="55.0,45.0,50.0,130.0,70.0,70.0,70.0" style="Table4Total">
+      <blockTable rowHeights="0.55cm" colWidths="70.0,45.0,50.0,130.0,70.0,70.0,70.0" style="Table4Total">
         <tr>
           <td><para style="P11"></para></td> 
           <td><para style="P11"></para></td>
