@@ -178,9 +178,11 @@ class journal_print(report_sxw.rml_parse, common_report_header):
             move_state = ['posted']
 
         if self.group_journal:
-            self.cr.execute('SELECT l.id FROM account_move_line l, account_move am WHERE l.move_id=am.id AND am.state IN %s AND l.period_id IN %s AND l.journal_id IN %s ' + self.query_get_clause + ' ORDER BY '+ self.sort_selection + ', l.move_id',(tuple(move_state), self.period_ids, tuple(journal_id) ))
+            #self.cr.execute('SELECT l.id FROM account_move_line l, account_move am WHERE l.move_id=am.id AND am.state IN %s AND l.period_id IN %s AND l.journal_id IN %s ' + self.query_get_clause + ' ORDER BY '+ self.sort_selection + ', l.move_id, l.account_id',(tuple(move_state), self.period_ids, tuple(journal_id) ))
+            self.cr.execute('SELECT l.id FROM account_move_line l join account_account a on l.account_id = a.id join account_move am on l.move_id=am.id where am.state IN %s AND l.period_id IN %s AND l.journal_id IN %s ' + self.query_get_clause + ' ORDER BY '+ self.sort_selection + ', l.move_id, a.code',(tuple(move_state), self.period_ids, tuple(journal_id) ))
+        
         else:
-            self.cr.execute('SELECT l.id FROM account_move_line l, account_move am WHERE l.move_id=am.id AND am.state IN %s AND l.period_id=%s AND l.journal_id IN %s ' + self.query_get_clause + ' ORDER BY '+ self.sort_selection + ', l.move_id',(tuple(move_state), period_id, tuple(journal_id) ))
+            self.cr.execute('SELECT l.id FROM account_move_line l, account_move am WHERE l.move_id=am.id AND am.state IN %s AND l.period_id=%s AND l.journal_id IN %s ' + self.query_get_clause + ' ORDER BY '+ self.sort_selection + ', l.move_id, l.account_id',(tuple(move_state), period_id, tuple(journal_id) ))
         ids = map(lambda x: x[0], self.cr.fetchall())
         return obj_mline.browse(self.cr, self.uid, ids)
 
@@ -230,7 +232,7 @@ class journal_print(report_sxw.rml_parse, common_report_header):
             return self._translate('Reference Number')
         return self._translate('Date')
 
-report_sxw.report_sxw('report.account.journal.period.print.extend', 'account.journal.period', 'addons_extra/account_journal_extend/report/account_journal.rml', parser=journal_print, header='external')
+report_sxw.report_sxw('report.account.journal.period.print.extend', 'account.journal.period', 'addons_extra/account_journal_extend/report/account_journal.rml', parser=journal_print, header='internal')
 #report_sxw.report_sxw('report.account.journal.period.print.sale.purchase', 'account.journal.period', 'addons/account/report/account_journal_sale_purchase.rml', parser=journal_print, header='external')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
