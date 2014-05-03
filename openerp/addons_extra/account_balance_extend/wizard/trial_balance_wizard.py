@@ -47,5 +47,8 @@ class account_balance_report(orm.TransientModel):
             res['value'] = {'period_from': start_period, 'period_to': end_period, 'date_from': False, 'date_to': False}
         return res
         
+    def _print_report(self, cr, uid, ids, data, context=None):
+        data = self.pre_print_report(cr, uid, ids, data, context=context)
+        return {'type': 'ir.actions.report.xml', 'report_name': 'account_balance_extend.account.balance', 'datas': data}
         
   
