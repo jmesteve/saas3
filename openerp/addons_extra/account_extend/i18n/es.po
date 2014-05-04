@@ -1,0 +1,37 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* account_extend
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.saas~3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-05-02 16:53+0000\n"
+"PO-Revision-Date: 2014-05-02 16:53+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_extend
+#: model:ir.ui.menu,name:account.menu_finance
+msgid "Accounting"
+msgstr "Facturación"
+
+#. module: account_extend
+#: model:ir.ui.menu,name:account_extend.menu_account_extend_report
+msgid "Report"
+msgstr "Informe"
+
+#. module: account_extend
+#: model:ir.ui.menu,name:account_extend.menu_account_extend
+msgid "Accounting"
+msgstr "Contabilidad"
+
+#. module: account_extend
+#: model:res.groups,name:account_extend.group_account_extend
+msgid "Account Extend"
+msgstr "Contabilidad Extendido"
+

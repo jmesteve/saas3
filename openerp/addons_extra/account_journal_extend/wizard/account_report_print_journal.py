@@ -69,3 +69,5 @@ class account_print_journal(osv.osv_memory):
         
         report_name = 'account.journal.period.print.extend'
         return {'type': 'ir.actions.report.xml', 'report_name': report_name, 'datas': data}
+    
+    

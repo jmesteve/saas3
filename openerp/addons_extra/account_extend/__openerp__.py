@@ -22,22 +22,21 @@
 #
 ##############################################################################
 {
-    'name': 'account journal extend',
+    'name': 'account extend',
     'version': '1.0',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """
-        [ENG] Extend accounting reports .
+        [ENG] Extend account module.
     """,
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
     'images': [],
-    'depends': ['account', 'account_extend'],
+    'depends': ['account'],
     'data' : [
-              'account_report.xml',
-#              'security/account_security.xml',
-#              'security/ir.model.access.csv',
-              'wizard/account_report_print_journal_view.xml',
+              'security/groups.xml',
+              'security/ir.model.access.csv',
+              'menu_account_view.xml'
         ],
     'demo': [],
     'installable': True,

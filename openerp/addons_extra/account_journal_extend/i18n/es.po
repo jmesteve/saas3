@@ -41,11 +41,6 @@ msgid "Group Journal"
 msgstr "Agrupar diarios"
 
 #. module: account_journal_extend
-#: model:res.groups,name:account_journal_extend.group_account_menu_old
-msgid "Journal Menu Old"
-msgstr "Menu Diarios Antiguo"
-
-#. module: account_journal_extend
 #: report:account.journal.period.print.extend:0
 msgid "Company"
 msgstr "Empresa"
@@ -112,7 +107,7 @@ msgid "Target Moves"
 msgstr "Movimientos destino"
 
 #. module: account_journal_extend
-#: model:ir.ui.menu,name:account_journal_extend.menu_journals_report_new
+#: model:ir.ui.menu,name:account_journal_extend.menu_account_extend_report_journal
 msgid "Journals"
 msgstr "Diarios"
 
