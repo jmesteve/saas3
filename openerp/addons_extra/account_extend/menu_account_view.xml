@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    
+   <menuitem name="Invoicing"
+        id="account.menu_finance"
+        groups="account.group_account_user,account.group_account_manager,account.group_account_invoice"
+        sequence="50"/>
+    
+    <menuitem id="menu_account_extend" name="Accounting" groups="group_account_extend" sequence="51"/>
+     	<menuitem id="menu_account_extend_report" name="Report" parent="menu_account_extend"  groups="group_account_extend"/>
+<!--      	<menuitem id="menu_account_extend_report" name="Journal" parent="menu_account_extend_report" action='action_menu_'  groups="group_account_extend"/> -->
+    </data>
+</openerp>

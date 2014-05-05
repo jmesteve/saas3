@@ -6,54 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.saas~3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-02 16:53+0000\n"
-"PO-Revision-Date: 2014-05-02 16:53+0000\n"
+"POT-Creation-Date: 2014-05-05 12:57+0000\n"
+"PO-Revision-Date: 2014-05-05 12:57+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: account_journal_extend
-#: report:account.journal.period.print.extend:0
-msgid "Account"
-msgstr "Cuenta"
-
-#. module: account_journal_extend
-#: report:account.journal.period.print.extend:0
-msgid "Move"
-msgstr "Movimiento"
-
-#. module: account_journal_extend
-#: report:account.journal.period.print.extend:0
-msgid "Total:"
-msgstr "Total:"
-
-#. module: account_journal_extend
-#: report:account.journal.period.print.extend:0
-msgid "Currency"
-msgstr "Moneda"
-
-#. module: account_journal_extend
-#: field:account.print.journal,group_journal:0
-msgid "Group Journal"
-msgstr "Agrupar diarios"
-
-#. module: account_journal_extend
-#: model:res.groups,name:account_journal_extend.group_account_menu_old
-msgid "Journal Menu Old"
-msgstr "Menu Diarios Antiguo"
-
-#. module: account_journal_extend
-#: report:account.journal.period.print.extend:0
-msgid "Company"
-msgstr "Empresa"
-
-#. module: account_journal_extend
-#: report:account.journal.period.print.extend:0
-msgid "Entries Sorted By"
-msgstr "Asientos ordenados por"
 
 #. module: account_journal_extend
 #: report:account.journal.period.print.extend:0
@@ -66,24 +26,14 @@ msgid "Detail"
 msgstr "Detalle"
 
 #. module: account_journal_extend
-#: report:account.journal.period.print.extend:0
-msgid "Date"
-msgstr "Período"
+#: model:ir.model,name:account_journal_extend.model_account_print_journal_extend
+msgid "Account Common Journal Report"
+msgstr "Contabilidad. Informe diario común"
 
 #. module: account_journal_extend
-#: report:account.journal.period.print.extend:0
-msgid "Credit"
-msgstr "Haber"
-
-#. module: account_journal_extend
-#: report:account.journal.period.print.extend:0
-msgid "Fiscal Year"
-msgstr "Ejercicio Fiscal"
-
-#. module: account_journal_extend
-#: report:account.journal.period.print.extend:0
-msgid "Period"
-msgstr "Período"
+#: field:account.print.journal.extend,group_journal:0
+msgid "Group Journal"
+msgstr "Agrupar diarios"
 
 #. module: account_journal_extend
 #: report:account.journal.period.print.extend:0
@@ -91,7 +41,7 @@ msgid "Debit"
 msgstr "Debe"
 
 #. module: account_journal_extend
-#: model:ir.model,name:account_journal_extend.model_account_print_journal
+#: model:ir.actions.act_window,name:account_journal_extend.action_account_print_journal_extend
 msgid "Account Print Journal"
 msgstr "Contabilidad. Imprimir diario"
 
@@ -102,17 +52,158 @@ msgstr "Plan Contable"
 
 #. module: account_journal_extend
 #: report:account.journal.period.print.extend:0
+msgid "Total:"
+msgstr "Total:"
+
+#. module: account_journal_extend
+#: field:account.print.journal.extend,sort_selection:0
+msgid "Entries Sorted by"
+msgstr "Entradas ordenadas por"
+
+#. module: account_journal_extend
+#: selection:account.print.journal.extend,sort_selection:0
+msgid "Journal Entry Number"
+msgstr "Número de asiento"
+
+#. module: account_journal_extend
+#: report:account.journal.period.print.extend:0
+#: field:account.print.journal.extend,company_id:0
+msgid "Company"
+msgstr "Empresa"
+
+#. module: account_journal_extend
+#: field:account.print.journal.extend,amount_currency:0
+msgid "With Currency"
+msgstr "Con divisa"
+
+#. module: account_journal_extend
+#: report:account.journal.period.print.extend:0
+#: selection:account.print.journal.extend,filter:0
+#: selection:account.print.journal.extend,sort_selection:0
+msgid "Date"
+msgstr "Fecha"
+
+#. module: account_journal_extend
+#: field:account.print.journal.extend,chart_account_id:0
+msgid "Chart of Account"
+msgstr "Plan Contable"
+
+#. module: account_journal_extend
+#: field:account.print.journal.extend,journal_ids:0
+#: model:ir.ui.menu,name:account_journal_extend.menu_account_extend_report_journal
+msgid "Journals"
+msgstr "Diarios"
+
+#. module: account_journal_extend
+#: report:account.journal.period.print.extend:0
+#: field:account.print.journal.extend,target_move:0
+msgid "Target Moves"
+msgstr "Movimientos destino"
+
+#. module: account_journal_extend
+#: help:account.print.journal.extend,chart_account_id:0
+msgid "Select Charts of Accounts"
+msgstr "Seleccionar Planes Contables"
+
+#. module: account_journal_extend
+#: view:account.print.journal.extend:0
+msgid "onchange_filter(filter, fiscalyear_id)"
+msgstr "onchange_filter(filter, fiscalyear_id)"
+
+#. module: account_journal_extend
+#: field:account.print.journal.extend,date_to:0
+msgid "End Date"
+msgstr "Fecha final"
+
+#. module: account_journal_extend
+#: report:account.journal.period.print.extend:0
+msgid "Account"
+msgstr "Cuenta"
+
+#. module: account_journal_extend
+#: field:account.print.journal.extend,period_from:0
+msgid "Start Period"
+msgstr "Periodo inicial"
+
+#. module: account_journal_extend
+#: help:account.print.journal.extend,amount_currency:0
+msgid "Print Report with the currency column if the currency differs from the company currency."
+msgstr "Print Report with the currency column if the currency differs from the company currency."
+
+#. module: account_journal_extend
+#: report:account.journal.period.print.extend:0
+msgid "Entries Sorted By"
+msgstr "Asientos ordenados por"
+
+#. module: account_journal_extend
+#: selection:account.print.journal.extend,target_move:0
+msgid "All Posted Entries"
+msgstr "Todos los asientos asentados"
+
+#. module: account_journal_extend
+#: help:account.print.journal.extend,fiscalyear_id:0
+msgid "Keep empty for all open fiscal year"
+msgstr "Dejarlo vacío para todos los ejercicios fiscales abiertos."
+
+#. module: account_journal_extend
+#: field:account.print.journal.extend,period_to:0
+msgid "End Period"
+msgstr "Periodo final"
+
+#. module: account_journal_extend
+#: report:account.journal.period.print.extend:0
+msgid "Credit"
+msgstr "Haber"
+
+#. module: account_journal_extend
+#: report:account.journal.period.print.extend:0
+#: field:account.print.journal.extend,fiscalyear_id:0
+msgid "Fiscal Year"
+msgstr "Ejercicio Fiscal"
+
+#. module: account_journal_extend
+#: selection:account.print.journal.extend,filter:0
+msgid "No Filters"
+msgstr "No Filtros"
+
+#. module: account_journal_extend
+#: report:account.journal.period.print.extend:0
+msgid "Move"
+msgstr "Movimiento"
+
+#. module: account_journal_extend
+#: report:account.journal.period.print.extend:0
+msgid "Period"
+msgstr "Periodo"
+
+#. module: account_journal_extend
+#: report:account.journal.period.print.extend:0
+msgid "Currency"
+msgstr "Divisa"
+
+#. module: account_journal_extend
+#: selection:account.print.journal.extend,filter:0
+msgid "Periods"
+msgstr "Periodos"
+
+#. module: account_journal_extend
+#: field:account.print.journal.extend,date_from:0
+msgid "Start Date"
+msgstr "Fecha inicial"
+
+#. module: account_journal_extend
+#: field:account.print.journal.extend,filter:0
+msgid "Filter by"
+msgstr "Filtrar por"
+
+#. module: account_journal_extend
+#: report:account.journal.period.print.extend:0
 #: model:ir.actions.report.xml,name:account_journal_extend.account_journal_extend
 msgid "Journal"
 msgstr "Diario"
 
 #. module: account_journal_extend
-#: report:account.journal.period.print.extend:0
-msgid "Target Moves"
-msgstr "Movimientos destino"
-
-#. module: account_journal_extend
-#: model:ir.ui.menu,name:account_journal_extend.menu_journals_report_new
-msgid "Journals"
-msgstr "Diarios"
+#: selection:account.print.journal.extend,target_move:0
+msgid "All Entries"
+msgstr "Todos los asientos"
 

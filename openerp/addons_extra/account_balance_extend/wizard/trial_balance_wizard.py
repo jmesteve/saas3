@@ -1,12 +1,23 @@
 from openerp.osv import orm
+from openerp.osv import fields, osv
 
 import time
 
-class account_balance_report(orm.TransientModel):
-    _inherit = 'account.balance.report'       
+class account_balance_report(osv.osv_memory):
+    _name = 'account.balance.report.extend'
+    _inherit = 'account.common.account.report'       
+    _columns = {
+                'journal_ids': fields.many2many('account.journal', 'account_balance_report_journal_extend_rel', 'account_id', 'journal_id', 'Journals', required=True),
+    }
+    
+    def get_all_journals(self, cr, uid, context):        
+        journal_ids = self.pool.get('account.journal').search(cr,uid,[])
+        return journal_ids
+    
     _defaults = {
+                 'journal_ids': get_all_journals,
                  'filter': 'filter_date'
-                 }
+    }
 
     def onchange_filter(self, cr, uid, ids, filter='filter_no', fiscalyear_id=False, context=None):
         res = {'value': {}}

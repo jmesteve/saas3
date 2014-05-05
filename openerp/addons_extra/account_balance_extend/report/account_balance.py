@@ -21,10 +21,11 @@
 
 import time
 
-from openerp.report import report_sxw
+from openerp.report import report_sxw as report_sxw_extend
+from openerp.addons.report_extend.report import report_sxw
 from openerp.addons.account.report.common_report_header import common_report_header
 
-class account_balance(report_sxw.rml_parse, common_report_header):
+class account_balance(report_sxw_extend.rml_parse, common_report_header):
 
     def __init__(self, cr, uid, name, context=None):
         super(account_balance, self).__init__(cr, uid, name, context=context)
@@ -76,11 +77,7 @@ class account_balance(report_sxw.rml_parse, common_report_header):
         #ids = obj_account_move_line.search(self.cr, self.uid, [('journal_id', 'in', journal_ids)], context=ctx)
         #obj_account_move_line.read_group(self.cr, self.uid, ids, ['debit', 'credit'])
         
-        print """SELECT l.credit, l.debit FROM account_move_line l WHERE l.account_id IN %s""", (tuple(account_ids),)
-        
-        self.cr.execute("""SELECT a.id, a.code, SUM(l.debit) - SUM(l.credit), SUM(l.credit), SUM(l.debit) FROM account_move_line l
-         JOIN account_account a ON a.id=l.account_id 
-         JOIN account_journal WHERE l.account_id IN %s GROUP BY a.id ORDER BY a.code""", (tuple(account_ids),))
+        self.cr.execute("""SELECT a.id, a.code, SUM(l.debit) - SUM(l.credit), SUM(l.credit), SUM(l.debit) FROM account_move_line l JOIN account_account a ON a.id=l.account_id JOIN account_journal aj ON aj.id=l.journal_id WHERE l.account_id IN %s GROUP BY a.id ORDER BY a.code""", (tuple(account_ids),))
         
         res = self.cr.fetchall()
         
@@ -143,7 +140,7 @@ class account_balance(report_sxw.rml_parse, common_report_header):
         if child_ids:
             ids = child_ids
     
-        #self._get_opening_balance(form, ids)       
+        #self._get_opening_balance(form, ids)
     
         accounts = obj_account.read(self.cr, self.uid, ids, ['type','code','name','debit','credit','balance','parent_id','level','child_id'], ctx)
 

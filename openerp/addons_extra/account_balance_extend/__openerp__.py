@@ -32,7 +32,7 @@
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
     'images': [],
-    'depends': ['account'],
+    'depends': ['account', 'account_extend', 'report_extend'],
     'data' : [
               'account_report.xml',
               'wizard/trial_balance_wizard_view.xml',

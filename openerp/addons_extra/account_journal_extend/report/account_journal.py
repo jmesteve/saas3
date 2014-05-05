@@ -21,9 +21,10 @@
 
 import time
 from openerp.addons.account.report.common_report_header import common_report_header
-from openerp.report import report_sxw
+from openerp.addons.report_extend.report import report_sxw 
+from openerp.report import report_sxw as report_sxw_original
 
-class journal_print(report_sxw.rml_parse, common_report_header):
+class journal_print(report_sxw_original.rml_parse, common_report_header):
 
     def __init__(self, cr, uid, name, context=None):
         if context is None:
@@ -41,7 +42,7 @@ class journal_print(report_sxw.rml_parse, common_report_header):
             'get_start_period': self.get_start_period,
             'get_end_period': self.get_end_period,
             'get_account': self._get_account,
-            'get_filter': self._get_filter,
+            'get_filter': self.get_filter,
             'get_start_date': self._get_start_date,
             'get_end_date': self._get_end_date,
             'get_fiscalyear': self._get_fiscalyear,
@@ -130,8 +131,7 @@ class journal_print(report_sxw.rml_parse, common_report_header):
         if self.group_journal and not self.period_ids:
             return []
 
-        self.cr.execute('SELECT SUM(debit) FROM account_move_line l, account_move am '
-                        'WHERE l.move_id=am.id AND am.state IN %s AND l.period_id IN %s AND l.journal_id IN %s ' + self.query_get_clause + ' ',
+        self.cr.execute('SELECT SUM(debit) FROM account_move_line l JOIN account_move am ON am.id=l.move_id WHERE am.state IN %s AND l.period_id IN %s AND l.journal_id IN %s ' + self.query_get_clause + ' ',
                         (tuple(move_state), tuple(period_id), tuple(journal_id)))
         return self.cr.fetchone()[0] or 0.0
 
@@ -153,8 +153,7 @@ class journal_print(report_sxw.rml_parse, common_report_header):
         if self.group_journal and not self.period_ids:
             return []
 
-        self.cr.execute('SELECT SUM(l.credit) FROM account_move_line l, account_move am '
-                        'WHERE l.move_id=am.id AND am.state IN %s AND l.period_id IN %s AND l.journal_id IN %s '+ self.query_get_clause+'',
+        self.cr.execute('SELECT SUM(l.credit) FROM account_move_line l JOIN account_move am ON l.move_id=am.id WHERE am.state IN %s AND l.period_id IN %s AND l.journal_id IN %s '+ self.query_get_clause+'',
                         (tuple(move_state), tuple(period_id), tuple(journal_id)))
         return self.cr.fetchone()[0] or 0.0
 
@@ -171,7 +170,7 @@ class journal_print(report_sxw.rml_parse, common_report_header):
         if self.group_journal:
             self.cr.execute('update account_journal_period set state=%s where journal_id IN %s and period_id IN %s and state=%s', ('printed', self.journal_ids, self.period_ids, 'draft'))
         else:
-            self.cr.execute('update account_journal_period set state=%s where journal_id IN %s and period_id IN %s and state=%s', ('printed', self.journal_ids, period_id, 'draft'))
+            self.cr.execute('update account_journal_period set state=%s where journal_id IN %s and period_id=%s and state=%s', ('printed', self.journal_ids, period_id, 'draft'))
 
         move_state = ['draft','posted']
         if self.target_move == 'posted':
@@ -182,14 +181,14 @@ class journal_print(report_sxw.rml_parse, common_report_header):
             self.cr.execute('SELECT l.id FROM account_move_line l join account_account a on l.account_id = a.id join account_move am on l.move_id=am.id where am.state IN %s AND l.period_id IN %s AND l.journal_id IN %s ' + self.query_get_clause + ' ORDER BY '+ self.sort_selection + ', l.move_id, a.code',(tuple(move_state), self.period_ids, tuple(journal_id) ))
         
         else:
-            self.cr.execute('SELECT l.id FROM account_move_line l, account_move am WHERE l.move_id=am.id AND am.state IN %s AND l.period_id=%s AND l.journal_id IN %s ' + self.query_get_clause + ' ORDER BY '+ self.sort_selection + ', l.move_id, l.account_id',(tuple(move_state), period_id, tuple(journal_id) ))
+            self.cr.execute('SELECT l.id FROM account_move_line l join account_account a on l.account_id = a.id join account_move am on l.move_id=am.id am WHERE am.state IN %s AND l.period_id=%s AND l.journal_id IN %s ' + self.query_get_clause + ' ORDER BY '+ self.sort_selection + ', l.move_id, a.code',(tuple(move_state), period_id, tuple(journal_id) ))
         ids = map(lambda x: x[0], self.cr.fetchall())
         return obj_mline.browse(self.cr, self.uid, ids)
 
     def _set_get_account_currency_code(self, account_id):
         self.cr.execute("SELECT c.symbol AS code "\
-                "FROM res_currency c,account_account AS ac "\
-                "WHERE ac.id = %s AND ac.currency_id = c.id" % (account_id))
+                "FROM res_currency c JOIN account_account AS ac ON  ac.currency_id=c.id"\
+                "WHERE ac.id = %s" % (account_id))
         result = self.cr.fetchone()
         if result:
             self.account_currency = result[0]
@@ -223,6 +222,14 @@ class journal_print(report_sxw.rml_parse, common_report_header):
         if data.get('form', False) and data['form'].get('period_to', False):
             return self.pool.get('account.period').browse(self.cr, self.uid, data['form']['period_to']).date_stop
         return ''
+    
+    def get_filter(self, data):
+        if data.get('form', False) and data['form'].get('filter', False):
+            if data['form']['filter'] == 'filter_date':
+                return 'filter_date'
+            elif data['form']['filter'] == 'filter_period':
+                return 'filter_period'
+        return 'filter_no'
 
     def _get_sortby(self, data):
         # TODO: deprecated, to remove in trunk
