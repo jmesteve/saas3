@@ -34,6 +34,7 @@
     'images': [],
     'depends': ['account'],
     'data' : [
+              'account_report.xml',
               'wizard/trial_balance_wizard_view.xml',
         ],
     'demo': [],
