@@ -77,7 +77,7 @@ class account_balance(report_sxw_extend.rml_parse, common_report_header):
         #ids = obj_account_move_line.search(self.cr, self.uid, [('journal_id', 'in', journal_ids)], context=ctx)
         #obj_account_move_line.read_group(self.cr, self.uid, ids, ['debit', 'credit'])
         
-        self.cr.execute("""SELECT a.id, a.code, SUM(l.debit) - SUM(l.credit), SUM(l.credit), SUM(l.debit) FROM account_move_line l JOIN account_account a ON a.id=l.account_id JOIN account_journal aj ON aj.id=l.journal_id WHERE l.account_id IN %s GROUP BY a.id ORDER BY a.code""", (tuple(account_ids),))
+        self.cr.execute("""SELECT a.id, a.code, SUM(l.debit) - SUM(l.credit), SUM(l.credit), SUM(l.debit) FROM account_move_line l JOIN account_account a ON a.id=l.account_id JOIN account_journal aj ON aj.id=l.journal_id WHERE l.account_id IN %s AND aj.type like 'situation' GROUP BY a.id ORDER BY a.code""", (tuple(account_ids),))
         
         res = self.cr.fetchall()
         

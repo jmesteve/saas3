@@ -8,6 +8,7 @@
         sequence="50"/>
     
     <menuitem id="menu_account_extend" name="Accounting" groups="group_account_extend" sequence="51"/>
+    	<menuitem id="menu_finance_entries_extend" name="Journal Entries" parent="menu_account_extend" sequence="5" groups="account.group_account_user,account.group_account_manager,group_account_extend"/>
      	<menuitem id="menu_account_extend_report" name="Report" parent="menu_account_extend"  groups="group_account_extend"/>
 <!--      	<menuitem id="menu_account_extend_report" name="Journal" parent="menu_account_extend_report" action='action_menu_'  groups="group_account_extend"/> -->
     </data>

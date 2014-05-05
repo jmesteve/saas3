@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    	<menuitem
+            icon="STOCK_JUSTIFY_FILL"
+            action="account.action_move_journal_line"
+            id="menu_action_move_journal_line_form_extend"
+            name="Journal Entries"
+            parent="account_extend.menu_finance_entries_extend"
+            groups="account.group_account_user,account_extend.group_account_extend"
+            sequence="5"
+        />
+            
+        <menuitem
+            action="account.action_account_moves_all_a"
+            icon="STOCK_JUSTIFY_FILL"
+            id="menu_action_account_moves_all_extend"
+            parent="account_extend.menu_finance_entries_extend"
+			name="Journal Items"
+            sequence="4"
+            groups="account.group_account_user,account_extend.group_account_extend"
+        />
+    </data>
+</openerp>
