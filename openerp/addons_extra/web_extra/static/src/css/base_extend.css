@@ -1,9 +1,9 @@
-.openerp .oe_form_editable .oe_form .oe_form_field_date input {
+.openerp .oe_form_editable .oe_form .oe_form_field_date input{
   width: 107px;
 }
-.openerp .oe_form .oe_form_field_selection select {
+.openerp .oe_form .oe_form_field_selection select{
   max-width: 240px;
 }
-.openerp .oe_form .oe_form_field {
+.openerp .oe_form .oe_form_field input{
 	max-width: 240px;
 }
