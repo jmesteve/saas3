@@ -1,0 +1,195 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* account_balance_extend
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.saas~3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-05-05 12:01+0000\n"
+"PO-Revision-Date: 2014-05-05 12:01+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_balance_extend
+#: selection:account.balance.report.extend,filter:0
+msgid "No Filters"
+msgstr "No Filtros"
+
+#. module: account_balance_extend
+#: view:account.balance.report.extend:0
+msgid "Dates"
+msgstr "Fechas"
+
+#. module: account_balance_extend
+#: report:account_balance_extend.account.balance:0
+msgid "Debit"
+msgstr "Debe"
+
+#. module: account_balance_extend
+#: report:account_balance_extend.account.balance:0
+msgid "Filter By"
+msgstr "Filtrar Por"
+
+#. module: account_balance_extend
+#: report:account_balance_extend.account.balance:0
+msgid "Display Account"
+msgstr "Mostrar Cuentas"
+
+#. module: account_balance_extend
+#: report:account_balance_extend.account.balance:0
+msgid "Chart of Accounts"
+msgstr "Plan Contable"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend,company_id:0
+#: report:account_balance_extend.account.balance:0
+msgid "Company"
+msgstr "Empresa"
+
+#. module: account_balance_extend
+#: selection:account.balance.report.extend,display_account:0
+#: report:account_balance_extend.account.balance:0
+msgid "With balance is not equal to 0"
+msgstr "Con balance si no es igual a 0"
+
+#. module: account_balance_extend
+#: selection:account.balance.report.extend,filter:0
+msgid "Date"
+msgstr "Fecha"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend,chart_account_id:0
+msgid "Chart of Account"
+msgstr "Plan Contable"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend,journal_ids:0
+msgid "Journals"
+msgstr "Diarios"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend,target_move:0
+#: report:account_balance_extend.account.balance:0
+msgid "Target Moves"
+msgstr "Movimientos Destino"
+
+#. module: account_balance_extend
+#: help:account.balance.report.extend,chart_account_id:0
+msgid "Select Charts of Accounts"
+msgstr "Selectionar Plan Contable"
+
+#. module: account_balance_extend
+#: view:account.balance.report.extend:0
+msgid "onchange_filter(filter, fiscalyear_id)"
+msgstr "onchange_filter(filter, fiscalyear_id)"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend,date_to:0
+#: report:account_balance_extend.account.balance:0
+msgid "End Date"
+msgstr "Fecha final"
+
+#. module: account_balance_extend
+#: report:account_balance_extend.account.balance:0
+msgid "Account"
+msgstr "Cuenta"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend,period_from:0
+#: report:account_balance_extend.account.balance:0
+msgid "Start Period"
+msgstr "Periodo inicial"
+
+#. module: account_balance_extend
+#: report:account_balance_extend.account.balance:0
+#: model:ir.actions.act_window,name:account_balance_extend.action_account_balance_menu_extend
+#: model:ir.actions.report.xml,name:account_balance_extend.account_balance_extend_account_balance
+#: model:ir.ui.menu,name:account_balance_extend.menu_account_extend_report_balance
+msgid "Trial Balance"
+msgstr "Balance de sumas y saldos"
+
+#. module: account_balance_extend
+#: selection:account.balance.report.extend,target_move:0
+msgid "All Posted Entries"
+msgstr "Todos los asientos asentados"
+
+#. module: account_balance_extend
+#: help:account.balance.report.extend,fiscalyear_id:0
+msgid "Keep empty for all open fiscal year"
+msgstr "Dejarlo vacío para todos los ejercicios fiscales abiertos."
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend,period_to:0
+#: report:account_balance_extend.account.balance:0
+msgid "End Period"
+msgstr "Periodo final"
+
+#. module: account_balance_extend
+#: report:account_balance_extend.account.balance:0
+msgid "Credit"
+msgstr "Haber"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend,fiscalyear_id:0
+#: report:account_balance_extend.account.balance:0
+msgid "Fiscal Year"
+msgstr "Ejercicio fiscal"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend,display_account:0
+msgid "Display Accounts"
+msgstr "Mostrar Cuentas"
+
+#. module: account_balance_extend
+#: report:account_balance_extend.account.balance:0
+msgid "Balance"
+msgstr "Balance"
+
+#. module: account_balance_extend
+#: selection:account.balance.report.extend,display_account:0
+#: report:account_balance_extend.account.balance:0
+msgid "With movements"
+msgstr "Con movimientos"
+
+#. module: account_balance_extend
+#: selection:account.balance.report.extend,display_account:0
+#: report:account_balance_extend.account.balance:0
+msgid "All"
+msgstr "Todos los asientos"
+
+#. module: account_balance_extend
+#: report:account_balance_extend.account.balance:0
+msgid "Code"
+msgstr "Código"
+
+#. module: account_balance_extend
+#: model:ir.model,name:account_balance_extend.model_account_balance_report_extend
+msgid "Account Common Account Report"
+msgstr "Contabilidad. Informe contable común"
+
+#. module: account_balance_extend
+#: selection:account.balance.report.extend,filter:0
+msgid "Periods"
+msgstr "Periodos"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend,date_from:0
+#: report:account_balance_extend.account.balance:0
+msgid "Start Date"
+msgstr "Fecha inicial"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend,filter:0
+msgid "Filter by"
+msgstr "Filtrar por"
+
+#. module: account_balance_extend
+#: selection:account.balance.report.extend,target_move:0
+msgid "All Entries"
+msgstr "Todos los asientos"
+

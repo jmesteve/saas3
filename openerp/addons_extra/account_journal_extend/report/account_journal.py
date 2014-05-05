@@ -21,9 +21,10 @@
 
 import time
 from openerp.addons.account.report.common_report_header import common_report_header
-from openerp.report import report_sxw
+from openerp.addons.report_extend.report import report_sxw 
+from openerp.report import report_sxw as report_sxw_original
 
-class journal_print(report_sxw.rml_parse, common_report_header):
+class journal_print(report_sxw_original.rml_parse, common_report_header):
 
     def __init__(self, cr, uid, name, context=None):
         if context is None:
@@ -169,7 +170,7 @@ class journal_print(report_sxw.rml_parse, common_report_header):
         if self.group_journal:
             self.cr.execute('update account_journal_period set state=%s where journal_id IN %s and period_id IN %s and state=%s', ('printed', self.journal_ids, self.period_ids, 'draft'))
         else:
-            self.cr.execute('update account_journal_period set state=%s where journal_id IN %s and period_id IN %s and state=%s', ('printed', self.journal_ids, period_id, 'draft'))
+            self.cr.execute('update account_journal_period set state=%s where journal_id IN %s and period_id=%s and state=%s', ('printed', self.journal_ids, period_id, 'draft'))
 
         move_state = ['draft','posted']
         if self.target_move == 'posted':

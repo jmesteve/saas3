@@ -1,11 +1,17 @@
 from openerp.osv import fields, osv
 import time
+from lxml import etree
 
 class account_print_journal(osv.osv_memory):
-    _inherit = "account.print.journal"
+    _inherit = "account.common.journal.report"
+    _name = "account.print.journal.extend"
    
     _columns = {
         'group_journal': fields.boolean("Group Journal"),
+        'sort_selection': fields.selection([('l.date', 'Date'),
+                                            ('am.name', 'Journal Entry Number'),],
+                                            'Entries Sorted by', required=True),
+        'journal_ids': fields.many2many('account.journal', 'account_print_journal_journal_extend_rel', 'account_id', 'journal_id', 'Journals', required=True),
     }
     
     def get_all_journals(self, cr, uid, context):        
@@ -18,6 +24,27 @@ class account_print_journal(osv.osv_memory):
                  'filter': 'filter_date',
                  'sort_selection': 'l.date'
                  }
+    
+    
+    def fields_view_get(self, cr, uid, view_id=None, view_type='form', context=None, toolbar=False, submenu=False):
+        '''
+        used to set the domain on 'journal_ids' field: we exclude or only propose the journals of type 
+        sale/purchase (+refund) accordingly to the presence of the key 'sale_purchase_only' in the context.
+        '''
+        if context is None: 
+            context = {}
+        res = super(account_print_journal, self).fields_view_get(cr, uid, view_id=view_id, view_type=view_type, context=context, toolbar=toolbar, submenu=submenu)
+        doc = etree.XML(res['arch'])
+
+        if context.get('sale_purchase_only'):
+            domain ="[('type', 'in', ('sale','purchase','sale_refund','purchase_refund'))]"
+        else:
+            domain ="[('type', 'not in', ('sale','purchase','sale_refund','purchase_refund'))]"
+        nodes = doc.xpath("//field[@name='journal_ids']")
+        for node in nodes:
+            node.set('domain', domain)
+        res['arch'] = etree.tostring(doc)
+        return res
     
     def onchange_filter(self, cr, uid, ids, filter='filter_no', fiscalyear_id=False, context=None):
         res = {'value': {}}
@@ -69,5 +96,4 @@ class account_print_journal(osv.osv_memory):
         
         report_name = 'account.journal.period.print.extend'
         return {'type': 'ir.actions.report.xml', 'report_name': report_name, 'datas': data}
-    
     

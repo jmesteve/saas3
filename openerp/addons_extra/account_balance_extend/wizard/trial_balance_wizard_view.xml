@@ -4,7 +4,7 @@
   
   	<record id="account_balance_view_extend" model="ir.ui.view">
           <field name="name">Trial Balance</field>
-          <field name="model">account.balance.report</field>
+          <field name="model">account.balance.report.extend</field>
           <field name="inherit_id" ref="account.account_common_report_view" />
           <field name="arch" type="xml">
             <data>
@@ -20,7 +20,19 @@
             </data>
           </field>
     </record>
-  
+    
+    
+   	<record id="action_account_balance_menu_extend" model="ir.actions.act_window">
+        <field name="name">Trial Balance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.balance.report.extend</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="account_balance_view_extend"/>
+        <field name="target">new</field>
+    </record>
+  	
+  	<menuitem id="menu_account_extend_report_balance" icon="STOCK_PRINT" name="Trial Balance" parent="account_extend.menu_account_extend_report" action='action_account_balance_menu_extend' />
   	
   </data>
 </openerp>

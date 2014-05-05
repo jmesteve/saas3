@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: account_extend
-#: model:ir.ui.menu,name:account.menu_finance
+#: model:ir.ui.menu,name:account_extend.menu_finance
 msgid "Accounting"
 msgstr "Facturación"
 

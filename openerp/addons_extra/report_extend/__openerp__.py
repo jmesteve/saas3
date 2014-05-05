@@ -2,10 +2,9 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (c) 2013 ErpAndCloud All Rights Reserved
+#    Copyright (c) 2013 jmesteve All Rights Reserved
 #                       https://github.com/jmesteve
-#                       https://github.com/escrichov
-#                       <engineering@erpandcloud.com>
+#                       <jmesteve@me.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -21,26 +20,19 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+
 {
-    'name': 'account journal extend',
+    'name': "Report Extend",
     'version': '1.0',
-    'author': 'ErpAndCloud',
-    'category': 'Generic Modules/Accounting',    
+    'category': 'Report',
     'description': """
-        [ENG] Extend accounting reports .
+        [ENG] Fix Report Header
     """,
+    'author': 'escrichov',
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
-    'images': [],
-    'depends': ['account', 'account_extend', 'report_extend'],
-    'data' : [
-              'account_report.xml',
-#              'security/account_security.xml',
-#              'security/ir.model.access.csv',
-              'wizard/account_report_print_journal_view.xml',
-        ],
-    'demo': [],
-    'installable': True,
-    'application': True,
-    'auto_install': False,
+    "depends": [],
+    'data': [],
+    "active": True,
+    "installable": True
 }

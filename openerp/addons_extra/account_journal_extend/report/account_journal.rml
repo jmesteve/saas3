@@ -133,6 +133,7 @@
     </initialize>
     <paraStyle name="P8" fontName="Helvetica" fontSize="7.0" leading="10" alignment="RIGHT" spaceBefore="0.0" spaceAfter="0.0"/>
     <paraStyle name="P9" fontName="Helvetica" fontSize="7.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="P9extend" fontName="Helvetica" fontSize="7.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="10.0"/>
     <paraStyle name="P10" fontName="Helvetica-Bold" fontSize="8.0" leading="11" alignment="CENTER" spaceBefore="0.0" spaceAfter="0.0"/>
     <paraStyle name="P10a" fontName="Helvetica-Bold" fontSize="7.5" leading="11" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
     <paraStyle name="P10b" fontName="Helvetica-Bold" fontSize="8.0" leading="11" alignment="RIGHT" spaceBefore="0.0" spaceAfter="0.0"/>
@@ -184,6 +185,11 @@
     <para style="P9">
       <font color="white"> </font>
     </para>
+    
+    <para style="P9extend">
+      <font color="white"> </font>
+    </para>
+    
     
     <section>
 	    [[  (display_group(data) == False and get_filter(data) != 'filter_date') or removeParentNode('section') ]]
@@ -279,6 +285,12 @@
       <font color="white"> </font>
     </para>
     <para style="Standard"><font color="white">[[ set_last_move_id(False)]]</font></para>
+    
+    
+    <para style="P9extend">
+      <font color="white"> </font>
+    </para>
+    
     <section>
         [[  (display_currency(data) == False and display_group(data) == False) or removeParentNode('section')  ]]
         <blockTable rowHeights="0.55cm" colWidths="70.0,45.0,50.0,160.0,70.0,70.0" style="Table1">

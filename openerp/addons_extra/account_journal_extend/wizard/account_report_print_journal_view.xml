@@ -2,9 +2,9 @@
 <openerp>
     <data>
 
-        <record id="account.account_report_print_journal" model="ir.ui.view">
+        <record id="account_report_print_journal_extend" model="ir.ui.view">
             <field name="name">Account Print Journal</field>
-            <field name="model">account.print.journal</field>
+            <field name="model">account.print.journal.extend</field>
             <field name="inherit_id" ref="account.account_common_report_view" />
             <field name="arch" type="xml">
             <data>
@@ -32,8 +32,10 @@
             <xpath expr="//field[@name='fiscalyear_id']" position="attributes">
             	<attribute name="on_change">onchange_filter(filter, fiscalyear_id)</attribute>
             </xpath>
+             
+
             <!-- 
-            <xpath expr="//page[@name='filters']" position="replace">
+           	<xpath expr="//page[@name='filters']" position="replace">
             </xpath>
             <xpath expr="//page[@name='journal_ids']" position="replace">
             </xpath>
@@ -56,8 +58,18 @@
             
 <!--         <menuitem id="menu_account_extend_report_journal" name="Journals" parent="account_extend.menu_account_extend_report" action='account.action_account_print_journal'  groups="account_extend.group_account_extend"/> -->
         
+        <record id="action_account_print_journal_extend" model="ir.actions.act_window">
+            <field name="name">Account Print Journal</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.print.journal.extend</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="account_report_print_journal_extend"/>
+        </record>
         
-        <menuitem id="menu_account_extend_report_journal" name="Journals" parent="account_extend.menu_account_extend_report" action='account.action_account_print_journal' />
+        
+        <menuitem id="menu_account_extend_report_journal" name="Journals" parent="account_extend.menu_account_extend_report" action='action_account_print_journal_extend' />
         
 <!-- 		<record id="account.menu_account_central_journal" model="ir.ui.menu"> -->
 <!--     		<field name="groups_id" eval="[(5), (4,ref('group_account_menu_old'))]"/> -->
