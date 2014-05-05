@@ -4,6 +4,6 @@
 .openerp .oe_form .oe_form_field_selection select{
   max-width: 240px;
 }
-.openerp .oe_form .oe_form_field input{
+.openerp .oe_form .oe_form_field div{
 	max-width: 240px;
 }
