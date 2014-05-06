@@ -293,7 +293,7 @@ class account_balance(report_sxw_extend.rml_parse, common_report_header):
         for account in accounts_dictionary.values():
             result.append(account)
         
-        return result
+        return sorted(result, key=lambda element: element['code'])
 
 report_sxw.report_sxw('report.account_balance_extend.account.balance', 'account.account', 'addons_extra/account_balance_extend/report/account_balance.rml', parser=account_balance, header="internal")
 
