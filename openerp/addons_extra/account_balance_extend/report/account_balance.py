@@ -70,87 +70,230 @@ class account_balance(report_sxw_extend.rml_parse, common_report_header):
 
     def _get_opening_balance(self, form, account_ids):
         
-        #obj_account_move_line = self.pool.get('account.account.move.line')
-        #accounts = obj_account.read(self.cr, self.uid, ids, ['type','code','name','debit','credit','balance','parent_id','level','child_id'], ctx)
-        
-        
-        #ids = obj_account_move_line.search(self.cr, self.uid, [('journal_id', 'in', journal_ids)], context=ctx)
-        #obj_account_move_line.read_group(self.cr, self.uid, ids, ['debit', 'credit'])
-        
-        self.cr.execute("""SELECT a.id, a.code, SUM(l.debit) - SUM(l.credit), SUM(l.credit), SUM(l.debit) FROM account_move_line l JOIN account_account a ON a.id=l.account_id JOIN account_journal aj ON aj.id=l.journal_id WHERE l.account_id IN %s AND aj.type like 'situation' GROUP BY a.id ORDER BY a.code""", (tuple(account_ids),))
+        if(form['filter'] == 'filter_period'):
+            self.cr.execute("""SELECT a.id, a.code, a.parent_id, a.name, SUM(l.debit), SUM(l.credit), SUM(l.debit) - SUM(l.credit), a.type, a.level
+            FROM account_move_line l 
+            JOIN account_account a ON a.id=l.account_id 
+            JOIN account_journal aj ON aj.id=l.journal_id 
+            JOIN account_move am ON am.id=l.move_id 
+            WHERE l.account_id IN %s AND aj.type like 'situation' AND am.state=%s AND l.period_id IN %s 
+            GROUP BY a.id ORDER BY a.code""", (tuple(account_ids), form['target_move'], tuple(form['period_from'], form['period_to']),))
+            
+        elif(form['filter'] == 'filter_date'):
+            self.cr.execute("""SELECT a.id, a.code, a.parent_id, a.name, SUM(l.debit), SUM(l.credit), SUM(l.debit) - SUM(l.credit), a.type, a.level
+            FROM account_move_line l 
+            JOIN account_account a ON a.id=l.account_id 
+            JOIN account_journal aj ON aj.id=l.journal_id 
+            JOIN account_move am ON am.id=l.move_id 
+            WHERE l.account_id IN %s AND aj.type like 'situation' AND am.state=%s AND l.date >= %s AND l.date <= %s 
+            GROUP BY a.id ORDER BY a.code""", (tuple(account_ids),  form['target_move'], form['date_from'], form['date_to']))
+        else:
+            self.cr.execute("""SELECT a.id, a.code, a.parent_id, a.name, SUM(l.debit), SUM(l.credit), SUM(l.debit) - SUM(l.credit), a.type, a.level
+            FROM account_move_line l 
+            JOIN account_account a ON a.id=l.account_id 
+            JOIN account_journal aj ON aj.id=l.journal_id 
+            JOIN account_move am ON am.id=l.move_id 
+            WHERE l.account_id IN %s AND aj.type like 'situation' AND am.state=%s 
+            GROUP BY a.id ORDER BY a.code""", (tuple(account_ids),  form['target_move'],))
         
         res = self.cr.fetchall()
         
         return res
+    
+    def _get_lines(self, form, account_ids):
         
-
-    def lines(self, form, ids=None, done=None):
-        def _process_child(accounts, disp_acc, parent):
-                account_rec = [acct for acct in accounts if acct['id']==parent][0]
-                currency_obj = self.pool.get('res.currency')
-                acc_id = self.pool.get('account.account').browse(self.cr, self.uid, account_rec['id'])
-                currency = acc_id.currency_id and acc_id.currency_id or acc_id.company_id.currency_id
-                res = {
-                    'id': account_rec['id'],
-                    'type': account_rec['type'],
-                    'code': account_rec['code'],
-                    'name': account_rec['name'],
-                    'level': account_rec['level'],
-                    'debit': account_rec['debit'],
-                    'credit': account_rec['credit'],
-                    'balance': account_rec['balance'],
-                    'parent_id': account_rec['parent_id'],
-                    'bal_type': '',
-                }
-                self.sum_debit += account_rec['debit']
-                self.sum_credit += account_rec['credit']
-                if disp_acc == 'movement':
-                    if not currency_obj.is_zero(self.cr, self.uid, currency, res['credit']) or not currency_obj.is_zero(self.cr, self.uid, currency, res['debit']) or not currency_obj.is_zero(self.cr, self.uid, currency, res['balance']):
-                        self.result_acc.append(res)
-                elif disp_acc == 'not_zero':
-                    if not currency_obj.is_zero(self.cr, self.uid, currency, res['balance']):
-                        self.result_acc.append(res)
-                else:
-                    self.result_acc.append(res)
-                if account_rec['child_id']:
-                    for child in account_rec['child_id']:
-                        _process_child(accounts,disp_acc,child)
-
-        obj_account = self.pool.get('account.account')
+        if(form['filter'] == 'filter_period'):
+            self.cr.execute("""SELECT a.id, a.code, a.parent_id, a.name, SUM(l.debit), SUM(l.credit), a.type, a.level
+            FROM account_move_line l 
+            JOIN account_account a ON a.id=l.account_id  
+            JOIN account_move am ON am.id=l.move_id 
+            WHERE l.account_id IN %s AND am.state=%s AND l.period_id IN %s AND l.journal_id IN %s
+            GROUP BY a.id ORDER BY a.code""", (tuple(account_ids), form['target_move'], tuple(form['period_to'], form['period_from']), tuple(form['journal_ids'])))
+            
+        elif(form['filter'] == 'filter_date'):
+            self.cr.execute("""SELECT a.id, a.code, a.parent_id, a.name, SUM(l.debit), SUM(l.credit), a.type, a.level
+            FROM account_move_line l 
+            JOIN account_account a ON a.id=l.account_id 
+            JOIN account_move am ON am.id=l.move_id 
+            WHERE l.account_id IN %s AND am.state=%s AND l.date >= %s AND l.date <= %s AND l.journal_id IN %s
+            GROUP BY a.id ORDER BY a.code""", (tuple(account_ids),  form['target_move'], form['date_from'], form['date_to'], tuple(form['journal_ids'])))
+        else:
+            self.cr.execute("""SELECT a.id, a.code, a.parent_id, a.name, SUM(l.debit), SUM(l.credit), a.type, a.level
+            FROM account_move_line l 
+            JOIN account_account a ON a.id=l.account_id 
+            JOIN account_move am ON am.id=l.move_id 
+            WHERE l.account_id IN %s AND am.state=%s AND l.journal_id IN %s
+            GROUP BY a.id ORDER BY a.code""", (tuple(account_ids),  form['target_move'], tuple(form['journal_ids'])))
+        
+        res = self.cr.fetchall()
+        
+        return res
+    
+    def _get_accounts(self, form, account_ids):
+                
+        self.cr.execute("""SELECT a.id, a.code, a.parent_id, a.name, a.type, a.level
+        FROM account_account a 
+        WHERE a.id IN %s
+        ORDER BY a.code""", (tuple(account_ids),))
+        
+        res = self.cr.fetchall()
+        
+        return res
+    
+    
+    def lines(self, form, ids=None):
+        
         if not ids:
             ids = self.ids
         if not ids:
             return []
-        if not done:
-            done={}
-            
-
+        
+        obj_account = self.pool.get('account.account')
+        
         ctx = self.context.copy()
 
-        ctx['fiscalyear'] = form['fiscalyear_id']
-        if form['filter'] == 'filter_period':
-            ctx['period_from'] = form['period_from']
-            ctx['period_to'] = form['period_to']
-        elif form['filter'] == 'filter_date':
-            ctx['date_from'] = form['date_from']
-            ctx['date_to'] =  form['date_to']
-        ctx['state'] = form['target_move']
         parents = ids
         child_ids = obj_account._get_children_and_consol(self.cr, self.uid, ids, ctx)
         if child_ids:
             ids = child_ids
-    
-        #self._get_opening_balance(form, ids)
-    
-        accounts = obj_account.read(self.cr, self.uid, ids, ['type','code','name','debit','credit','balance','parent_id','level','child_id'], ctx)
-
-        for parent in parents:
-                if parent in done:
-                    continue
-                done[parent] = 1
-                _process_child(accounts,form['display_account'],parent)
         
-        return self.result_acc
+        opening_balance = self._get_opening_balance(form, ids)
+        lines = self._get_lines(form, ids)
+        accounts = self._get_accounts(form, ids)
+        
+        # Get max level
+        max_level = 0
+        for line in lines:
+            if(line[7] > max_level):
+                max_level = line[7]
+        
+        # Create a dictionary from list of accounts.
+        # The key of the dicctionary is the id of the account
+        accounts_dictionary = {}
+        for account in accounts:
+            account_dict = {'id': account[0], 'code': account[1], 'parent_id': account[2], 'name': account[3], 'opening_balance': 0,
+                            'type': account[4], 'level': account[5], 'debit': 0, 'credit': 0, 'accumulated_debit': 0, 'accumulated_credit':0, 'final_balance':0}
+            accounts_dictionary[account[0]] = account_dict
+        
+        ## Combine opening balance with other lines
+        result_lines = []
+        i = 0
+        j = 0
+        while (i < len(lines) and j < len(opening_balance)):
+            
+            line = {}
+            
+            # Compare codes
+            if(lines[i][1] == opening_balance[j][1]):
+                line['id'] = lines[i][0]
+                line['code'] = lines[i][1]
+                line['parent_id'] = lines[i][2]
+                line['name'] = lines[i][3]
+                line['debit'] = lines[i][4]
+                line['credit'] = lines[i][5]
+                line['opening_balance'] = opening_balance[j][6]
+                line['accumulated_debit'] = opening_balance[j][4] + lines[i][4]
+                line['accumulated_credit'] = opening_balance[j][5] + lines[i][5]
+                line['final_balance'] = line['accumulated_debit'] - line['accumulated_credit']
+                line['type'] = lines[i][6]
+                line['level'] = lines[i][7]
+                i+=1
+                j+=1
+            elif(int(lines[i][1]) < int(opening_balance[j][1])):
+                line['id'] = lines[i][0]
+                line['code'] = lines[i][1]
+                line['parent_id'] = lines[i][2]
+                line['name'] = lines[i][3]
+                line['debit'] = lines[i][4]
+                line['credit'] = lines[i][5]
+                line['opening_balance'] = 0
+                line['accumulated_debit'] = lines[i][4]
+                line['accumulated_credit'] = lines[i][5]
+                line['final_balance'] = line['accumulated_debit'] - line['accumulated_credit']
+                line['type'] = lines[i][6]
+                line['level'] = lines[i][7]
+                i+=1
+            else:
+                line['id'] = opening_balance[j][0]
+                line['code'] = opening_balance[j][1]
+                line['parent_id'] = opening_balance[j][2]
+                line['name'] = opening_balance[j][3]
+                line['debit'] = 0
+                line['credit'] = 0
+                line['opening_balance'] = opening_balance[j][6]
+                line['accumulated_debit'] = opening_balance[j][4]
+                line['accumulated_credit'] = opening_balance[j][5]
+                line['final_balance'] = line['accumulated_debit'] - line['accumulated_credit']
+                line['type'] = opening_balance[j][7]
+                line['level'] = opening_balance[j][8]
+                j+=1
+                
+            result_lines.append(line)
+        
+        while (i < len(lines)):
+            
+            line = {}
+            
+            line['id'] = lines[i][0]
+            line['code'] = lines[i][1]
+            line['parent_id'] = lines[i][2]
+            line['name'] = lines[i][3]
+            line['debit'] = lines[i][4]
+            line['credit'] = lines[i][5]
+            line['opening_balance'] = 0
+            line['accumulated_debit'] = lines[i][4]
+            line['accumulated_credit'] = lines[i][5]
+            line['final_balance'] = line['accumulated_debit'] - line['accumulated_credit']
+            line['type'] = lines[i][6]
+            line['level'] = lines[i][7]
+            i+=1
+            
+            result_lines.append(line)
+            
+        while (j < len(opening_balance)):
+            
+            line = {}
+            
+            line['id'] = opening_balance[j][0]
+            line['code'] = opening_balance[j][1]
+            line['parent_id'] = opening_balance[j][2]
+            line['name'] = opening_balance[j][3]
+            line['debit'] = 0
+            line['credit'] = 0
+            line['opening_balance'] = opening_balance[j][6]
+            line['accumulated_debit'] = opening_balance[j][4]
+            line['accumulated_credit'] = opening_balance[j][5]
+            line['final_balance'] = line['accumulated_debit'] - line['accumulated_credit']
+            line['type'] = opening_balance[j][7]
+            line['level'] = opening_balance[j][8]
+            j+=1
+            
+            result_lines.append(line)
+            
+        for line in result_lines:
+            accounts_dictionary[line['id']]['debit'] = line['debit'] 
+            accounts_dictionary[line['id']]['credit'] = line['credit']
+            accounts_dictionary[line['id']]['opening_balance'] = line['opening_balance']
+            accounts_dictionary[line['id']]['accumulated_debit'] = line['accumulated_debit']
+            accounts_dictionary[line['id']]['accumulated_credit'] = line['accumulated_credit']
+            accounts_dictionary[line['id']]['final_balance'] = line['final_balance']
+        
+        for level in xrange(max_level+1, 0, -1):
+            for key, account in accounts_dictionary.iteritems():
+                if(account['level'] == level):
+                     parent_id = account['parent_id']
+                     accounts_dictionary[parent_id]['opening_balance'] += account['opening_balance']
+                     accounts_dictionary[parent_id]['debit'] += account['debit'] 
+                     accounts_dictionary[parent_id]['credit'] += account['credit']
+                     accounts_dictionary[parent_id]['accumulated_debit'] += account['accumulated_debit']
+                     accounts_dictionary[parent_id]['accumulated_credit'] += account['accumulated_credit']
+                     accounts_dictionary[parent_id]['final_balance'] += account['final_balance']
+        
+        result = []
+        for account in accounts_dictionary.values():
+            result.append(account)
+        
+        return result
 
 report_sxw.report_sxw('report.account_balance_extend.account.balance', 'account.account', 'addons_extra/account_balance_extend/report/account_balance.rml', parser=account_balance, header="internal")
 

@@ -11,7 +11,7 @@ class account_balance_report(osv.osv_memory):
     }
     
     def get_all_journals(self, cr, uid, context):        
-        journal_ids = self.pool.get('account.journal').search(cr,uid,[])
+        journal_ids = self.pool.get('account.journal').search(cr,uid,[('type', 'not in', ('situation',))])
         return journal_ids
     
     _defaults = {
