@@ -22,12 +22,12 @@
 #
 ##############################################################################
 {
-    'name': 'account general extend',
+    'name': 'group account general',
     'version': '1.0',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """
-        [ENG] Extend account module.
+        [ENG] Groups account modules extend
     """,
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
