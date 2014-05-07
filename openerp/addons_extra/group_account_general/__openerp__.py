@@ -32,8 +32,7 @@
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
     'images': [],
-    'depends': ['account_extend', 
-                'account_financial_entries_extend',
+    'depends': ['account_financial_entries_extend',
                 'account_journal_extend',
                 'account_balance_extend',
                 'account_account_menu_extend'
