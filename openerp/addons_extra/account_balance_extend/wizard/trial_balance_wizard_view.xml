@@ -13,15 +13,42 @@
             	</xpath>
             	<xpath expr="//field[@name='target_move']" position="after">
 	                <field name="display_account"/>
-	                <field name="display_level"/>
-	                <newline/>
+<!-- 	                <field name="levels"/> -->
+<!-- 	                <newline/> -->
 	            </xpath>
-            	<xpath expr="//group[@string='Dates']" position="replace">
-	            	<group string="Dates"  attrs="{'invisible':[('filter', '!=', 'filter_date')], 'required':[('filter', '=', 'filter_date')]}">
-                           <field name="date_from"/>
-                           <field name="date_to"/>
-	                </group>
-                </xpath>
+	            <xpath expr="//notebook[@tabpos='up']" position="replace">
+	            	<group col="4" colspan="4">
+		            	<notebook tabpos="up" colspan="2">
+		                    <page string="Filters" name="filters">
+		                        <group>
+		                            <field name="filter" on_change="onchange_filter(filter, fiscalyear_id)"/>
+		                        </group>
+				            	<group string="Dates"  attrs="{'invisible':[('filter', '!=', 'filter_date')], 'required':[('filter', '=', 'filter_date')]}">
+			                           <field name="date_from"/>
+			                           <field name="date_to"/>
+				                </group>
+		                        <group string="Periods" attrs="{'invisible':[('filter','!=','filter_period')], 'required':[('filter', '=', 'filter_period')]}">
+		                            <field name="period_from" domain="[('fiscalyear_id', '=', fiscalyear_id)]"/>
+		                            <field name="period_to" domain="[('fiscalyear_id', '=', fiscalyear_id)]"/>
+		                        </group>
+		                    </page>
+		                    <page string="Journals" name="journal_ids">
+		                        <field name="journal_ids"/>
+		                    </page>
+	                	</notebook>
+	                	<notebook tabpos="up" colspan="2">
+		                    <page string="Levels" name="levels">
+								<field name="levels"/>
+							</page>
+	                	</notebook>
+                	</group>
+	            </xpath>
+<!--             	<xpath expr="//group[@string='Dates']" position="replace"> -->
+<!-- 	            	<group string="Dates"  attrs="{'invisible':[('filter', '!=', 'filter_date')], 'required':[('filter', '=', 'filter_date')]}"> -->
+<!--                            <field name="date_from"/> -->
+<!--                            <field name="date_to"/> -->
+<!-- 	                </group> -->
+<!--                 </xpath> -->
             </data>
           </field>
     </record>

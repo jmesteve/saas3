@@ -316,8 +316,10 @@ class account_balance(report_sxw_extend.rml_parse, common_report_header):
             else:
                 result.append(account)
         
+        levels = self.pool.get('account.balance.report.extend.level').read(self.cr, self.uid, form['levels'], ['value'], self.context)
+        levels = [element['value'] for element in levels]  
         # Filter by display level
-        result = [elem for elem in result if form['display_level'] == False or len(elem['code']) <= int(form['display_level'])]
+        result = [elem for elem in result if len(elem['code']) in levels]
         
         return sorted(result, key=lambda element: element['code'])
 

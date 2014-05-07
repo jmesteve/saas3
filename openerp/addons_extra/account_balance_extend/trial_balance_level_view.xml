@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+    <data>
+		<record model="ir.ui.view" id="view_trial_balance_level_form">
+			<field name="name">account.balance.report.extend.level.form</field>
+			<field name="model">account.balance.report.extend.level</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="account_balance_report_extend_level_form" version="7.0" create="false" edit="false" delete="false">
+					<field name="digit"/>
+					<field name="value"/>
+				</form>
+			</field>
+		</record>
+		
+		<record id="view_trial_balance_level_tree" model="ir.ui.view">
+            <field name="name">account.balance.report.extend.level.tree</field>
+            <field name="model">account.balance.report.extend.level</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="account_balance_report_extend_level_tree" create="false" edit="false" delete="false">
+					<field name="digit"/>
+                </tree>
+            </field>
+        </record>
+	</data>
+</openerp>

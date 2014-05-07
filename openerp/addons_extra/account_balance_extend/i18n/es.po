@@ -212,3 +212,19 @@ msgstr "Saldo Inicial"
 #: field:account.balance.report.extend,display_level:0
 msgid "Display Level"
 msgstr "Mostrar hasta el Nivel"
+
+#. module: account_balance_extend
+#: view:account.balance.report.extend:0
+msgid "Filters"
+msgstr "Filtros"
+
+#. module: account_balance_extend
+#: view:account.balance.report.extend:0
+#: field:account.balance.report.extend,levels:0
+msgid "Levels"
+msgstr "Niveles"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend.level,digit:0
+msgid "Digit"
+msgstr "Dígito"

@@ -15,13 +15,19 @@ class account_balance_report(osv.osv_memory):
                                                    ('5', '5'),
                                                    ('8', '8'),
                                                    ('9', '9')], 'Display Level'),
+                'levels': fields.many2many('account.balance.report.extend.level', 'account_balance_report_level_extend_rel', 'report_id', 'level_id', 'Levels', required=True),
     }
     
     fields.selection([('draft','Draft'),
                                    ('calc','Processing'),
                                    ('calc_done','Processed'),
                                    ('done','Done'),
-                                   ('canceled','Canceled')], 'State'),
+                                   ('canceled','Canceled')], 'State')
+    
+    def get_all_levels(self, cr, uid, context):
+        level_ids = self.pool.get('account.balance.report.extend.level').search(cr,uid,[])
+        return level_ids
+    
     def get_all_journals(self, cr, uid, context):        
         journal_ids = self.pool.get('account.journal').search(cr,uid,[('type', 'not in', ('situation',))])
         return journal_ids
@@ -29,7 +35,7 @@ class account_balance_report(osv.osv_memory):
     _defaults = {
                  'journal_ids': get_all_journals,
                  'filter': 'filter_date',
-                 'display_level': None,
+                 'levels': get_all_levels,
     }
 
     def onchange_filter(self, cr, uid, ids, filter='filter_no', fiscalyear_id=False, context=None):
@@ -73,7 +79,7 @@ class account_balance_report(osv.osv_memory):
         
     def _print_report(self, cr, uid, ids, data, context=None):
         data = self.pre_print_report(cr, uid, ids, data, context=context)
-        data['form'].update(self.read(cr, uid, ids, ['display_level'], context=context)[0])
+        data['form'].update(self.read(cr, uid, ids, ['levels'], context=context)[0])
         return {'type': 'ir.actions.report.xml', 'report_name': 'account_balance_extend.account.balance', 'datas': data}
         
   
