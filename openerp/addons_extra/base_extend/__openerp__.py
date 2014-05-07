@@ -32,7 +32,7 @@
     'website': 'https://github.com/jmesteve',
     'license': 'AGPL-3',
     'images': [],
-    'depends' : ['base'],
+    'depends' : ['base', 'report_extend'],
     'data': ['base_extend.xml'],
     'demo': [],
     'installable': True,
