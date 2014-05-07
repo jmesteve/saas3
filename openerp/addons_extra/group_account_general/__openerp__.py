@@ -35,7 +35,8 @@
     'depends': ['account_extend', 
                 'account_financial_entries_extend',
                 'account_journal_extend',
-                'account_balance_extend'
+                'account_balance_extend',
+                'account_account_menu_extend'
                 ],
     'data' : [],
     'demo': [],

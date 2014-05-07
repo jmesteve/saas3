@@ -39,3 +39,8 @@ msgstr "Contabilidad Extendido"
 #: model:ir.ui.menu,name:account_extend.menu_finance_entries_extend
 msgid "Journal Entries"
 msgstr "Asientos contables"
+
+#. module: account_extend
+#: model:ir.ui.menu,name:account_extend.account_account_menu_extend
+msgid "Accounts"
+msgstr "Cuentas"
