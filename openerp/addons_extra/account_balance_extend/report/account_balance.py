@@ -131,7 +131,7 @@ class account_balance(report_sxw_extend.rml_parse, common_report_header):
     
     def _get_accounts(self, form, account_ids):
                 
-        self.cr.execute("""SELECT a.id, a.code, a.parent_id, a.name, a.type, a.level
+        self.cr.execute("""SELECT a.id, a.code, a.parent_id, a.name, a.type, a.level, a.currency_id
         FROM account_account a 
         WHERE a.id IN %s
         ORDER BY a.code""", (tuple(account_ids),))
@@ -172,7 +172,8 @@ class account_balance(report_sxw_extend.rml_parse, common_report_header):
         accounts_dictionary = {}
         for account in accounts:
             account_dict = {'id': account[0], 'code': account[1], 'parent_id': account[2], 'name': account[3], 'opening_balance': 0,
-                            'type': account[4], 'level': account[5], 'debit': 0, 'credit': 0, 'accumulated_debit': 0, 'accumulated_credit':0, 'final_balance':0}
+                            'type': account[4], 'level': account[5], 'debit': 0, 'credit': 0, 'accumulated_debit': 0, 
+                            'accumulated_credit':0, 'final_balance':0, 'currency_id': account[6]}
             accounts_dictionary[account[0]] = account_dict
         
         ## Combine opening balance with other lines
@@ -289,9 +290,34 @@ class account_balance(report_sxw_extend.rml_parse, common_report_header):
                      accounts_dictionary[parent_id]['accumulated_credit'] += account['accumulated_credit']
                      accounts_dictionary[parent_id]['final_balance'] += account['final_balance']
         
+        
+        # Filter by currency
         result = []
+        currency_obj = self.pool.get('res.currency')
+        company_id = self.pool.get('res.company')._company_default_get(self.cr, self.uid, 'account.account', context=self.context)
+        company = self.pool.get('res.company').browse(self.cr, self.uid, company_id, context=self.context)
+        currency_ids = currency_obj.search(self.cr, self.uid, [], context=self.context)
+        currency_objects = currency_obj.browse(self.cr, self.uid, currency_ids, context=self.context)
+        currencies = {}
+        for currency in currency_objects:
+            currencies[currency.id] = currency
+            
         for account in accounts_dictionary.values():
-            result.append(account)
+            currency = company.currency_id
+            if account['currency_id'] != None  and currencies[account['currency_id']]:
+                currency = currencies[account['currency_id']]
+            
+            if form['display_account'] == 'movement':
+                if not currency_obj.is_zero(self.cr, self.uid, currency, account['credit']) or not currency_obj.is_zero(self.cr, self.uid, currency, account['debit']) or not currency_obj.is_zero(self.cr, self.uid, currency, account['final_balance']):
+                    result.append(account)
+            elif form['display_account'] == 'not_zero':
+                if not currency_obj.is_zero(self.cr, self.uid, currency, account['final_balance']):
+                    result.append(account)
+            else:
+                result.append(account)
+        
+        # Filter by display level
+        result = [elem for elem in result if form['display_level'] == False or len(elem['code']) <= int(form['display_level'])]
         
         return sorted(result, key=lambda element: element['code'])
 

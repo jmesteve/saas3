@@ -8,15 +8,28 @@ class account_balance_report(osv.osv_memory):
     _inherit = 'account.common.account.report'       
     _columns = {
                 'journal_ids': fields.many2many('account.journal', 'account_balance_report_journal_extend_rel', 'account_id', 'journal_id', 'Journals', required=True),
+                'display_level': fields.selection([('1', '1'), 
+                                                   ('2', '2'), 
+                                                   ('3', '3'), 
+                                                   ('4', '4'), 
+                                                   ('5', '5'),
+                                                   ('8', '8'),
+                                                   ('9', '9')], 'Display Level'),
     }
     
+    fields.selection([('draft','Draft'),
+                                   ('calc','Processing'),
+                                   ('calc_done','Processed'),
+                                   ('done','Done'),
+                                   ('canceled','Canceled')], 'State'),
     def get_all_journals(self, cr, uid, context):        
         journal_ids = self.pool.get('account.journal').search(cr,uid,[('type', 'not in', ('situation',))])
         return journal_ids
     
     _defaults = {
                  'journal_ids': get_all_journals,
-                 'filter': 'filter_date'
+                 'filter': 'filter_date',
+                 'display_level': None,
     }
 
     def onchange_filter(self, cr, uid, ids, filter='filter_no', fiscalyear_id=False, context=None):
@@ -60,6 +73,7 @@ class account_balance_report(osv.osv_memory):
         
     def _print_report(self, cr, uid, ids, data, context=None):
         data = self.pre_print_report(cr, uid, ids, data, context=context)
+        data['form'].update(self.read(cr, uid, ids, ['display_level'], context=context)[0])
         return {'type': 'ir.actions.report.xml', 'report_name': 'account_balance_extend.account.balance', 'datas': data}
         
   

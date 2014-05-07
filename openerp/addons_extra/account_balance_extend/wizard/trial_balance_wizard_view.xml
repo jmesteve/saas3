@@ -11,6 +11,11 @@
             	<xpath expr="//field[@name='fiscalyear_id']" position="attributes">
             		<attribute name="on_change">onchange_filter(filter, fiscalyear_id)</attribute>
             	</xpath>
+            	<xpath expr="//field[@name='target_move']" position="after">
+	                <field name="display_account"/>
+	                <field name="display_level"/>
+	                <newline/>
+	            </xpath>
             	<xpath expr="//group[@string='Dates']" position="replace">
 	            	<group string="Dates"  attrs="{'invisible':[('filter', '!=', 'filter_date')], 'required':[('filter', '=', 'filter_date')]}">
                            <field name="date_from"/>

@@ -148,7 +148,7 @@ msgstr "Mostrar Cuentas"
 #. module: account_balance_extend
 #: report:account_balance_extend.account.balance:0
 msgid "Balance"
-msgstr "Balance"
+msgstr "Saldo Final"
 
 #. module: account_balance_extend
 #: selection:account.balance.report.extend,display_account:0
@@ -193,3 +193,22 @@ msgstr "Filtrar por"
 msgid "All Entries"
 msgstr "Todos los asientos"
 
+#. module: account_balance_extend
+#: report:account_balance_extend.account.balance:0
+msgid "Accumulated Debit"
+msgstr "Debe Acumulado"
+
+#. module: account_balance_extend
+#: report:account_balance_extend.account.balance:0
+msgid "Accumulated Credit"
+msgstr "Haber Acumulado"
+
+#. module: account_balance_extend
+#: report:account_balance_extend.account.balance:0
+msgid "Opening Balance"
+msgstr "Saldo Inicial"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend,display_level:0
+msgid "Display Level"
+msgstr "Mostrar hasta el Nivel"
