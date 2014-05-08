@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'account extend',
-    'version': '1.2',
+    'version': '1.17',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """

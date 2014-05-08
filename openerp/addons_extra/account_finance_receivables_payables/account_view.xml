@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    		<!-- Receivables -->
+    
+			<menuitem action="account.action_invoice_tree1" id="menu_action_invoice_tree1_extend" parent="account_extend.menu_finance_receivables_extend"/>
+			<menuitem action="account.action_invoice_tree3" id="menu_action_invoice_tree3_extend" parent="account_extend.menu_finance_receivables_extend"/>
+			<menuitem action="account_voucher.action_vendor_receipt" icon="STOCK_JUSTIFY_FILL" sequence="12"
+           		id="menu_action_vendor_receipt"  parent="account_extend.menu_finance_receivables_extend"/>
+           	<menuitem id="menu_action_sale_receipt_extend" icon="STOCK_JUSTIFY_FILL"
+	            action="account_voucher.action_sale_receipt"
+	            parent="account_extend.menu_finance_receivables_extend"
+	            sequence="10"/>
+	        <menuitem id="menu_account_customer_extend" name="Customers"
+	            parent="account_extend.menu_finance_receivables_extend"
+	            action="base.action_partner_customer_form" sequence="100"/>
+            
+        	<!-- Payables -->
+	        
+	        <menuitem id="menu_account_supplier_extend" name="Suppliers"
+	            parent="account_extend.menu_finance_payables_extend"
+	            action="base.action_partner_supplier_form" sequence="100"/>
+	        <menuitem action="account.action_invoice_tree2" id="menu_action_invoice_tree2_extend" parent="account_extend.menu_finance_payables_extend"/>
+	        <menuitem action="account.action_invoice_tree4" id="menu_action_invoice_tree4_extend" parent="account_extend.menu_finance_payables_extend"/>
+	        
+	        <menuitem action="account_voucher.action_vendor_payment" icon="STOCK_JUSTIFY_FILL" sequence="12"
+            id="menu_action_vendor_payment_extend"  parent="account_extend.menu_finance_payables_extend"/>
+            <menuitem id="menu_action_purchase_receipt_extend" icon="STOCK_JUSTIFY_FILL"
+            action="account_voucher.action_purchase_receipt" parent="account_extend.menu_finance_payables_extend" sequence="10"/>
+            
+            <menuitem action="account_check_writing.action_write_check" icon="STOCK_JUSTIFY_FILL" sequence="12"
+            	id="menu_action_write_check_extend"  parent="account_extend.menu_finance_payables_extend"/>
+            
+            
+	</data>
+</openerp>

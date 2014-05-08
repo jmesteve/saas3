@@ -22,23 +22,20 @@
 #
 ##############################################################################
 {
-    'name': 'group account general',
-    'version': '1.10',
+    'name': 'account finance receivables payables',
+    'version': '1.24',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """
-        [ENG] Groups account modules extend
+        [ENG] Extend account receivables and payables menu .
     """,
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
     'images': [],
-    'depends': ['account_financial_entries_extend',
-                'account_journal_extend',
-                'account_balance_extend',
-                'account_account_menu_extend',
-                'account_finance_receivables_payables'
-                ],
-    'data' : [],
+    'depends': ['account', 'account_voucher', 'account_check_writing', 'account_extend'],
+    'data' : [
+              'account_view.xml'
+        ],
     'demo': [],
     'installable': True,
     'application': True,
