@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'group account general',
-    'version': '1.10',
+    'version': '1.6',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """

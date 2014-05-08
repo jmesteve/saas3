@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'account finance receivables payables',
-    'version': '1.24',
+    'version': '1.10',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """
