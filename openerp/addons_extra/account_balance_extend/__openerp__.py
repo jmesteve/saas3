@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'account balance extend',
-    'version': '1.3',
+    'version': '1.5',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """
@@ -35,6 +35,7 @@
     'depends': ['account', 'account_extend', 'report_extend'],
     'data' : [
               'data/data.xml',
+              'security/ir.model.access.csv',
               'trial_balance_level_view.xml',
               'account_report.xml',
               'wizard/trial_balance_wizard_view.xml',
