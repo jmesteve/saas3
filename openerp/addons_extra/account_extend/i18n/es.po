@@ -54,3 +54,14 @@ msgstr "Clientes"
 #: model:ir.ui.menu,name:account_extend.menu_finance_payables_extend
 msgid "Suppliers"
 msgstr "Proveedores"
+
+
+#. module: account_extend
+#: model:res.groups,name:account_extend.group_invoicing_extend
+msgid "Invoicing Extend"
+msgstr "Facturación Extendido"
+
+#. module: account_extend
+#: model:ir.ui.menu,name:account_extend.menu_invoicing_extend
+msgid "Invoicing"
+msgstr "Facturación"
