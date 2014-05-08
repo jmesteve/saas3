@@ -22,21 +22,19 @@
 #
 ##############################################################################
 {
-    'name': 'account extend',
-    'version': '1.8',
+    'name': 'account finance receivables payables',
+    'version': '1.9',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """
-        [ENG] Extend account module.
+        [ENG] Extend account receivables and payables menu .
     """,
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
     'images': [],
-    'depends': ['account'],
+    'depends': ['account', 'account_voucher', 'account_check_writing', 'account_extend'],
     'data' : [
-              'security/groups.xml',
-              'security/ir.model.access.csv',
-              'menu_account_view.xml'
+              'account_view.xml'
         ],
     'demo': [],
     'installable': True,

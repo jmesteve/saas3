@@ -18,7 +18,7 @@ msgstr ""
 #. module: account_extend
 #: model:ir.ui.menu,name:account.menu_finance
 msgid "Accounting"
-msgstr "Facturación"
+msgstr "Contabilidad Antiguo"
 
 #. module: account_extend
 #: model:ir.ui.menu,name:account_extend.menu_account_extend_report
@@ -44,3 +44,13 @@ msgstr "Asientos contables"
 #: model:ir.ui.menu,name:account_extend.account_account_menu_extend
 msgid "Accounts"
 msgstr "Cuentas"
+
+#. module: account_extend
+#: model:ir.ui.menu,name:account_extend.menu_finance_receivables_extend
+msgid "Customers"
+msgstr "Clientes"
+
+#. module: account_extend
+#: model:ir.ui.menu,name:account_extend.menu_finance_payables_extend
+msgid "Suppliers"
+msgstr "Proveedores"

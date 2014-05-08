@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'group account general',
-    'version': '1.1',
+    'version': '1.4',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """
@@ -35,7 +35,8 @@
     'depends': ['account_financial_entries_extend',
                 'account_journal_extend',
                 'account_balance_extend',
-                'account_account_menu_extend'
+                'account_account_menu_extend',
+                'account_finance_receivables_payables'
                 ],
     'data' : [],
     'demo': [],
