@@ -7,3 +7,7 @@
 /* .openerp .oe_form .oe_form_field div{ */
 /* 	max-width: 240px; */
 /* } */
+
+.openerp .oe_form_sheet_width {
+  max-width: 1200px;
+}

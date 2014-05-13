@@ -18,14 +18,14 @@
             <field name="digit">4</field>
             <field name="value">4</field>
         </record>
-        <record id="level_data_5" model="account.balance.report.extend.level">
-            <field name="digit">5</field>
-            <field name="value">5</field>
-        </record>
-        <record id="level_data_8" model="account.balance.report.extend.level">
-            <field name="digit">8</field>
-            <field name="value">8</field>
-        </record>
+<!--         <record id="level_data_5" model="account.balance.report.extend.level"> -->
+<!--             <field name="digit">5</field> -->
+<!--             <field name="value">5</field> -->
+<!--         </record> -->
+<!--         <record id="level_data_8" model="account.balance.report.extend.level"> -->
+<!--             <field name="digit">8</field> -->
+<!--             <field name="value">8</field> -->
+<!--         </record> -->
         <record id="level_data_9" model="account.balance.report.extend.level">
             <field name="digit">9</field>
             <field name="value">9</field>

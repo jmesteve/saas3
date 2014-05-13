@@ -1,6 +1,94 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+    
+	 	<record id="view_move_line_tree_extend_financial" model="ir.ui.view">
+            <field name="name">account.move.line.tree.extend.financial</field>
+            <field name="model">account.move.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree colors="red:state == 'draft';black:state == 'valid'" string="Journal Items" create="true" on_write="on_create_write" version="7.0" editable="top">
+                    <field name="journal_id" options='{"no_open":True}' invisible="context.get('journal_id',False)"/>
+                    <field name="period_id" options='{"no_open":True}' invisible="context.get('period_id',False)"/>
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="statement_id" invisible="1"/>
+                    <field name="partner_id" on_change="onchange_partner_id(move_id, partner_id, account_id, debit, credit, date, journal_id)"/>
+                    <field name="account_id" options='{"no_open":True}' domain="[('journal_id','=',journal_id), ('company_id', '=', company_id)]" on_change="onchange_account_id(account_id, partner_id, context)"/>
+                    <field name="account_tax_id" options='{"no_open":True}' invisible="context.get('journal_type', False) not in ['sale','sale_refund','purchase','purchase_refund','general']"/>
+                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting" domain="[('type','not in',['view','template'])]" invisible="not context.get('analytic_journal_id',False)"/>
+                    <field name="move_id" required="0"/>
+                    <field name="debit" sum="Total Debit"/>
+                    <field name="credit" sum="Total Credit"/>
+                    <field name="date_maturity" invisible="context.get('journal_type', False) not in ['sale','sale_refund','purchase','purchase_refund']"/>
+                    <field name="reconcile"/>
+                    <field name="invoice" invisible="1"/>
+                    <field name="amount_currency" readonly="True" invisible="not context.get('currency',False)"/>
+                    <field name="currency_id" readonly="True" invisible="not context.get('currency',False)" />
+                    <field name="state" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+	
+    
+    	<record id="view_move_line_tree_extend_financial_no_editable" model="ir.ui.view">
+            <field name="name">account.move.line.tree.extend.financial.no.editable</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="view_move_line_tree_extend_financial"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                	<attribute name="editable" />
+            	</xpath>
+                <xpath expr="//field[@name='account_id']" position="after">
+                    <button name="action_go_to_account" string="Account" icon="arrow-on" type="object"/>
+                </xpath>
+                
+                <xpath expr="//field[@name='move_id']" position="after">
+                    <button name="action_go_to_account_move" string="Account" icon="arrow-on" type="object"/>
+                </xpath>
+                
+                <xpath expr="//field[@name='credit']" position="after"> 
+		            	    <field name="balance" sum="Total Balance"/> 
+		                    <field name="accumulated"/>
+		                    <field name="notes"/>
+		                    <field name="code"/>
+		                    <field name="tax_code_id"/>
+		        </xpath>
+		        <field name="reconcile" position="after">
+                <field name="amount_to_pay"/>
+	            </field>
+	            <field name="currency_id" position="replace">
+	                <field name="currency_id" groups="base.group_extended"/>
+	                <field name="reconcile_id"/>
+	                <field name="reconcile_partial_id" groups="base.group_extended"/>
+	                <field name="state"/>
+	                <field name="payment_type"/>
+	            </field>
+	      </field>
+        </record>
+    
+    	<record id="action_account_moves_all_a_extend" model="ir.actions.act_window">
+            <field name="context">{'journal_type':'general'}</field>
+            <field name="name">Journal Items</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_id" ref="view_move_line_tree_extend_financial_no_editable" />
+          	<field name="view_type">form</field>
+            <field name="view_mode">tree_account_move_line_quickadd_extend,form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Select the period and the journal you want to fill.
+              </p><p>
+                This view can be used by accountants in order to quickly record
+                entries in OpenERP. If you want to record a supplier invoice,
+                start by recording the line of the expense account. OpenERP
+                will propose to you automatically the Tax related to this
+                account and the counterpart "Account Payable".
+              </p>
+            </field>
+        </record>
+    
     	<menuitem
             icon="STOCK_JUSTIFY_FILL"
             action="account.action_move_journal_line"
@@ -12,7 +100,7 @@
         />
             
         <menuitem
-            action="account.action_account_moves_all_a"
+            action="action_account_moves_all_a_extend"
             icon="STOCK_JUSTIFY_FILL"
             id="menu_action_account_moves_all_extend"
             parent="account_extend.menu_finance_entries_extend"

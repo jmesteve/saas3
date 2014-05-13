@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'account financial entries extend',
-    'version': '1.1',
+    'version': '1.2',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """
@@ -32,10 +32,19 @@
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
     'images': [],
-    'depends': ['account', 'account_extend'],
+    'depends': ['account', 'account_move_line_extend','account_payment_extension','account_extend'],
     'data' : [
               'menu_account_financial_entries_view.xml'
         ],
+    'js': [
+        "static/src/js/account_move_line_extend.js",
+    ],
+    'qweb' : [
+        "static/src/xml/account_move_line_extend.xml",
+    ],
+    'css':[
+        "static/src/css/account_move_line_extend.css"
+    ],
     'demo': [],
     'installable': True,
     'application': True,
