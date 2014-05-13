@@ -8,13 +8,6 @@ class account_balance_report(osv.osv_memory):
     _inherit = 'account.common.account.report'       
     _columns = {
                 'journal_ids': fields.many2many('account.journal', 'account_balance_report_journal_extend_rel', 'account_id', 'journal_id', 'Journals', required=True),
-                'display_level': fields.selection([('1', '1'), 
-                                                   ('2', '2'), 
-                                                   ('3', '3'), 
-                                                   ('4', '4'), 
-                                                   ('5', '5'),
-                                                   ('8', '8'),
-                                                   ('9', '9')], 'Display Level'),
                 'levels': fields.many2many('account.balance.report.extend.level', 'account_balance_report_level_extend_rel', 'report_id', 'level_id', 'Levels', required=True),
     }
     
@@ -25,7 +18,14 @@ class account_balance_report(osv.osv_memory):
                                    ('canceled','Canceled')], 'State')
     
     def get_all_levels(self, cr, uid, context):
-        level_ids = self.pool.get('account.balance.report.extend.level').search(cr,uid,[])
+        cr.execute("""SELECT DISTINCT CHAR_LENGTH(TRIM(both ' ' FROM a.code))
+        FROM account_account a""")
+        res = cr.fetchall()
+        values = list()
+        for i in res:
+            values.append(i[0])
+        level_ids = self.pool.get('account.balance.report.extend.level').search(cr,uid,[('value','in', values)], order='value ASC')
+        
         return level_ids
     
     def get_all_journals(self, cr, uid, context):        

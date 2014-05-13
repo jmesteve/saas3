@@ -16,6 +16,9 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: account_financial_entries_extend
+#: view:account.move.line:0
+#: model:ir.actions.act_window,name:account_financial_entries_extend.action_account_moves_all_a_extend
+#: model:ir.model,name:account_financial_entries_extend.model_account_move_line
 #: model:ir.ui.menu,name:account_financial_entries_extend.menu_action_account_moves_all_extend
 msgid "Journal Items"
 msgstr "Apuntes contables"
@@ -25,3 +28,17 @@ msgstr "Apuntes contables"
 msgid "Journal Entries"
 msgstr "Asientos contables"
 
+#. module: account_financial_entries_extend
+#: view:account.move.line:0
+msgid "Total Credit"
+msgstr "Total haber"
+
+#. module: account_financial_entries_extend
+#: view:account.move.line:0
+msgid "Total Debit"
+msgstr "Total debe"
+
+#. module: account_financial_entries_extend
+#: view:account.move.line:0
+msgid "Total Balance"
+msgstr "Total Saldo"
