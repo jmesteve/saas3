@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    	
+       	<record id="view_ibeacon_import_tree" model="ir.ui.view">
+            <field name="name">ibeacon.import.tree</field>
+            <field name="model">ibeacon.import</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="ibeacon_import_tree">
+						<field name="file_name"/>
+                </tree>
+            </field>
+        </record>
+       	 <record id="view_ibeacon_import_form" model="ir.ui.view">
+            <field name="name">ibeacon.import.form</field>
+            <field name="model">ibeacon.import</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="ibeacon_import_form">
+                	<group>
+						<field name="file_name"/>
+						<field name="file_stream" string="File Stream" filename="file_name"/>
+					</group>
+					<group>
+						<button name="button_create_test" string="Create Test" type="object"/>
+					</group>
+                </form>
+            </field>
+        </record>
+       		
+       	<record model='ir.actions.act_window' id='action_menu_ibeacon_import'>
+            <field name="name">ibeacon Import</field>
+            <field name="res_model">ibeacon.import</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        
+    
+   		<menuitem id="menu_ibeacon_import" name="Import Json" parent="menu_ibeacon_data" action='action_menu_ibeacon_import'  groups="group_ibeacon_access"/>
+     	
+    </data>
+</openerp>
