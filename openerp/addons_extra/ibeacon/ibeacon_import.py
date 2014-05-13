@@ -5,7 +5,7 @@ import json
 class ibeacon_import(osv.osv):
     _name = 'ibeacon.import'
     _columns = {
-    'file_stream': fields.binary('File Stream', filters='*.json'),
+    'file_stream': fields.binary('File Stream', filters='*.json'), 
     'file_name': fields.char('File name',size=250),
     }
     

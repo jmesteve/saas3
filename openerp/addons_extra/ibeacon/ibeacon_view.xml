@@ -31,6 +31,8 @@
                     <field name="frecuency"/>  
                     <newline/>
                     <field name="points"/> 
+                    <newline/>
+                    <field name="image_map" widget="image"/> 
                 </form>
             </field>
         </record>
@@ -40,6 +42,7 @@
             <field name="res_model">beacon.test</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
+            
         </record>
         
         <record id="view_ibeacon_point_tree" model="ir.ui.view">
@@ -54,7 +57,8 @@
                 	<field name="magneticheading"/>
                 	<field name="trueHeading"/>
                     <field name="closest"/>  
-                    <field name="beacons"/> 
+                    <field name="beacons"/>
+                    <button name="action_beacon_form" icon="gtk-go" string="beacons" type="object"/> 
                 </tree>
             </field>
         </record>
@@ -84,14 +88,8 @@
                 </form>
             </field>
         </record>
-        
-        <record model='ir.actions.act_window' id='action_menu_ibeacon_point'>
-            <field name="name">Beacon Point</field>
-            <field name="res_model">beacon.point</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-    
+       
+      
     	<record id="view_ibeacon_beacon_tree" model="ir.ui.view">
             <field name="name">ibeacon.beacon.tree</field>
             <field name="model">beacon</field>
@@ -137,7 +135,19 @@
             <field name="res_model">beacon</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <field name="target">current</field>
+        </record>
+        
+        <record id="beacon_search_form_view" model="ir.ui.view">
+            <field name="name">beacon.search.form</field>
+            <field name="model">beacon</field>
+            <field name="arch" type="xml">
+                <search string="Beacon">
+                   <group expand='0' string='Group by...'>
+                       <filter name="minor" string="minor"  context="{'group_by':'minor'}"/>
+                       <filter name="sample" string="sample" icon="terp-check" context="{'group_by':'sample'}"/>
+                   </group>
+                </search>
+            </field>
         </record>
     
     <menuitem id="menu_ibeacon" name="iBeacon" groups="group_ibeacon_access"/>
