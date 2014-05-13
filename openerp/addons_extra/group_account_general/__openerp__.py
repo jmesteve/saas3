@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'group account general',
-    'version': '1.6',
+    'version': '1.7',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """
@@ -32,7 +32,8 @@
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
     'images': [],
-    'depends': ['account_financial_entries_extend',
+    'depends': ['account_extend',
+                'account_financial_entries_extend',
                 'account_journal_extend',
                 'account_balance_extend',
                 'account_account_menu_extend',
