@@ -43,6 +43,10 @@
 	                	</notebook>
                 	</group>
 	            </xpath>
+	            <button string="Print" position="before">
+                	<button icon="gtk-execute" name="xls_export" string="Export XLS" type="object" context="{'xls_export':1}" colspan="2"/>
+                	<button icon="gtk-execute" name="txt_export" string="Export TXT" type="object" context="{'txt_export':1}" colspan="2"/>
+            	</button>
 <!--             	<xpath expr="//group[@string='Dates']" position="replace"> -->
 <!-- 	            	<group string="Dates"  attrs="{'invisible':[('filter', '!=', 'filter_date')], 'required':[('filter', '=', 'filter_date')]}"> -->
 <!--                            <field name="date_from"/> -->

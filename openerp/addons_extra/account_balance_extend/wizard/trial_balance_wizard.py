@@ -1,7 +1,9 @@
 from openerp.osv import orm
 from openerp.osv import fields, osv
-
 import time
+from openerp.addons.account_balance_extend.report.account_balance import account_balance
+from datetime import datetime
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
 class account_balance_report(osv.osv_memory):
     _name = 'account.balance.report.extend'
@@ -81,5 +83,43 @@ class account_balance_report(osv.osv_memory):
         data = self.pre_print_report(cr, uid, ids, data, context=context)
         data['form'].update(self.read(cr, uid, ids, ['levels'], context=context)[0])
         return {'type': 'ir.actions.report.xml', 'report_name': 'account_balance_extend.account.balance', 'datas': data}
+    
+    def get_data(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        data = {}
+        data['ids'] = context.get('active_ids', [])
+        data['model'] = context.get('active_model', 'ir.ui.menu')
+        data['form'] = self.read(cr, uid, ids, ['date_from',  'date_to',  'fiscalyear_id', 'journal_ids', 'period_from', 'period_to',  'filter',  'chart_account_id', 'target_move'], context=context)[0]
+        for field in ['fiscalyear_id', 'chart_account_id', 'period_from', 'period_to']:
+            if isinstance(data['form'][field], tuple):
+                data['form'][field] = data['form'][field][0]
+        used_context = self._build_contexts(cr, uid, ids, data, context=context)
+        data['form']['periods'] = used_context.get('periods', False) and used_context['periods'] or []
+        data['form']['used_context'] = dict(used_context, lang=context.get('lang', 'en_US'))
+        data = self.pre_print_report(cr, uid, ids, data, context=context)
+        data['form'].update(self.read(cr, uid, ids, ['levels'], context=context)[0])
+        
+        return data
+    
+    def xls_export(self, cr, uid, ids, context=None):
+        
+        data = self.get_data(cr, uid, ids, context=context)
+        
+        return {
+            'type' : 'ir.actions.report.xml',
+            'report_name':'account_balance_extend.balance.xls',
+            'datas' : data,
+        }
+        
+    def txt_export(self, cr, uid, ids, context=None):
+        
+        data = self.get_data(cr, uid, ids, context=context)
+        
+        return {
+            'type' : 'ir.actions.report.xml',
+            'report_name':'account_balance_extend.balance.txt',
+            'datas' : data
+        }
         
   

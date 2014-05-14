@@ -2,5 +2,7 @@
 <openerp>
     <data>
         <report auto="False" id="account_balance_extend_account_balance" menu="False" model="account.account" name="account_balance_extend.account.balance" rml="account_balance_extend/report/account_balance.rml" string="Trial Balance"/>
+        <report auto="False" id="account_balance_extend_balance_txt" model="account.account" name="account_balance_extend.balance.txt" string="Trial Balance" />
+        <report auto="False" id="account_balance_extend_balance_xls" model="account.account" name="account_balance_extend.balance.xls" string="Trial Balance" />
     </data>
 </openerp>

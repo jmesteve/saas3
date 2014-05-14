@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'account balance extend',
-    'version': '1.7',
+    'version': '1.8',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """
@@ -32,7 +32,7 @@
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
     'images': [],
-    'depends': ['account', 'account_extend', 'report_extend'],
+    'depends': ['report_xls', 'account', 'account_extend', 'report_extend'],
     'data' : [
               'data/data.xml',
               'security/ir.model.access.csv',

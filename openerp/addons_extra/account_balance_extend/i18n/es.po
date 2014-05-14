@@ -109,6 +109,8 @@ msgstr "Periodo inicial"
 #: report:account_balance_extend.account.balance:0
 #: model:ir.actions.act_window,name:account_balance_extend.action_account_balance_menu_extend
 #: model:ir.actions.report.xml,name:account_balance_extend.account_balance_extend_account_balance
+#: model:ir.actions.report.xml,name:account_balance_extend.account_balance_extend_balance_txt
+#: model:ir.actions.report.xml,name:account_balance_extend.account_balance_extend_balance_xls
 #: model:ir.ui.menu,name:account_balance_extend.menu_account_extend_report_balance
 msgid "Trial Balance"
 msgstr "Balance de sumas y saldos"
@@ -228,3 +230,19 @@ msgstr "Niveles"
 #: field:account.balance.report.extend.level,digit:0
 msgid "Digit"
 msgstr "Dígito"
+
+#. module: account_balance_extend
+#: view:account.balance.report.extend:0
+msgid "Export XLS"
+msgstr "Exportar XLS"
+
+#. module: account_balance_extend
+#: view:account.balance.report.extend:0
+msgid "Export TXT"
+msgstr "Exportar TXT"
+
+#. module: account_balance_extend
+#: field:account.balance.report.extend.level,value:0
+msgid "Value"
+msgstr "Valor"
+
