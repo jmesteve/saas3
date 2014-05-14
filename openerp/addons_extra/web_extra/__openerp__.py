@@ -23,7 +23,7 @@
 
 {
     'name': "Web Extra",
-    'version': '0.3',
+    'version': '0.4',
     'category': 'Hidden',
     'description': """
         [ENG] Extend addon Web  
@@ -36,7 +36,7 @@
         'views/webclient_templates.xml',
     ],
     'qweb' : [
-        'static/src/xml/base.xml',
+        'static/src/xml/*.xml',
     ],
     'js': [
         'static/src/js/announcement.js',
