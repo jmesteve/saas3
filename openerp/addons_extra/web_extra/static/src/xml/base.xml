@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <templates id="template" xml:space="preserve">
+	
 	<t t-extend="WebClient">
 		<t t-jquery=".oe_footer" t-operation="replace">
 	       <div class="oe_footer">
