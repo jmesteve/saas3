@@ -2292,6 +2292,7 @@ class BaseModel(object):
         aggregated_fields = [
             f for f in fields
             if f not in ('id', 'sequence')
+            if f not in groupby_list
             if fget[f]['type'] in ('integer', 'float')
             if (f in self._columns and getattr(self._columns[f], '_classic_write'))]
         for f in aggregated_fields:

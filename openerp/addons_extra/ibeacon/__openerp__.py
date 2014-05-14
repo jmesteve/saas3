@@ -39,6 +39,8 @@
               'ibeacon_view.xml',
               'map_view.xml',
               'ibeacon_import_view.xml',
+              'data/data.xml',
+              'proximity.xml',
               ],
     'demo': [],
     'installable': True,

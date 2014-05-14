@@ -57,8 +57,9 @@
                 	<field name="magneticheading"/>
                 	<field name="trueHeading"/>
                     <field name="closest"/>  
-                    <field name="beacons"/>
-                    <button name="action_beacon_form" icon="gtk-go" string="beacons" type="object"/> 
+                    <field name="beacons"/>                    
+                    <button name="action_beacon_form" icon="gtk-go" string="beacons" type="object"/>
+                    <field name="medians"/> 
                 </tree>
             </field>
         </record>
@@ -96,6 +97,9 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="ibeacon_beacon_tree">
+                	<field name="test_id"/>
+                	<field name="point"/>
+                	<field name="point_id"/>
                 	<field name="sample"/>
                 	<field name="major"/>
                 	<field name="minor"/>
@@ -132,6 +136,7 @@
         
         <record model='ir.actions.act_window' id='action_menu_ibeacon_beacon'>
             <field name="name">Beacon</field>
+            <field name="search_view_id" ref="beacon_search_form_view"/>
             <field name="res_model">beacon</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
@@ -143,8 +148,13 @@
             <field name="arch" type="xml">
                 <search string="Beacon">
                    <group expand='0' string='Group by...'>
-                       <filter name="minor" string="minor"  context="{'group_by':'minor'}"/>
-                       <filter name="sample" string="sample" icon="terp-check" context="{'group_by':'sample'}"/>
+                   		<filter name="test" string="test" icon="terp-check" context="{'group_by':'test_id'}"/>
+                   		<filter name="point" string="point" icon="terp-check" context="{'group_by':'point_id'}"/>
+                   		<filter name="minor" string="minor"  context="{'group_by':'minor'}"/>
+                   		<filter name="major" string="major"  context="{'group_by':'major'}"/>
+                   		<filter name="uuid" string="uuid"  context="{'group_by':'uuid'}"/>
+                   		<filter name="sample" string="sample" icon="terp-check" context="{'group_by':'sample'}"/>
+                   		<filter name="proximity" string="proximity" icon="terp-check" context="{'group_by':'proximity'}"/>
                    </group>
                 </search>
             </field>
@@ -153,9 +163,9 @@
     <menuitem id="menu_ibeacon" name="iBeacon" groups="group_ibeacon_access"/>
      	<menuitem id="menu_ibeacon_data" name="Data" parent="menu_ibeacon" groups="group_ibeacon_access"/>
      		<menuitem id="menu_ibeacon_test" name="Test" parent="menu_ibeacon_data" action='action_menu_ibeacon_test'  groups="group_ibeacon_access"/>
-     		<!-- <menuitem id="menu_ibeacon_point" name="Point" parent="menu_ibeacon_data" action='action_menu_ibeacon_point'  groups="group_ibeacon_access"/>
+<!--      		<menuitem id="menu_ibeacon_point" name="Point" parent="menu_ibeacon_data" action='action_menu_ibeacon_point'  groups="group_ibeacon_access"/> -->
      		<menuitem id="menu_ibeacon_beacon" name="Beacons" parent="menu_ibeacon_data" action='action_menu_ibeacon_beacon'  groups="group_ibeacon_access"/>
-     		 -->
+     		 
   
     </data>
 </openerp>
