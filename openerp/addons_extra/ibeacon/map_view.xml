@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    	<record id="view_ibeacon_beacon_map_beacons_tree" model="ir.ui.view">
+            <field name="name">ibeacon.beacon.map.beacons.tree</field>
+            <field name="model">beacon.map.beacons</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="ibeacon_beacon_map_beacons_tree">
+                	<field name="uuid"/>
+                	<field name="major"/>
+                    <field name="minor"/>
+                    <field name="x"/> 
+                    <field name="y"/>
+                    <field name="z"/>
+                    
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_ibeacon_beacon_map_beacons_form" model="ir.ui.view">
+            <field name="name">ibeacon.beacon.map.beacons.form</field>
+            <field name="model">beacon.map.beacons</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="ibeacon_beacon_map_beacons_form">
+                	<field name="uuid"/>
+                	<newline/>
+                	<field name="major"/>
+                	<newline/>
+                	<field name="minor"/>
+                	<newline/>
+                	<field name="x"/>
+                	<newline/>
+                    <field name="y"/>
+                    <newline/>
+                    <field name="z"/>  
+                    <newline/>
+                    
+                </form>
+            </field>
+        </record>
+    
+    	<record model='ir.actions.act_window' id='action_menu_ibeacon_beacon_map_beacons'>
+            <field name="name">Beacon Map Beacons</field>
+            <field name="res_model">beacon.map.beacons</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    
+    
+    	<record id="view_ibeacon_beacon_map_tree" model="ir.ui.view">
+            <field name="name">ibeacon.beacon.map.tree</field>
+            <field name="model">beacon.map</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="ibeacon_beacon_map_tree">
+                	<field name="name"/>
+                	<field name="file"/>
+                	<field name="x"/>
+                    <field name="y"/>
+                    <field name="z"/> 
+                    <field name="beacons"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_ibeacon_beacon_map_form" model="ir.ui.view">
+            <field name="name">ibeacon.beacon.map.form</field>
+            <field name="model">beacon.map</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="ibeacon_beacon_map_form">
+                	<field name="name"/>
+                	<field name="file"/>
+                	<newline/>
+                	<newline/>
+                	<field name="x"/>
+                	<newline/>
+                    <field name="y"/>
+                    <newline/>
+                    <field name="z"/>  
+                    <newline/>
+                    <field name="beacons"/>
+                </form>
+            </field>
+        </record>
+    
+    	<record model='ir.actions.act_window' id='action_menu_ibeacon_beacon_map'>
+            <field name="name">Beacon Map</field>
+            <field name="res_model">beacon.map</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+       
+   
+     		<menuitem id="menu_ibeacon_beacon_map" name="Map" parent="menu_ibeacon_data" action='action_menu_ibeacon_beacon_map'  groups="group_ibeacon_access"/>
+     		
+    </data>
+</openerp>

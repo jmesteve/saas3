@@ -141,7 +141,7 @@ openerp.base_import = function (instance) {
             var self = this;
             this.setup_encoding_picker();
             this.setup_separator_picker();
-
+            console.log("import")
             return $.when(
                 this._super(),
                 this.Import.call('create', [{
