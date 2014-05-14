@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="account_report_print_journal_extend" model="ir.ui.view">
+            <field name="name">Account Print Journal</field>
+            <field name="model">account.print.journal.extend</field>
+            <field name="inherit_id" ref="account.account_common_report_view" />
+            <field name="arch" type="xml">
+            <data>
+           
+            <xpath expr="//field[@name='target_move']" position="replace">
+                <newline/>
+            	<field name="target_move"/>
+            	<newline/>
+                <field name="group_journal"/>
+                <field name="amount_currency"/>
+	            <newline/>
+	            <field name="sort_selection"/>
+	             
+                <!-- 
+                <newline/>
+                <field name="filter" on_change="onchange_filter(filter, fiscalyear_id)" colspan="4" invisible="1"/>
+                <separator string="Periods"  colspan="4"/>
+                <field name="period_from" domain="[('fiscalyear_id', '=', fiscalyear_id)]" required="1" colspan="4"/>
+                <field name="period_to" domain="[('fiscalyear_id', '=', fiscalyear_id)]" required="1" colspan="4"/>
+                <separator string="Journals"  colspan="4"/>
+                <field name="journal_ids" colspan="4" nolabel="1"/>
+                 -->
+            </xpath>
+            
+            <xpath expr="//field[@name='fiscalyear_id']" position="attributes">
+            	<attribute name="on_change">onchange_filter(filter, fiscalyear_id)</attribute>
+            </xpath>
+             
+
+            <!-- 
+           	<xpath expr="//page[@name='filters']" position="replace">
+            </xpath>
+            <xpath expr="//page[@name='journal_ids']" position="replace">
+            </xpath>
+            -->
+            </data>
+            </field>
+        </record>
+            
+<!--         <menuitem -->
+<!--             parent="account.menu_finance_legal_statement" -->
+<!--             id="account.menu_journals_report" -->
+<!--             groups="account.group_account_user,account.group_account_manager" -->
+<!--             name="Journals Old"/> -->
+        
+<!--         <menuitem -->
+<!--             parent="account.menu_finance_legal_statement" -->
+<!--             id="menu_journals_report_new" -->
+<!--             action="account.action_account_print_journal" -->
+<!--             name="Journals"/> -->
+            
+<!--         <menuitem id="menu_account_extend_report_journal" name="Journals" parent="account_extend.menu_account_extend_report" action='account.action_account_print_journal'  groups="account_extend.group_account_extend"/> -->
+        
+        <record id="action_account_print_journal_extend" model="ir.actions.act_window">
+            <field name="name">Account Print Journal</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.print.journal.extend</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="account_report_print_journal_extend"/>
+        </record>
+        
+        
+        <menuitem id="menu_account_extend_report_journal" name="Journals" parent="account_extend.menu_account_extend_report" action='action_account_print_journal_extend' />
+        
+<!-- 		<record id="account.menu_account_central_journal" model="ir.ui.menu"> -->
+<!--     		<field name="groups_id" eval="[(5), (4,ref('group_account_menu_old'))]"/> -->
+<!-- 		</record> -->
+		
+<!-- 		<record id="account.menu_account_general_journal" model="ir.ui.menu"> -->
+<!--     		<field name="groups_id" eval="[(5), (4,ref('group_account_menu_old'))]"/> -->
+<!-- 		</record> -->
+		
+<!-- 		<record id="account.menu_account_print_journal" model="ir.ui.menu"> -->
+<!--     		<field name="groups_id" eval="[(5), (4,ref('group_account_menu_old'))]"/> -->
+<!-- 		</record> -->
+		
+<!-- 		<record id="account.menu_account_print_sale_purchase_journal" model="ir.ui.menu"> -->
+<!--     		<field name="groups_id" eval="[(5), (4,ref('group_account_menu_old'))]"/> -->
+<!-- 		</record> -->
+		
+<!-- 		<record id="account.menu_journals_report" model="ir.ui.menu"> -->
+<!--     		<field name="groups_id" eval="[(5), (4,ref('group_account_menu_old'))]"/> -->
+<!-- 		</record> -->
+
+      
+    </data>
+</openerp>

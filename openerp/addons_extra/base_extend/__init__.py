@@ -23,4 +23,4 @@
 from openerp.modules import get_module_resource, get_module_path
 import report
 import base_extend
-
+import ir

@@ -4,6 +4,7 @@
 # Modificar permisos de la carpeta de openerp
 # Modificar permisos de la carpeta /var/log/
 # Añadir en apache ports.conf: NameVirtualHost *:443
+# Instalar última versión de Mako: pip install Mako
 
 # Ejecutar:
 

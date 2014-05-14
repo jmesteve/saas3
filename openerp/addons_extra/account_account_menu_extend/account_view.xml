@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		<menuitem action="account.action_account_form" id="menu_action_account_form_extend" parent="account_extend.account_account_menu_extend" sequence="12" groups="account_extend.group_account_extend"/>
+<!-- 		<menuitem action="account.action_account_type_form" sequence="20" id="menu_action_account_type_form_extend" parent="account_extend.account_account_menu_extend" groups="base.group_no_one"/> -->
+		
+		<!-- Account Templates -->
+<!--         <menuitem -->
+<!--             id="account_template_folder_extend" -->
+<!--             name="Templates" -->
+<!--             parent="account_extend.account_account_menu_extend" -->
+<!--             groups="account.group_account_manager"/> -->
+            
+<!-- 	        <menuitem -->
+<!-- 	            id="account_template_taxes_extend" -->
+<!-- 	            name="Taxes" -->
+<!-- 	            parent="account_template_folder_extend" -->
+<!-- 	            sequence="2"/> -->
+<!-- 	            <menuitem action="account.action_account_tax_template_form" id="menu_action_account_tax_template_form_extend" parent="account_template_taxes_extend" sequence="13"/> -->
+<!-- 	            <menuitem action="account.action_account_tax_code_template_form" id="menu_action_account_tax_code_template_form_extend" parent="account_template_taxes_extend" sequence="14"/> -->
+<!-- 	            <menuitem -->
+<!-- 		            action="account.action_account_fiscal_position_template_form" -->
+<!-- 		            id="menu_action_account_fiscal_position_form_template_extend" -->
+<!-- 		            parent="account_template_taxes_extend" sequence="20"/> -->
+	            
+<!-- 	        <menuitem -->
+<!-- 	            id="account_template_accounts_extend" -->
+<!-- 	            name="Accounts" -->
+<!-- 	            parent="account_template_folder_extend" -->
+<!-- 	            sequence="1"/> -->
+	            
+<!--             	<menuitem action="account.action_account_template_form" id="menu_action_account_template_form_extend" parent="account_template_accounts_extend"/> -->
+<!--             	<menuitem action="account.action_account_chart_template_form" id="menu_action_account_chart_template_form_extend" parent="account_template_accounts_extend" sequence="1"/> -->
+            
+<!--         <menuitem -->
+<!-- 	        sequence="0" -->
+<!-- 	        parent="account_extend.account_account_menu_extend" -->
+<!-- 	        id="menu_action_bank_tree_extend" -->
+<!-- 	        action="account.action_bank_tree"/> -->
+	</data>
+</openerp>

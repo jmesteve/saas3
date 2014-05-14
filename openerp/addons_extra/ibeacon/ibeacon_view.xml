@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    	<record id="view_ibeacon_test_tree" model="ir.ui.view">
+            <field name="name">ibeacon.test.tree</field>
+            <field name="model">beacon.test</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="ibeacon_test_tree">
+                	<field name="name"/>
+                	<field name="txpower"/>
+                    <field name="map"/>
+                    <field name="frecuency"/> 
+                    <field name="points"/>  
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_ibeacon_test_form" model="ir.ui.view">
+            <field name="name">ibeacon.test.form</field>
+            <field name="model">beacon.test</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="ibeacon_test_form">
+                	<field name="name"/>
+                	<newline/>
+                	<field name="txpower"/>
+                	<newline/>
+                    <field name="map"/>
+                    <newline/>
+                    <field name="frecuency"/>  
+                    <newline/>
+                    <field name="points"/> 
+                    <newline/>
+                    <field name="image_map" widget="image"/> 
+                </form>
+            </field>
+        </record>
+    
+    	<record model='ir.actions.act_window' id='action_menu_ibeacon_test'>
+            <field name="name">Beacon Test</field>
+            <field name="res_model">beacon.test</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            
+        </record>
+        
+        <record id="view_ibeacon_point_tree" model="ir.ui.view">
+            <field name="name">ibeacon.point.tree</field>
+            <field name="model">beacon.point</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="ibeacon_point_tree">
+                	<field name="x"/>
+                	<field name="y"/>
+                	<field name="z"/>
+                	<field name="magneticheading"/>
+                	<field name="trueHeading"/>
+                    <field name="closest"/>  
+                    <field name="beacons"/>
+                    <button name="action_beacon_form" icon="gtk-go" string="beacons" type="object"/> 
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_ibeacon_point_form" model="ir.ui.view">
+            <field name="name">ibeacon.point.form</field>
+            <field name="model">beacon.point</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="ibeacon_point_form">
+                	<group col="6">
+	                	<field name="x"/>
+	                	<field name="y"/>
+	                    <field name="z"/>
+	                </group>
+	                 <newline/>
+	                <group col="6">
+	                	<field name="magneticheading"/>
+	                	<field name="trueHeading"/>
+	                    <field name="closest"/>  
+	                </group>
+	                <newline/>
+	                <group>
+	                <field name="beacons"/>
+	                </group>
+	                
+                </form>
+            </field>
+        </record>
+       
+      
+    	<record id="view_ibeacon_beacon_tree" model="ir.ui.view">
+            <field name="name">ibeacon.beacon.tree</field>
+            <field name="model">beacon</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="ibeacon_beacon_tree">
+                	<field name="sample"/>
+                	<field name="major"/>
+                	<field name="minor"/>
+                    <field name="uuid"/>
+                    <field name="accuracy"/>  
+	            	<field name="rssi"/>
+	            	<field name="proximity"/> 
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_ibeacon_beacon_form" model="ir.ui.view">
+            <field name="name">ibeacon.beacon.form</field>
+            <field name="model">beacon</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="ibeacon_beacon_form">
+                		<field name="sample"/>
+	                	<newline/>
+	                	<field name="major"/>
+	                	<newline/>
+	                	<field name="minor"/>
+	                	<newline/>
+	                    <field name="uuid"/>
+	                    <newline/>
+	                    <field name="accuracy"/> 
+	                    <newline/> 
+		            	<field name="rssi"/>
+		            	<newline/>
+		            	<field name="proximity"/> 
+                </form>
+            </field>
+        </record>
+        
+        <record model='ir.actions.act_window' id='action_menu_ibeacon_beacon'>
+            <field name="name">Beacon</field>
+            <field name="res_model">beacon</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <record id="beacon_search_form_view" model="ir.ui.view">
+            <field name="name">beacon.search.form</field>
+            <field name="model">beacon</field>
+            <field name="arch" type="xml">
+                <search string="Beacon">
+                   <group expand='0' string='Group by...'>
+                       <filter name="minor" string="minor"  context="{'group_by':'minor'}"/>
+                       <filter name="sample" string="sample" icon="terp-check" context="{'group_by':'sample'}"/>
+                   </group>
+                </search>
+            </field>
+        </record>
+    
+    <menuitem id="menu_ibeacon" name="iBeacon" groups="group_ibeacon_access"/>
+     	<menuitem id="menu_ibeacon_data" name="Data" parent="menu_ibeacon" groups="group_ibeacon_access"/>
+     		<menuitem id="menu_ibeacon_test" name="Test" parent="menu_ibeacon_data" action='action_menu_ibeacon_test'  groups="group_ibeacon_access"/>
+     		<!-- <menuitem id="menu_ibeacon_point" name="Point" parent="menu_ibeacon_data" action='action_menu_ibeacon_point'  groups="group_ibeacon_access"/>
+     		<menuitem id="menu_ibeacon_beacon" name="Beacons" parent="menu_ibeacon_data" action='action_menu_ibeacon_beacon'  groups="group_ibeacon_access"/>
+     		 -->
+  
+    </data>
+</openerp>

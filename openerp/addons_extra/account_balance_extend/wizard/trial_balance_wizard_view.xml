@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+  
+  	<record id="account_balance_view_extend" model="ir.ui.view">
+          <field name="name">Trial Balance</field>
+          <field name="model">account.balance.report.extend</field>
+          <field name="inherit_id" ref="account.account_common_report_view" />
+          <field name="arch" type="xml">
+            <data>
+            	<xpath expr="//field[@name='fiscalyear_id']" position="attributes">
+            		<attribute name="on_change">onchange_filter(filter, fiscalyear_id)</attribute>
+            	</xpath>
+            	<xpath expr="//field[@name='target_move']" position="after">
+	                <field name="display_account"/>
+<!-- 	                <field name="levels"/> -->
+<!-- 	                <newline/> -->
+	            </xpath>
+	            <xpath expr="//notebook[@tabpos='up']" position="replace">
+	            	<group col="4" colspan="4">
+		            	<notebook tabpos="up" colspan="2">
+		                    <page string="Filters" name="filters">
+		                        <group>
+		                            <field name="filter" on_change="onchange_filter(filter, fiscalyear_id)"/>
+		                        </group>
+				            	<group string="Dates"  attrs="{'invisible':[('filter', '!=', 'filter_date')], 'required':[('filter', '=', 'filter_date')]}">
+			                           <field name="date_from"/>
+			                           <field name="date_to"/>
+				                </group>
+		                        <group string="Periods" attrs="{'invisible':[('filter','!=','filter_period')], 'required':[('filter', '=', 'filter_period')]}">
+		                            <field name="period_from" domain="[('fiscalyear_id', '=', fiscalyear_id)]"/>
+		                            <field name="period_to" domain="[('fiscalyear_id', '=', fiscalyear_id)]"/>
+		                        </group>
+		                    </page>
+		                    <page string="Journals" name="journal_ids">
+		                        <field name="journal_ids"/>
+		                    </page>
+	                	</notebook>
+	                	<notebook tabpos="up" colspan="2">
+		                    <page string="Levels" name="levels">
+								<field name="levels"/>
+							</page>
+	                	</notebook>
+                	</group>
+	            </xpath>
+	            <button string="Print" position="before">
+                	<button icon="gtk-execute" name="xls_export" string="Export XLS" type="object" context="{'xls_export':1}" colspan="2"/>
+                	<button icon="gtk-execute" name="txt_export" string="Export TXT" type="object" context="{'txt_export':1}" colspan="2"/>
+            	</button>
+<!--             	<xpath expr="//group[@string='Dates']" position="replace"> -->
+<!-- 	            	<group string="Dates"  attrs="{'invisible':[('filter', '!=', 'filter_date')], 'required':[('filter', '=', 'filter_date')]}"> -->
+<!--                            <field name="date_from"/> -->
+<!--                            <field name="date_to"/> -->
+<!-- 	                </group> -->
+<!--                 </xpath> -->
+            </data>
+          </field>
+    </record>
+    
+    
+   	<record id="action_account_balance_menu_extend" model="ir.actions.act_window">
+        <field name="name">Trial Balance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.balance.report.extend</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="account_balance_view_extend"/>
+        <field name="target">new</field>
+    </record>
+  	
+  	<menuitem id="menu_account_extend_report_balance" icon="STOCK_PRINT" name="Trial Balance" parent="account_extend.menu_account_extend_report" action='action_account_balance_menu_extend' />
+  	
+  </data>
+</openerp>

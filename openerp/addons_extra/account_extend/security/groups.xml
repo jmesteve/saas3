@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="group_account_extend" model="res.groups">
+            <field name="name">Account Extend</field>
+            <field name="category_id" ref="base.module_category_accounting_and_finance"/>
+        </record>
+        
+        <record id="group_invoicing_extend" model="res.groups">
+            <field name="name">Invoicing Extend</field>
+            <field name="category_id" ref="base.module_category_accounting_and_finance"/>
+        </record>
+        
+        
+    </data>
+</openerp>
+

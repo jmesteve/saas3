@@ -28,7 +28,7 @@ __author__ = "Borja López Soilán (Pexego)"
 
 
 from openerp.osv import orm,fields
-import openerp.pooler
+import openerp.pooler as pooler
 
 
 class print_wizard(orm.TransientModel):

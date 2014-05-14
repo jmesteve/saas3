@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data >
+        <record id="level_data_1" model="account.balance.report.extend.level">
+            <field name="digit">1</field>
+            <field name="value">1</field>
+        </record>
+        <record id="level_data_2" model="account.balance.report.extend.level">
+            <field name="digit">2</field>
+            <field name="value">2</field>
+        </record>
+        <record id="level_data_3" model="account.balance.report.extend.level">
+            <field name="digit">3</field>
+            <field name="value">3</field>
+        </record>
+        <record id="level_data_4" model="account.balance.report.extend.level">
+            <field name="digit">4</field>
+            <field name="value">4</field>
+        </record>
+        <record id="level_data_5" model="account.balance.report.extend.level">
+            <field name="digit">5</field>
+            <field name="value">5</field>
+        </record>
+        <record id="level_data_6" model="account.balance.report.extend.level">
+            <field name="digit">6</field>
+            <field name="value">6</field>
+        </record>
+        <record id="level_data_7" model="account.balance.report.extend.level">
+            <field name="digit">7</field>
+            <field name="value">7</field>
+        </record>
+        <record id="level_data_8" model="account.balance.report.extend.level">
+            <field name="digit">8</field>
+            <field name="value">8</field>
+        </record>
+        <record id="level_data_9" model="account.balance.report.extend.level">
+            <field name="digit">9</field>
+            <field name="value">9</field>
+        </record>
+		<record id="level_data_10" model="account.balance.report.extend.level">
+            <field name="digit">10</field>
+            <field name="value">10</field>
+        </record>
+        <record id="level_data_11" model="account.balance.report.extend.level">
+            <field name="digit">11</field>
+            <field name="value">11</field>
+        </record>
+        <record id="level_data_12" model="account.balance.report.extend.level">
+            <field name="digit">12</field>
+            <field name="value">12</field>
+        </record>
+        <record id="level_data_13" model="account.balance.report.extend.level">
+            <field name="digit">13</field>
+            <field name="value">13</field>
+        </record>
+        <record id="level_data_14" model="account.balance.report.extend.level">
+            <field name="digit">14</field>
+            <field name="value">14</field>
+        </record>
+        <record id="level_data_15" model="account.balance.report.extend.level">
+            <field name="digit">15</field>
+            <field name="value">15</field>
+        </record>
+        <record id="level_data_16" model="account.balance.report.extend.level">
+            <field name="digit">16</field>
+            <field name="value">16</field>
+        </record>
+        <record id="level_data_17" model="account.balance.report.extend.level">
+            <field name="digit">17</field>
+            <field name="value">17</field>
+        </record>
+        <record id="level_data_18" model="account.balance.report.extend.level">
+            <field name="digit">18</field>
+            <field name="value">18</field>
+        </record>
+        <record id="level_data_19" model="account.balance.report.extend.level">
+            <field name="digit">19</field>
+            <field name="value">19</field>
+        </record>
+        <record id="level_data_20" model="account.balance.report.extend.level">
+            <field name="digit">20</field>
+            <field name="value">20</field>
+        </record>
+        
+    </data>
+</openerp>

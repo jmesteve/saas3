@@ -205,6 +205,16 @@ class rml_parse(object):
             self.rml_header2 = company_id.rml_header2
             self.rml_header3 = company_id.rml_header3
             self.logo = company_id.logo
+            
+#     def setCompany(self, company_id):
+#         if company_id:
+#             self.localcontext['company'] = company_id
+#             self.localcontext['logo'] = company_id.logo
+#             self.rml_header = company_id.rml_header
+#             self.rml_header2 = company_id.rml_header2
+#             self.rml_header3 = company_id.rml_header3
+#             self.rml_header4 = company_id.rml_header4
+#             self.logo = company_id.logo
 
     def _strip_name(self, name, maxlen=50):
         return self._ellipsis(name, maxlen)
@@ -353,7 +363,7 @@ class rml_parse(object):
             rml_head =  self.rml_header3
         else:
             rml_head =  self.rml_header
-
+ 
         head_dom = etree.XML(rml_head)
         for tag in head_dom:
             found = rml_dom.find('.//'+tag.tag)
@@ -363,6 +373,27 @@ class rml_parse(object):
                 else :
                     found.getparent().replace(found,tag)
         return True
+    
+#     def _add_header(self, rml_dom, header='external'):
+#         
+#         if header=='internal':
+#             rml_head =  self.rml_header2
+#         elif header=='internal landscape':
+#             rml_head =  self.rml_header3
+#         elif header=='shipping':
+#             rml_head =  self.rml_header4
+#         else:
+#             rml_head =  self.rml_header
+#         
+#         head_dom = etree.XML(rml_head)
+#         for tag in head_dom:
+#             found = rml_dom.find('.//'+tag.tag)
+#             if found is not None and len(found):
+#                 if tag.get('position'):
+#                     found.append(tag)
+#                 else :
+#                     found.getparent().replace(found,tag)
+#         return True
 
     def set_context(self, objects, data, ids, report_type = None):
         self.localcontext['data'] = data

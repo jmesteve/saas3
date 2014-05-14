@@ -23,7 +23,7 @@
 
 {
     'name': "Web Extra",
-    'version': '0.1',
+    'version': '0.3',
     'category': 'Hidden',
     'description': """
         [ENG] Extend addon Web  
@@ -36,12 +36,16 @@
         'views/webclient_templates.xml',
     ],
     'qweb' : [
-        "static/src/xml/base.xml",
+        'static/src/xml/base.xml',
     ],
     'js': [
         'static/src/js/announcement.js',
-        "static/lib/jquery.printarea/jquery.PrintArea.js",
+        'static/lib/jquery.printarea/jquery.PrintArea.js',
     ],
-    "active": False,
-    "installable": True
+     'css' : [
+        'static/src/css/base_extend.css',
+    ],
+    'installable': True,
+    'application': True,
+    'auto_install': True,
 }
