@@ -63,7 +63,7 @@ class sale_order(orm.Model):
                     or line.product_uom_qty,
             'product_uos': (line.product_uos and line.product_uos.id)\
                     or line.product_uom.id,
-            'location_id': order.shop_id.warehouse_id.lot_stock_id.id,
+            'location_id': order.warehouse_id.lot_stock_id.id,
             'procure_method': line.type,
             'move_id': move_id,
             'company_id': order.company_id.id,
@@ -72,8 +72,8 @@ class sale_order(orm.Model):
         }
     
     def _prepare_order_line_move(self, cr, uid, order, line, picking_id, date_planned, date_order, context=None):
-        location_id = order.shop_id.warehouse_id.lot_stock_id.id
-        output_id = order.shop_id.warehouse_id.lot_output_id.id
+        location_id = order.warehouse_id.lot_stock_id.id
+        output_id = order.warehouse_id.lot_output_id.id
         return {
             'name': line.name,
             'picking_id': picking_id,
