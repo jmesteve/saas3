@@ -42,11 +42,11 @@
                 	<attribute name="editable" />
             	</xpath>
                 <xpath expr="//field[@name='account_id']" position="after">
-                    <button name="action_go_to_account" string="Account" icon="arrow-on" type="object"/>
+                    <button name="action_filter" string="Account" icon="gtk-go" type="object"/>
                 </xpath>
                 
                 <xpath expr="//field[@name='move_id']" position="after">
-                    <button name="action_go_to_account_move" string="Account" icon="arrow-on" type="object"/>
+                    <button name="action_go_to_account_move" string="Account" icon="gtk-go" type="object"/>
                 </xpath>
                 
                 <xpath expr="//field[@name='credit']" position="after"> 

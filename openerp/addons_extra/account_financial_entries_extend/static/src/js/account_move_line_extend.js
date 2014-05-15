@@ -83,6 +83,12 @@ openerp.account_financial_entries_extend = function (instance) {
                 self.current_period = result['period_id'];
                 //self.current_journal = result['journal_id'];
                 //self.current_account = result['account_id'];
+                if(typeof self.dataset.context['journal_id'] !== "undefined" && self.dataset.context['journal_id'] !== false){
+                	self.current_journal = self.dataset.context['journal_id'];
+            	}	
+                if(typeof self.dataset.context['account_id'] !== "undefined" && self.dataset.context['account_id'] !== false){
+                	self.current_account = self.dataset.context['account_id'];
+                }
             });
             return tmp;
         },
@@ -138,7 +144,7 @@ openerp.account_financial_entries_extend = function (instance) {
         },
         search_accounts: function(id){
         	var self = this;
-        	console.log(self.accounts);
+        	//console.log(self.accounts);
         	var size = self.accounts.length;
         	var account = -1;
         	for(var i=0; i<size; i++){
