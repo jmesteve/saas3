@@ -12,6 +12,22 @@
   max-width: 1200px;
 }
 
-.openerp .oe_searchview {
-  float: left;
+/* .openerp .oe_searchview { */
+/*   float: left; */
+/* } */
+@media screen and (min-width: 1024px){
+	.openerp .oe_searchview {
+	   position: absolute;
+	   right: 20px;
+	}
+	
+	.openerp .oe_view_manager_switch{
+		position:absolute;
+		right: 20px;
+	}
+	
+	.openerp .oe_view_manager_pager{
+		position:absolute;
+		right: 120px;
+	}	
 }

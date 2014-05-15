@@ -23,7 +23,6 @@ openerp.account_financial_entries_extend = function (instance) {
             this.current_journal_type = null;
             this.current_journal_currency = null;
             this.current_journal_analytic = null;
-            
         },
         start:function(){
             var tmp = this._super.apply(this, arguments);
@@ -80,7 +79,14 @@ openerp.account_financial_entries_extend = function (instance) {
             var mod = new instance.web.Model("account.move.line", self.dataset.context, self.dataset.domain);
             
             mod.call("default_get", [['journal_id','period_id','account_id'],self.dataset.context]).then(function(result) {
-                self.current_period = result['period_id'];
+            	
+            	console.log("")
+            	if(typeof self.dataset.context['no_period_id'] !== "undefined" && self.dataset.context['no_period_id'] !== false){
+            		self.current_period = null;
+            	}
+            	else{
+            		self.current_period = result['period_id'];
+            	}
                 //self.current_journal = result['journal_id'];
                 //self.current_account = result['account_id'];
                 if(typeof self.dataset.context['journal_id'] !== "undefined" && self.dataset.context['journal_id'] !== false){
