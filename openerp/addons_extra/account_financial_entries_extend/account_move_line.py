@@ -34,15 +34,17 @@ class account_move_line(osv.osv):
         view_id = view_ref and view_ref[1] or False
          
         account_move_line = self.pool.get('account.move.line').browse(cr, uid, ids[0])
- 
+        
         ctx = dict(context)
         ctx.update({'account_id': account_move_line.account_id.id})
-         
+        if 'period_id' not in ctx:
+            ctx.update({'no_period_id': True})
          
         return {
             'view_type': 'form',
-            'view_mode': 'tree_account_move_line_quickadd',
             'view_id': view_id,
+            'view_mode': 'tree_account_move_line_quickadd_extend,form',
+            'views': [(view_id,'tree_account_move_line_quickadd_extend'),(False,'form')],
             'res_model': 'account.move.line',
             'type': 'ir.actions.act_window',
             'context': ctx,

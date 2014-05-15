@@ -24,6 +24,8 @@ msgid "Journal Items"
 msgstr "Apuntes contables"
 
 #. module: account_financial_entries_extend
+#: view:account.move:0
+#: model:ir.actions.act_window,name:account_financial_entries_extend.action_move_journal_line_extend
 #: model:ir.ui.menu,name:account_financial_entries_extend.menu_action_move_journal_line_form_extend
 msgid "Journal Entries"
 msgstr "Asientos contables"
@@ -42,3 +44,18 @@ msgstr "Total debe"
 #: view:account.move.line:0
 msgid "Total Balance"
 msgstr "Total Saldo"
+
+#. module: account_financial_entries_extend
+#: field:account.move,credit:0
+msgid "Credit"
+msgstr "Haber"
+
+#. module: account_financial_entries_extend
+#: field:account.move,debit:0
+msgid "Debit"
+msgstr "Debe"
+
+#. module: account_financial_entries_extend
+#: view:account.move:0
+msgid "Balance"
+msgstr "Saldo"
