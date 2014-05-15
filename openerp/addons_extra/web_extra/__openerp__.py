@@ -23,7 +23,7 @@
 
 {
     'name': "Web Extra",
-    'version': '0.6',
+    'version': '0.7',
     'category': 'Hidden',
     'description': """
         [ENG] Extend addon Web  

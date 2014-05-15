@@ -15,7 +15,7 @@
 /* .openerp .oe_searchview { */
 /*   float: left; */
 /* } */
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 860px){
 	.openerp .oe_searchview {
 	   position: absolute;
 	   right: 20px;
