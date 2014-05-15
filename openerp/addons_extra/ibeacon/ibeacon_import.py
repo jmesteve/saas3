@@ -29,7 +29,6 @@ class ibeacon_import(osv.osv):
                         file_content_decoded = base64.decodestring(line.file_stream)
                         decodingJsonMap = json.loads(file_content_decoded)
                         break
-                #name = name.encode('utf-8')
                 map_id = map_obj.search(cr,uid,[('file', '=', name)],0, None)
                 if len(map_id) == 0:
                     decodingJsonMap_size = decodingJsonMap.get('size')    
@@ -66,7 +65,9 @@ class ibeacon_import(osv.osv):
                     })
                     points = decodingJsonTest.get('puntos')
                     for point in points:
+                        point_index = points.index(point) + 1 
                         point_id = points_obj.create(cr, uid, {
+                            'point':point_index,                                   
                             'x':point.get('x'),
                             'y': point.get('y'),
                             'z': point.get('z'),
@@ -78,9 +79,10 @@ class ibeacon_import(osv.osv):
                         samples = point.get('samples')
                         for sample in samples:
                             sample_beacons = sample.get('beacons')
+                            sample_index = samples.index(sample) + 1 
                             for sample_beacon in sample_beacons:
                                 beacon_id = beacon_obj.create(cr, uid, {
-                                    'sample':sample_beacons.index(sample_beacon),                                    
+                                    'sample':sample_index,                                    
                                     'major':sample_beacon.get('major'),
                                     'minor': sample_beacon.get('minor'),
                                     'uuid': sample_beacon.get('uuid'),

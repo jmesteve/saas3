@@ -51,6 +51,7 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="ibeacon_point_tree">
+                	<field name="point"/>
                 	<field name="x"/>
                 	<field name="y"/>
                 	<field name="z"/>
@@ -70,6 +71,8 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="ibeacon_point_form">
+                	<field name="point"/>
+                	 <newline/>
                 	<group col="6">
 	                	<field name="x"/>
 	                	<field name="y"/>
@@ -97,12 +100,12 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="ibeacon_beacon_tree">
-                	<field name="test_id"/>
+                	<field name="test"/>
                 	<field name="point"/>
-                	<field name="point_id"/>
                 	<field name="sample"/>
                 	<field name="major"/>
                 	<field name="minor"/>
+                	<field name="closest"/>
                     <field name="uuid"/>
                     <field name="accuracy"/>  
 	            	<field name="rssi"/>
@@ -117,11 +120,17 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="ibeacon_beacon_form">
+                		<field name="test"/>
+                		<newline/>
+                		<field name="point_id"/>
+                		<newline/>
                 		<field name="sample"/>
 	                	<newline/>
 	                	<field name="major"/>
 	                	<newline/>
 	                	<field name="minor"/>
+	                	<newline/>
+	                	<field name="closest"/>
 	                	<newline/>
 	                    <field name="uuid"/>
 	                    <newline/>
@@ -130,6 +139,7 @@
 		            	<field name="rssi"/>
 		            	<newline/>
 		            	<field name="proximity"/> 
+		            	
                 </form>
             </field>
         </record>
@@ -148,12 +158,12 @@
             <field name="arch" type="xml">
                 <search string="Beacon">
                    <group expand='0' string='Group by...'>
-                   		<filter name="test" string="test" icon="terp-check" context="{'group_by':'test_id'}"/>
-                   		<filter name="point" string="point" icon="terp-check" context="{'group_by':'point_id'}"/>
-                   		<filter name="minor" string="minor"  context="{'group_by':'minor'}"/>
-                   		<filter name="major" string="major"  context="{'group_by':'major'}"/>
-                   		<filter name="uuid" string="uuid"  context="{'group_by':'uuid'}"/>
+                   		<filter name="test" string="test" icon="terp-check" context="{'group_by':'test'}"/>
+                   		<filter name="point" string="point" icon="terp-check" context="{'group_by':'point'}"/>
                    		<filter name="sample" string="sample" icon="terp-check" context="{'group_by':'sample'}"/>
+                   		<filter name="uuid" string="uuid"  context="{'group_by':'uuid'}"/>
+                   		<filter name="major" string="major"  context="{'group_by':'major'}"/>
+                   		<filter name="minor" string="minor"  context="{'group_by':'minor'}"/>
                    		<filter name="proximity" string="proximity" icon="terp-check" context="{'group_by':'proximity'}"/>
                    </group>
                 </search>
