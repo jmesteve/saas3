@@ -49,7 +49,7 @@ class ibeacon_import(osv.osv):
                             'x': pos.get('x'),
                             'y': pos.get('y'),
                             'z': pos.get('z'),
-                            'map_id': map_id[0],
+                            'map_id': map_id,
                         })
                 
                 try:

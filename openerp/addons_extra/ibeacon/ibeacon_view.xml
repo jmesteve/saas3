@@ -109,6 +109,8 @@
                     <field name="accuracy"/>  
 	            	<field name="rssi"/>
 	            	<field name="proximity"/> 
+	            	<field name="x"/>
+		            <field name="y"/>
                 </tree>
             </field>
         </record>
@@ -138,6 +140,9 @@
 		            	<field name="rssi"/>
 		            	<newline/>
 		            	<field name="proximity"/>
+		            	<newline/>
+		            	<field name="x"/>
+		            	<field name="y"/>
                 </form>
             </field>
         </record>
@@ -146,9 +151,10 @@
             <field name="name">view.ibeacon.beacon.graph</field>
             <field name="model">beacon</field>
             <field name="arch" type="xml">
-                <graph string="Beacon Statistics" type="bar">
+                <graph string="Beacon Statistics" orientation="horizontal" type="bar">
                     <field name="point"/>
-                    <field name="rssi"/>
+                    <field name="minor"/>
+                    <field name="rssi" operator="+"/>
                 </graph>
             </field>
         </record>
