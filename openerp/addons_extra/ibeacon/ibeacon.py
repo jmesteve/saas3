@@ -1,5 +1,5 @@
 from openerp.osv import fields,osv
-
+    
 class beacon_test(osv.osv):
     _name = 'beacon.test'
     
@@ -15,9 +15,17 @@ class beacon_test(osv.osv):
         ('name_uniq', 'unique(name)', 'Name must be unique per Test!'),
     ]
     
-
 class beacon_point(osv.osv):
     _name = 'beacon.point'
+    
+    def _medians(self, cr, uid, ids, field, arg, context=None):
+        res = {}
+        for point in ids:
+            res[point] = self.pool.get('beacon').search(cr, uid, [('point_id','=', point)], context=context)
+        return res
+    
+    def _medians_inv(self, cr, uid, field, arg, context=None):
+        return True
     
     _columns = {
                 'x': fields.float('x'),
@@ -28,6 +36,11 @@ class beacon_point(osv.osv):
                 'closest': fields.integer('Minor Near'),
                 'test_id': fields.many2one('beacon.test', 'Test id', select=1, ondelete="cascade"),
                 'beacons': fields.one2many('beacon', 'point_id','Beacons'),
+                'medians': fields.function(_medians,
+                                           funct_inv=_medians_inv,
+                                           type='one2many',
+                                           obj='beacon', 
+                                           string='Medians'),
                 }
 
     def action_beacon_form(self, cr, uid, ids, context=None):
@@ -60,6 +73,8 @@ class beacon(osv.osv):
                 'rssi': fields.integer('Rssi', group_operator="avg"),
                 'proximity': fields.selection([('0','unknow'),('1','inmediate'),('2','near'), ('3','far')], 'Proximity',  select=True),
                 'point_id': fields.many2one('beacon.point', 'Point id', select=1, ondelete="cascade"),
+                'point': fields.related('point_id', 'id', type='integer', string='Point', store=True),
+                'test_id': fields.related('point_id', 'test_id', type='many2one', relation='beacon.test', string='Test', store=True),
                 }
     _order = "sample, rssi"
    
