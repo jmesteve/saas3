@@ -27,7 +27,7 @@ class beacon_point(osv.osv):
     def _medians_inv(self, cr, uid, field, arg, context=None):
         return True
     
-    _columns = {
+    _columns = {'point':fields.integer('Point',group_operator="count"),
                 'x': fields.float('x'),
                 'y': fields.float('y'),
                 'z': fields.float('z'),
@@ -65,17 +65,18 @@ class beacon_point(osv.osv):
 class beacon(osv.osv):
     _name = 'beacon'
     
-    _columns = {'sample':fields.integer('sample',group_operator="count"),
-                'major': fields.integer('Major',group_operator="count"),
-                'minor': fields.integer('Minor',group_operator="count"), #['avg', 'max', 'min', 'sum', 'count']
+    _columns = {'sample':fields.integer('sample',group_operator="max"),
+                'major': fields.integer('Major',group_operator="max"),
+                'minor': fields.integer('Minor',group_operator="max"), #['avg', 'max', 'min', 'sum', 'count']
                 'uuid': fields.char('Uuid', size=36),
                 'accuracy': fields.float('Accuracy', group_operator="avg"),
                 'rssi': fields.integer('Rssi', group_operator="avg"),
                 'proximity': fields.selection([('0','unknow'),('1','inmediate'),('2','near'), ('3','far')], 'Proximity',  select=True),
                 'point_id': fields.many2one('beacon.point', 'Point id', select=1, ondelete="cascade"),
-                'point': fields.related('point_id', 'id', type='integer', string='Point', store=True),
-                'test_id': fields.related('point_id', 'test_id', type='many2one', relation='beacon.test', string='Test', store=True),
+                'point': fields.related('point_id', 'point', type='integer', string='Point', store=True),
+                'test': fields.related('point_id', 'test_id', type='many2one', relation='beacon.test', string='Test', store=True),
+                'closest': fields.related('point_id', 'closest', type='integer', string='Minor Near', store=True, group_operator="max"),
                 }
-    _order = "sample, rssi"
+    _order = "test, point, sample, rssi desc, accuracy"
    
    
