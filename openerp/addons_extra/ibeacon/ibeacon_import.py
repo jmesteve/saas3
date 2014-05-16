@@ -32,7 +32,7 @@ class ibeacon_import(osv.osv):
                 map_id = map_obj.search(cr,uid,[('file', '=', name)],0, None)
                 if len(map_id) == 0:
                     decodingJsonMap_size = decodingJsonMap.get('size')    
-                    map_obj.create(cr, uid, {
+                    map_id = map_obj.create(cr, uid, {
                         'name':decodingJsonMap.get('name'),
                         'file':name,
                         'x': decodingJsonMap_size.get('x'),
@@ -49,7 +49,7 @@ class ibeacon_import(osv.osv):
                             'x': pos.get('x'),
                             'y': pos.get('y'),
                             'z': pos.get('z'),
-                            'map_id': map_id[0],
+                            'map_id': map_id,
                         })
                 
                 try:

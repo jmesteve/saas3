@@ -76,6 +76,8 @@ class beacon(osv.osv):
                 'point': fields.related('point_id', 'point', type='integer', string='Point', store=True),
                 'test': fields.related('point_id', 'test_id', type='many2one', relation='beacon.test', string='Test', store=True),
                 'closest': fields.related('point_id', 'closest', type='integer', string='Minor Near', store=True, group_operator="max"),
+                'x': fields.related('point_id', 'x', type='float',digits=(12,1), string='x', store=True, group_operator="ava"),
+                'y': fields.related('point_id', 'y', type='float',digits=(12,1), string='y', store=True, group_operator="ava"),
                 }
     _order = "test, point, sample, rssi desc, accuracy"
    

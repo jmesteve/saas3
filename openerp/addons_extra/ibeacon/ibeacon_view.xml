@@ -36,13 +36,12 @@
                 </form>
             </field>
         </record>
-    
+        
     	<record model='ir.actions.act_window' id='action_menu_ibeacon_test'>
             <field name="name">Beacon Test</field>
             <field name="res_model">beacon.test</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            
         </record>
         
         <record id="view_ibeacon_point_tree" model="ir.ui.view">
@@ -110,6 +109,8 @@
                     <field name="accuracy"/>  
 	            	<field name="rssi"/>
 	            	<field name="proximity"/> 
+	            	<field name="x"/>
+		            <field name="y"/>
                 </tree>
             </field>
         </record>
@@ -138,18 +139,73 @@
 	                    <newline/> 
 		            	<field name="rssi"/>
 		            	<newline/>
-		            	<field name="proximity"/> 
-		            	
+		            	<field name="proximity"/>
+		            	<newline/>
+		            	<field name="x"/>
+		            	<field name="y"/>
                 </form>
             </field>
         </record>
-        
+    
+<!-- Graph 1 -->
+         <record id="view_ibeacon_beacon_graph1" model="ir.ui.view">
+            <field name="name">view.ibeacon.beacon.graph1</field>
+            <field name="model">beacon</field>
+            <field name="arch" type="xml">
+                <graph string="Point Minor -> Rssi " orientation="horizontal" type="bar">
+                    <field name="point"/>
+                    <field name="minor"/>
+                    <field name="rssi" operator="+"/>
+                </graph>
+            </field>
+        </record>
+         <record model='ir.actions.act_window' id='action_menu_ibeacon_graph1'>
+            <field name="name">Beacon</field>
+            <field name="search_view_id" ref="beacon_search_form_view"/>
+            <field name="res_model">beacon</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+        </record>
+        <record model="ir.actions.act_window.view" id="act_ibeacon_beacon_graph1">
+		    <field eval="1" name="sequence"/>
+		    <field name="view_mode">graph</field>
+		    <field name="view_id" ref="view_ibeacon_beacon_graph1"/>
+		    <field name="act_window_id" ref="action_menu_ibeacon_graph1"/>
+		</record>
+
+<!-- Graph 2 -->        
+        <record id="view_ibeacon_beacon_graph2" model="ir.ui.view">
+            <field name="name">view.ibeacon.beacon.graph2</field>
+            <field name="model">beacon</field>
+            <field name="arch" type="xml">
+                <graph string="Sample Minor -> Rssi " orientation="horizontal" type="bar">
+                    <field name="sample"/>
+                    <field name="minor"/>
+                    <field name="rssi" operator="+"/>
+                </graph>
+            </field>
+        </record>
+        <record model='ir.actions.act_window' id='action_menu_ibeacon_graph2'>
+            <field name="name">Beacon</field>
+            <field name="search_view_id" ref="beacon_search_form_view"/>
+            <field name="res_model">beacon</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+        </record>
+        <record model="ir.actions.act_window.view" id="act_ibeacon_beacon_graph2">
+		    <field eval="1" name="sequence"/>
+		    <field name="view_mode">graph</field>
+		    <field name="view_id" ref="view_ibeacon_beacon_graph2"/>
+		    <field name="act_window_id" ref="action_menu_ibeacon_graph2"/>
+		</record>
+		
+<!-- general -->        
         <record model='ir.actions.act_window' id='action_menu_ibeacon_beacon'>
             <field name="name">Beacon</field>
             <field name="search_view_id" ref="beacon_search_form_view"/>
             <field name="res_model">beacon</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,graph</field>
         </record>
         
         <record id="beacon_search_form_view" model="ir.ui.view">
@@ -175,7 +231,8 @@
      		<menuitem id="menu_ibeacon_test" name="Test" parent="menu_ibeacon_data" action='action_menu_ibeacon_test'  groups="group_ibeacon_access"/>
 <!--      		<menuitem id="menu_ibeacon_point" name="Point" parent="menu_ibeacon_data" action='action_menu_ibeacon_point'  groups="group_ibeacon_access"/> -->
      		<menuitem id="menu_ibeacon_beacon" name="Beacons" parent="menu_ibeacon_data" action='action_menu_ibeacon_beacon'  groups="group_ibeacon_access"/>
-     		 
-  
+     	<menuitem id="menu_ibeacon_graph" name="Graphs" parent="menu_ibeacon" groups="group_ibeacon_access"/> 
+  			<menuitem id="menu_ibeacon_graph1" name="Point Minor -> Rssi" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph1'  groups="group_ibeacon_access"/>
+  			<menuitem id="menu_ibeacon_graph2" name="Sample Minor -> Rssi" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph2'  groups="group_ibeacon_access"/>
     </data>
 </openerp>

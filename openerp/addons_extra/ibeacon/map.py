@@ -21,8 +21,8 @@ class beacon_map_beacons(osv.osv):
     
     _columns = {
                 'uuid': fields.char('Uuid', size=16),
-                'major': fields.integer('Major'),
-                'minor': fields.integer('Minor'),
+                'major': fields.char('Major',size=4),
+                'minor': fields.integer('Minor',size=4),
                 'x': fields.float('x'),
                 'y': fields.float('y'),
                 'z': fields.float('z'),
