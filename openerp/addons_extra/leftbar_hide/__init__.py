@@ -2,10 +2,9 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (c) 2013 ErpAndCloud All Rights Reserved
+#    Copyright (c) 2013 escrichov All Rights Reserved
 #                       https://github.com/jmesteve
-#                       https://github.com/escrichov
-#                       <engineering@erpandcloud.com>
+#                       <escrichov@gmail.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -21,27 +20,3 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-    'name': 'account balance extend',
-    'version': '1.9',
-    'author': 'ErpAndCloud',
-    'category': 'Generic Modules/Accounting',    
-    'description': """
-        [ENG] Extend accounting balance .
-    """,
-    'website': 'http://www.erpandcloud.com',
-    'license': 'AGPL-3',
-    'images': [],
-    'depends': ['report_xls', 'account', 'account_extend', 'report_extend'],
-    'data' : [
-              'data/data.xml',
-              'security/ir.model.access.csv',
-              'trial_balance_level_view.xml',
-              'account_report.xml',
-              'wizard/trial_balance_wizard_view.xml',
-        ],
-    'demo': [],
-    'installable': True,
-    'application': True,
-    'auto_install': False,
-}

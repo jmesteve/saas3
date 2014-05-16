@@ -1,11 +1,11 @@
 ${title}
 
 
-${headers1[0]}	${headers1[1]}	${headers1[2]}	${headers1[3]}	${headers1[4]}	${headers1[5]}
-${data1[0]}	${data1[1]}	${data1[2]}	${data1[3]}	${data1[4]}	${data1[5]}
+${headers1[0]};${headers1[1]};${headers1[2]};${headers1[3]};${headers1[4]};${headers1[5]}
+${data1[0]};${data1[1]};${data1[2]};${data1[3]};${data1[4]};${data1[5]}
 
 
-${headers2[0]} ${headers2[1]} ${headers2[2]} ${headers2[3]} ${headers2[4]} ${headers2[5]} ${headers2[6]} ${headers2[7]}
+${headers2[0]};${headers2[1]};${headers2[2]};${headers2[3]};${headers2[4]};${headers2[5]};${headers2[6]};${headers2[7]}
 % for line in lines:
-${line['code']} ${line['name']} ${"%.2f" % (line['opening_balance'])} ${"%.2f" % (line['debit'])} ${"%.2f" % (line['credit'])} ${"%.2f" % (line['accumulated_debit'])} ${"%.2f" % (line['accumulated_credit'])} ${"%.2f" % (line['final_balance'])} 
+${line['code']};${line['name']};${"%.2f" % (line['opening_balance'])};${"%.2f" % (line['debit'])};${"%.2f" % (line['credit'])};${"%.2f" % (line['accumulated_debit'])};${"%.2f" % (line['accumulated_credit'])};${"%.2f" % (line['final_balance'])} 
 % endfor

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="group_leftbar" model="res.groups">
+            <field name="name">Leftbar Button</field>
+        </record>
+        
+    </data>
+</openerp>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+
+	<t t-extend="Menu">
+	    <t t-jquery="ul.navbar-left" t-operation="replace">
+	    	<a class="leftbar oe_menu_toggler"><img alt="Cuenta" src="/web/static/src/img/icons/gtk-leftbar-black.png"></img></a>	
+	        <ul class="nav navbar-nav navbar-left" t-if="widget.data">
+		        <li t-foreach="widget.data.data.children" t-as="menu">
+		            <t t-call="Menu.link"/>
+		        </li>
+		        <li id="menu_more_container" class="dropdown" style="display: none;">
+		            <a href="#" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
+		            <ul id="menu_more" class="dropdown-menu"></ul>
+	        	</li>
+    		</ul>
+	    </t>
+	</t>
+
+</templates>
