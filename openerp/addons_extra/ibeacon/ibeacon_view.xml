@@ -198,7 +198,84 @@
 		    <field name="view_id" ref="view_ibeacon_beacon_graph2"/>
 		    <field name="act_window_id" ref="action_menu_ibeacon_graph2"/>
 		</record>
+	
+<!-- Graph 3 -->        
+        <record id="view_ibeacon_beacon_graph3" model="ir.ui.view">
+            <field name="name">view.ibeacon.beacon.graph3</field>
+            <field name="model">beacon</field>
+            <field name="arch" type="xml">
+                <graph string="Proximity -> Rssi " orientation="horizontal" type="bar">
+                    <field name="test"/>
+                    <field name="proximity"/>
+                    <field name="rssi" operator="+"/>
+                </graph>
+            </field>
+        </record>
+        <record model='ir.actions.act_window' id='action_menu_ibeacon_graph3'>
+            <field name="name">Beacon</field>
+            <field name="search_view_id" ref="beacon_search_form_view"/>
+            <field name="res_model">beacon</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+        </record>
+        <record model="ir.actions.act_window.view" id="act_ibeacon_beacon_graph3">
+		    <field eval="1" name="sequence"/>
+		    <field name="view_mode">graph</field>
+		    <field name="view_id" ref="view_ibeacon_beacon_graph3"/>
+		    <field name="act_window_id" ref="action_menu_ibeacon_graph3"/>
+		</record>
 		
+<!-- Graph 4 -->        
+        <record id="view_ibeacon_beacon_graph4" model="ir.ui.view">
+            <field name="name">view.ibeacon.beacon.graph4</field>
+            <field name="model">beacon</field>
+            <field name="arch" type="xml">
+                <graph string="Proximity -> Accuracy " orientation="horizontal" type="bar">
+                    <field name="test"/>
+                    <field name="proximity"/>
+                    <field name="accuracy" operator="+"/>
+                </graph>
+            </field>
+        </record>
+        <record model='ir.actions.act_window' id='action_menu_ibeacon_graph4'>
+            <field name="name">Beacon</field>
+            <field name="search_view_id" ref="beacon_search_form_view"/>
+            <field name="res_model">beacon</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+        </record>
+        <record model="ir.actions.act_window.view" id="act_ibeacon_beacon_graph4">
+		    <field eval="1" name="sequence"/>
+		    <field name="view_mode">graph</field>
+		    <field name="view_id" ref="view_ibeacon_beacon_graph4"/>
+		    <field name="act_window_id" ref="action_menu_ibeacon_graph4"/>
+		</record>
+
+<!-- Graph 5 -->        
+        <record id="view_ibeacon_beacon_graph5" model="ir.ui.view">
+            <field name="name">view.ibeacon.beacon.graph5</field>
+            <field name="model">beacon</field>
+            <field name="arch" type="xml">
+                <graph string="Accuracy -> Rssi " orientation="horizontal" type="line">
+                    <field name="accuracy"/>
+                    <field name="rssi"/>
+                </graph>
+            </field>
+        </record>
+        <record model='ir.actions.act_window' id='action_menu_ibeacon_graph5'>
+            <field name="name">Beacon</field>
+            <field name="search_view_id" ref="beacon_search_form_view"/>
+            <field name="res_model">beacon</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+        </record>
+        <record model="ir.actions.act_window.view" id="act_ibeacon_beacon_graph5">
+		    <field eval="1" name="sequence"/>
+		    <field name="view_mode">graph</field>
+		    <field name="view_id" ref="view_ibeacon_beacon_graph5"/>
+		    <field name="act_window_id" ref="action_menu_ibeacon_graph5"/>
+		</record>
+					
 <!-- general -->        
         <record model='ir.actions.act_window' id='action_menu_ibeacon_beacon'>
             <field name="name">Beacon</field>
@@ -221,18 +298,22 @@
                    		<filter name="major" string="major"  context="{'group_by':'major'}"/>
                    		<filter name="minor" string="minor"  context="{'group_by':'minor'}"/>
                    		<filter name="proximity" string="proximity" icon="terp-check" context="{'group_by':'proximity'}"/>
+                   		<filter name="accuracy" string="accuracy" icon="terp-check" context="{'group_by':'accuracy'}"/>
                    </group>
                 </search>
             </field>
         </record>
     
-    <menuitem id="menu_ibeacon" name="iBeacon" groups="group_ibeacon_access"/>
+   		<menuitem id="menu_ibeacon" name="iBeacon" groups="group_ibeacon_access"/>
      	<menuitem id="menu_ibeacon_data" name="Data" parent="menu_ibeacon" groups="group_ibeacon_access"/>
-     		<menuitem id="menu_ibeacon_test" name="Test" parent="menu_ibeacon_data" action='action_menu_ibeacon_test'  groups="group_ibeacon_access"/>
+   		<menuitem id="menu_ibeacon_test" name="Test" parent="menu_ibeacon_data" action='action_menu_ibeacon_test'  groups="group_ibeacon_access"/>
 <!--      		<menuitem id="menu_ibeacon_point" name="Point" parent="menu_ibeacon_data" action='action_menu_ibeacon_point'  groups="group_ibeacon_access"/> -->
-     		<menuitem id="menu_ibeacon_beacon" name="Beacons" parent="menu_ibeacon_data" action='action_menu_ibeacon_beacon'  groups="group_ibeacon_access"/>
+   		<menuitem id="menu_ibeacon_beacon" name="Beacons" parent="menu_ibeacon_data" action='action_menu_ibeacon_beacon'  groups="group_ibeacon_access"/>
      	<menuitem id="menu_ibeacon_graph" name="Graphs" parent="menu_ibeacon" groups="group_ibeacon_access"/> 
-  			<menuitem id="menu_ibeacon_graph1" name="Point Minor -> Rssi" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph1'  groups="group_ibeacon_access"/>
-  			<menuitem id="menu_ibeacon_graph2" name="Sample Minor -> Rssi" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph2'  groups="group_ibeacon_access"/>
+  		<menuitem id="menu_ibeacon_graph1" name="Point Minor -> Rssi" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph1'  groups="group_ibeacon_access"/>
+  		<menuitem id="menu_ibeacon_graph2" name="Sample Minor -> Rssi" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph2'  groups="group_ibeacon_access"/>
+  		<menuitem id="menu_ibeacon_graph3" name="Proximity -> Rssi" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph3'  groups="group_ibeacon_access"/>
+  		<menuitem id="menu_ibeacon_graph4" name="Proximity -> Accuracy" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph4'  groups="group_ibeacon_access"/>
+  		<menuitem id="menu_ibeacon_graph5" name="Accuracy -> Rssi" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph5'  groups="group_ibeacon_access"/>
     </data>
 </openerp>
