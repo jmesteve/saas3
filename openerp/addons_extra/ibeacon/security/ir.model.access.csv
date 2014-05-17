@@ -2,6 +2,6 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_group_ibeacon_access,ibeacon,model_beacon,ibeacon.group_ibeacon_access,1,1,1,1
 access_group_ibeacon_access,ibeacon,model_beacon_test,ibeacon.group_ibeacon_access,1,1,1,1
 access_group_ibeacon_access,ibeacon,model_beacon_point,ibeacon.group_ibeacon_access,1,1,1,1
-access_group_ibeacon_access,ibeacon,model_map,ibeacon.group_ibeacon_access,1,1,1,1
-access_group_ibeacon_access,ibeacon,model_map_beacon,ibeacon.group_ibeacon_access,1,1,1,1
+access_group_ibeacon_access,ibeacon,model_beacon_map,ibeacon.group_ibeacon_access,1,1,1,1
+access_group_ibeacon_access,ibeacon,model_beacon_map_beacons,ibeacon.group_ibeacon_access,1,1,1,1
 access_group_ibeacon_access,ibeacon,model_ibeacon_import,ibeacon.group_ibeacon_access,1,1,1,1
