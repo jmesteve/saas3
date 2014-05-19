@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'ibeacon',
-    'version': '1.1',
+    'version': '1.2',
     'author': 'ErpAndCloud',
     'category': 'iBeacon',    
     'description': """
