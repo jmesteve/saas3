@@ -25,6 +25,17 @@ class account_move_line(osv.osv):
 #             'context': ctx
 #          }
 
+    def _check_company_id(self, cr, uid, ids, context=None):
+        lines = self.browse(cr, uid, ids, context=context)
+        for l in lines:
+            if l.account_id.company_id != l.period_id.company_id:
+                return False
+        return True
+    
+    _constraints = [
+        (_check_company_id, 'Account and Period must belong to the same company.', ['company_id']),
+    ]
+
     def action_filter(self, cr, uid, ids, context=None):
          
         view_ref = self.pool.get('ir.model.data').get_object_reference(cr, 

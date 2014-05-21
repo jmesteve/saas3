@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'account financial entries extend',
-    'version': '1.6',
+    'version': '1.7',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """
