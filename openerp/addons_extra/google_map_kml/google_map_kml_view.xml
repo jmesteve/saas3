@@ -177,6 +177,15 @@
             <field name="tag">location_map.partners_point</field>
         </record>
         
+        <record id="action_open_map_comparison" model="ir.actions.act_window">
+            <field name="name">Map Partner Comparison</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">map.partner.comparison</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help">Map Partner Comparison.</field>
+        </record>
+        
         <record model="ir.actions.act_window.view" id="action_open_map_comparison_view">
 		    <field eval="2" name="sequence"/>
 		    <field name="view_mode">form</field>
@@ -190,15 +199,6 @@
 		    <field name="view_id" ref="view_open_map_comparison_tree"/>
 		    <field name="act_window_id" ref="action_open_map_comparison"/>
 		</record>
-        
-        <record id="action_open_map_comparison" model="ir.actions.act_window">
-            <field name="name">Map Partner Comparison</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">map.partner.comparison</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="help">Map Partner Comparison.</field>
-        </record>
         
         <menuitem id="menu_partner_map" parent="base.menu_sales" action="action_open_map" sequence="2"/>
         <menuitem id="menu_partner_map_point" parent="base.menu_sales" action="action_open_map_point" sequence="3"/>
