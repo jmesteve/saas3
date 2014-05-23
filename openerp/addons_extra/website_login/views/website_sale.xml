@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="products_extend" inherit_id="website_sale.products">
+		  <xpath expr="//link[@href='/website_sale/static/src/css/website_sale.css']" position="after">
+		      <link rel='stylesheet' href='/website_login/static/src/css/website_sale.css'/>
+		  </xpath>
+		</template>
+	</data>
+</openerp>

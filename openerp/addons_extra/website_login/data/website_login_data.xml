@@ -4,6 +4,36 @@
         <record id="ir_config_parameter_default_shop_redirect" model="ir.config_parameter">
             <field name="key">default_shop_redirect</field>
             <field name="value">/home</field>
-        </record>        
+        </record>
+        
+<!-- 		<record id="base.public_user" model="res.users"> -->
+<!-- 		    <field name="name">Public user</field> -->
+<!-- 		    <field name="login">public</field> -->
+<!-- 		    <field name="password"></field> -->
+<!-- 		    Avoid auto-including this demo user in any default group -->
+<!-- 		    <field name="groups_id" eval="[(6,0,[ref('base.group_public')])]"/> -->
+<!-- 		    <field name="image" type="base64" file="base/static/img/public_user-image.png"/> -->
+<!-- 		    <field name="partner_id" ref="base.public_partner"/> -->
+<!-- 		    <field name="active" eval="False"/> -->
+<!-- 		    <field name="share" eval="True" /> -->
+<!-- 		</record> -->
+        
+<!--         <record id="base.public_user" model="res.users"> -->
+<!--             <field eval="[(4, ref('share.group_share_user'))]" name="groups_id"/> -->
+<!--             <field name="share" eval="True" /> -->
+<!--         </record> -->
+        
+        <!-- Default template user for new users signing in -->
+        <record id="default_template_user" model="res.users">
+            <field name="name">Template User</field>
+            <field name="login">portaltemplate</field>
+            <!-- No password: this template user doesn't need to log in -->
+            <field name="password"></field>
+            <field name="active" eval="False"/>
+            <!-- Avoid auto-including this user in any default group, just like a typical portal member -->
+            <field name="groups_id" eval="[(4,ref('base.group_portal'))]"/>
+            <!-- allow signuped users to have a alias -->
+            <field name="alias_name">_usertemplate</field>
+        </record>
     </data>
 </openerp>

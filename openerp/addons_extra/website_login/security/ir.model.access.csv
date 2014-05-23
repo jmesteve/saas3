@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_warehouse_user_public_user,stock.warehouse.user group_public,stock.model_stock_warehouse,base.group_public,1,0,0,0
+access_stock_location_user_public,stock.location.user group_public,stock.model_stock_location,base.group_public,1,0,0,0
+access_product_uom_stock_manager_public_user,product.uom stock_manager group_public,product.model_product_uom,base.group_public,1,0,0,0
