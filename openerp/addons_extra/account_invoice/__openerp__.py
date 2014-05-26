@@ -23,7 +23,7 @@
 
 {
     'name': 'Account Invoice',
-    'version': '1.2',
+    'version': '1.3',
     'author': 'jmesteve',
     'category' : 'Accounting & Finance',
     'description': """
