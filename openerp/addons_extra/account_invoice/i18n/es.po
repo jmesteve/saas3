@@ -175,3 +175,8 @@ msgstr "Cuenta Bancaria:"
 #: field:payment.type,account:0
 msgid "Bank Account"
 msgstr "Cuenta Bancaria"
+
+#. module: account_invoice
+#: field:payment.type,has_account:0
+msgid "Has Account"
+msgstr "Tiene Cuenta Bancaria"

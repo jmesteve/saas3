@@ -127,10 +127,10 @@
     <paraStyle name="terp_default_Centre_8" rightIndent="0.0" leftIndent="0.0" fontSize="8.0" leading="10" alignment="CENTER" spaceBefore="0.0" spaceAfter="0.0"/>
     <paraStyle name="terp_default_address" rightIndent="0.0" leftIndent="0.0" fontSize="10.0" leading="13" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
     <paraStyle name="terp_default_9" rightIndent="0.0" leftIndent="0.0" fontSize="9.0" leading="11" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
-    <paraStyle name="terp_default_9" rightIndent="0.0" leftIndent="0.0" fontSize="9.0" leading="11" alignment="LEFT" spaceBefore="20.0" spaceAfter="20.0"/>
+    <paraStyle name="terp_default_9_extra" rightIndent="0.0" leftIndent="0.0" fontSize="9.0" leading="11" alignment="LEFT" spaceBefore="8.0" spaceAfter="8.0"/>
     <paraStyle name="terp_default_Bold_9" rightIndent="0.0" leftIndent="-3.0" fontSize="9.0" leading="11" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
     <paraStyle name="terp_default_Bold_9_extend" rightIndent="0.0" leftIndent="-3.0" fontSize="9.0" leading="11" alignment="LEFT" spaceBefore="3.0" spaceAfter="2.0"/>
-    <paraStyle name="terp_default_Bold_9_extra" rightIndent="0.0" leftIndent="-3.0" fontSize="9.0" leading="11" alignment="LEFT" spaceBefore="6.0" spaceAfter="4.0"/>
+    <paraStyle name="terp_default_Bold_9_extra" rightIndent="0.0" leftIndent="-3.0" fontSize="9.0" leading="11" alignment="LEFT" spaceBefore="8.0" spaceAfter="2.0"/>
     <paraStyle name="terp_default_Centre_9" rightIndent="0.0" leftIndent="0.0" fontSize="9.0" leading="11" alignment="CENTER" spaceBefore="0.0" spaceAfter="0.0"/>
     <paraStyle name="terp_default_Right_9" rightIndent="0.0" leftIndent="0.0" fontSize="9.0" leading="11" alignment="RIGHT" spaceBefore="0.0" spaceAfter="0.0"/>
     <paraStyle name="terp_default_Bold_Right_9" rightIndent="0.0" leftIndent="-3.0" fontSize="9.0" leading="11" alignment="RIGHT" spaceBefore="0.0" spaceAfter="0.0"/>
@@ -335,11 +335,11 @@
       </blockTable>
     </section>
     <section>
-	   <para style="terp_default_9_extra">
+	   <para style="terp_default_9">
 		      <font color="white"> </font>
 		</para>
 	    <para style="terp_default_9_extra">[[ (o.comment and format(o.comment )) or removeParentNode('para') ]]</para>
-	    <para style="terp_default_9_extra">
+	    <para style="terp_default_9">
 	      <font color="white"> </font>
 	    </para>
     </section>
