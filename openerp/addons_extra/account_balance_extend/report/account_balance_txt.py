@@ -84,8 +84,8 @@ class report_custom(report_int):
             data1.append(ab.formatLang(ab._get_start_date(data),date=True))
             data1.append(ab.formatLang(ab._get_end_date(data),date=True))
         else:
-            data1.append(ab.formatLang(ab.get_start_period(data),date=True))
-            data1.append(ab.formatLang(ab.get_end_period(data),date=True))
+            data1.append(ab.get_start_period(data))
+            data1.append(ab.get_end_period(data))
         if data['form']['display_account']=='all':
             data1.append(self.translate(cr, uid, 'All', context=context))
         elif data['form']['display_account']=='movement':

@@ -77,7 +77,7 @@ class account_balance(report_sxw_extend.rml_parse, common_report_header):
             JOIN account_journal aj ON aj.id=l.journal_id 
             JOIN account_move am ON am.id=l.move_id 
             WHERE l.account_id IN %s AND aj.type like 'situation' AND am.state=%s AND l.period_id IN %s 
-            GROUP BY a.id ORDER BY a.code""", (tuple(account_ids), form['target_move'], tuple(form['period_from'], form['period_to']),))
+            GROUP BY a.id ORDER BY a.code""", (tuple(account_ids), form['target_move'], tuple([form['period_from'], form['period_to']]),))
             
         elif(form['filter'] == 'filter_date'):
             self.cr.execute("""SELECT a.id, a.code, a.parent_id, a.name, SUM(l.debit), SUM(l.credit), SUM(l.debit) - SUM(l.credit), a.type, a.level
@@ -108,7 +108,7 @@ class account_balance(report_sxw_extend.rml_parse, common_report_header):
             JOIN account_account a ON a.id=l.account_id  
             JOIN account_move am ON am.id=l.move_id 
             WHERE l.account_id IN %s AND am.state=%s AND l.period_id IN %s AND l.journal_id IN %s
-            GROUP BY a.id ORDER BY a.code""", (tuple(account_ids), form['target_move'], tuple(form['period_to'], form['period_from']), tuple(form['journal_ids'])))
+            GROUP BY a.id ORDER BY a.code""", (tuple(account_ids), form['target_move'], tuple([form['period_to'], form['period_from']]), tuple(form['journal_ids'])))
             
         elif(form['filter'] == 'filter_date'):
             self.cr.execute("""SELECT a.id, a.code, a.parent_id, a.name, SUM(l.debit), SUM(l.credit), a.type, a.level
