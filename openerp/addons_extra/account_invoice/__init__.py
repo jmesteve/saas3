@@ -22,4 +22,5 @@
 ##############################################################################
 import report
 import account_invoice
+import payment_type_extend
 

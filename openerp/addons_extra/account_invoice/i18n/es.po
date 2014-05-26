@@ -155,3 +155,23 @@ msgstr "Factura rectificativa"
 #: report:account.account_invoice:0
 msgid "Total"
 msgstr "Total"
+
+#. module: account_invoice
+#: report:account.account_invoice:0
+msgid "Payment Term:"
+msgstr "Plazo de pago:"
+
+#. module: account_invoice
+#: report:account.account_invoice:0
+msgid "Payment Type:"
+msgstr "Tipo de Pago:"
+
+#. module: account_invoice
+#: report:account.account_invoice:0
+msgid "Bank Account:"
+msgstr "Cuenta Bancaria:"
+
+#. module: account_invoice
+#: field:payment.type,account:0
+msgid "Bank Account"
+msgstr "Cuenta Bancaria"

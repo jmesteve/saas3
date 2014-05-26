@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'account journal extend',
-    'version': '1.1',
+    'version': '1.2',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """

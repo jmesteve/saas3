@@ -86,12 +86,19 @@
               </p>
             </field>
         </record>
+        
+        <record model="ir.ui.view" id="view_payment_type_form_extend">
+	        <field name="name">payment.type.form</field>
+	        <field name="model">payment.type</field>
+	        <field name="inherit_id" ref="account_payment_extension.view_payment_type_form"/>
+	        <field name="arch" type="xml">
+	        	<xpath expr="//field[@name='note']" position="after">
+               		<field name="has_account"/>
+		            <field name="account" attrs="{'invisible':[('has_account','not in',[True])]}"/>
+                </xpath>
+	        </field>
+    	</record>
   </data>
-  
-  
-
-  
-  
 </openerp>
 
 
