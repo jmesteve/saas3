@@ -85,11 +85,14 @@ class google_map_partner(osv.osv):
             url = 'https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address='
         url += urllib.quote(addr.encode('utf8'))
     
+        result = {}
+        result['status'] = 'ERROR'
         try:
             result = json.load(urllib.urlopen(url))
         except Exception, e:
-            raise osv.except_osv('Network error',
-                                 'Cannot contact geolocation servers. Please make sure that your internet connection is up and running (%s).' % e)
+            pass
+            #raise osv.except_osv('Network error',
+            #                     'Cannot contact geolocation servers. Please make sure that your internet connection is up and running (%s).' % e)
         if result['status'] != 'OK':
             return None
     

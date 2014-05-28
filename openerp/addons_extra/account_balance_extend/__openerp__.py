@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'account balance extend',
-    'version': '1.9',
+    'version': '1.10',
     'author': 'ErpAndCloud',
     'category': 'Generic Modules/Accounting',    
     'description': """

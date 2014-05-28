@@ -161,6 +161,7 @@
                    		<filter name="minor" string="minor"  context="{'group_by':'minor'}"/>
                    		<filter name="proximity" string="proximity" icon="terp-check" context="{'group_by':'proximity'}"/>
                    		<filter name="accuracy" string="accuracy" icon="terp-check" context="{'group_by':'accuracy'}"/>
+                   		<filter name="rssi" string="rssi" icon="terp-check" context="{'group_by':'rssi'}"/>
                    </group>
                 </search>
             </field>

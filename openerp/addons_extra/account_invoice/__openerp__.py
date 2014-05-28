@@ -23,7 +23,7 @@
 
 {
     'name': 'Account Invoice',
-    'version': '1.0',
+    'version': '1.3',
     'author': 'jmesteve',
     'category' : 'Accounting & Finance',
     'description': """
@@ -32,7 +32,7 @@
     'website': 'https://github.com/jmesteve',
     'license': 'AGPL-3',
     'images': [],
-    'depends': ['account'],
+    'depends': ['account', 'account_payment_extension'],
     'data': ['account_invoice.xml'],
     'demo': [],
     'installable': True,

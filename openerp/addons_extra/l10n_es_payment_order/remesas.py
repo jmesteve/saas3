@@ -39,7 +39,6 @@
 ##############################################################################
 
 from openerp.osv import osv, fields
-import openerp.pooler
 from openerp.tools.translate import _
 
 
@@ -50,8 +49,8 @@ class payment_mode(osv.osv):
 
     def onchange_partner(self, cr, uid, ids, partner_id):
         if partner_id:
-            pool = pooler.get_pool(cr.dbname)
-            obj = pool.get('res.partner')
+            #pool = self.pooler.get_pool(cr.dbname)
+            obj = self.pool.get('res.partner')
             field = ['name']
             ids = [partner_id]
             filas = obj.read(cr, uid, ids, field) 

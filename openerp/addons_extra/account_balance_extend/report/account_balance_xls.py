@@ -90,8 +90,8 @@ class report_custom(report_int):
              ws.write(2, 3, ab.formatLang(ab._get_start_date(data),date=True), style2)
              ws.write(2, 4, ab.formatLang(ab._get_end_date(data),date=True), style2)
         else:
-             ws.write(2, 3, ab.formatLang(ab.get_start_period(data),date=True), style2)
-             ws.write(2, 4, ab.formatLang(ab.get_end_period(data),date=True), style2)
+             ws.write(2, 3, ab.get_start_period(data), style2)
+             ws.write(2, 4, ab.get_end_period(data), style2)
         if data['form']['display_account']=='all':
             ws.write(2, 5, self.translate(cr, uid, 'All', context=context), style2)
         elif data['form']['display_account']=='movement':

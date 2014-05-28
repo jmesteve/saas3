@@ -3,11 +3,12 @@
 -->
 <openerp>
     <data>
+		    
       <record model="ir.ui.view" id="show_sign_in_extend">
          <field name="name">Show sign in extend</field>
          <field name="type">qweb</field>     
-         <field name="inherit_id" ref="website.show_sign_in"/>       
-         <field name="arch" type="xml">            
+         <field name="inherit_id" ref="website.show_sign_in"/>
+         <field name="arch" type="xml">          
                <xpath expr="//a[@t-attf-href='/web/login']" position="replace">
                		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
 			            <a t-attf-href="/shop/login">
@@ -95,13 +96,12 @@
          </field>
       </record>
       
-      
       <record model="ir.ui.view" id="website_layout_extend">
          <field name="name">Main layout Extend</field>
          <field name="type">qweb</field>     
-         <field name="inherit_id" ref="website.layout"/>       
+         <field name="inherit_id" ref="website.layout"/>     
          <field name="arch" type="xml">            
-               <xpath expr="//li[@class='dropdown']" position="replace">
+               <xpath expr='//li[@class="dropdown"]' position="replace">
                		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
 			            <li class="dropdown" t-ignore="true" groups="base.group_user,base.group_portal">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -207,18 +207,22 @@
                		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
 						<t t-foreach="submenu.child_id" t-as="submenu">
 							<t t-if="submenu.name != 'Home'">
-               					<t t-call="website.submenu"/>
+               					<t t-call="website_submenu_extend"/>
                				</t>
            				</t>
 			         </t>
 			         <t t-if="request.httprequest.url_root[:5] == 'https' or (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
 						<t t-foreach="submenu.child_id" t-as="submenu">
-                			<t t-call="website.submenu"/>
+                			<t t-call="website_submenu_extend"/>
             			</t>
 			         </t>
     			</xpath>
          </field>
       </record>
+      
+<!--       <record id="website.main_menu" model="website.menu"> -->
+<!-- 		    <field name="child_id" eval="[(3,ref('website.menu_homepage'))]"/> -->
+<!-- 	  </record> -->
       
       <delete model="website.menu" id="website.menu_homepage"/>
       
@@ -237,7 +241,7 @@
          <field name="arch" type="xml">            
                <xpath expr="//form[@class='oe_signup_form']" position="replace">
                		<t t-if="request.httprequest.url_root[:5] != 'https' and not (request.httprequest.host[request.httprequest.host.index(':')+1:] if ':' in request.httprequest.host else False)">
-			        	<form class="oe_signup_form" role="form" t-attf-action="/shop/login{{ '?debug' if debug else '' }}" method="post">
+			        	<form class="oe_signup_form" role="form" t-attf-action="/shop/register{{ '?debug' if debug else '' }}" method="post">
 		                    <t t-call="web.database_select"/>
 		
 		                    <div class="form-group field-name" t-if="not reset_without_token">

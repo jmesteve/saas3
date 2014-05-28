@@ -23,7 +23,7 @@
 
 {
     'name': "Website Login",
-    'version': '0.1',
+    'version': '0.2',
     'category': 'Hidden',
     'description': """
         [ENG] Change addon Website Login 
@@ -31,11 +31,15 @@
     'author': 'jmesteve',
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
-    "depends": ['web','website', 'auth_signup'],
-    'data': ['views/shop_redirect_view.xml',
+    "depends": ['web','website', 'auth_signup', 'website_sale'],
+    'data': ['security/ir.model.access.csv',
+             'views/shop_redirect_view.xml',
              'views/website_templates.xml',
+             'views/website_sale.xml',
              'data/website_login_data.xml'
     ],
+    "application": True,
     "active": True,
-    "installable": True
+    "installable": True,
+    'auto_install': False,
 }

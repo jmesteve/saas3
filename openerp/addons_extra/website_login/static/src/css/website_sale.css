@@ -1,0 +1,13 @@
+.oe_product .oe_product_cart section>h5{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oe_product .oe_subdescription{
+	display: none;
+}
+
+.oe_product .oe_subdescription.oe_shadow{
+	display: none;
+}

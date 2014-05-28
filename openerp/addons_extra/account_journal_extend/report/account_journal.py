@@ -69,7 +69,7 @@ class journal_print(report_sxw_original.rml_parse, common_report_header):
             self.query_get_clause = 'AND '
             self.query_get_clause += obj_move._query_get(self.cr, self.uid, obj='l', context=data['form'].get('used_context', {}))
             self.sort_selection = data['form'].get('sort_selection', 'date')
-            if(self._display_group(data)):
+            if(self._display_group(data) and len(new_ids) > 0):
                 objects = self.pool.get('account.journal.period').browse(self.cr, self.uid, [new_ids[0]])
             else:
                 objects = self.pool.get('account.journal.period').browse(self.cr, self.uid, new_ids)

@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'Google Map KML',
-    'version': '1.0',
+    'version': '1.2',
     'author': 'ErpAndCloud',
     'category': 'Customer Relationship Management',    
     'description': """
