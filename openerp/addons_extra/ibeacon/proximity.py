@@ -32,17 +32,17 @@ class beacon_proximity(osv.osv_memory):
 #         return self._calculate( cr, ids, '''SELECT max(accuracy) FROM beacon WHERE proximity LIKE '3' GROUP BY test;''')
 #     
     
-    def default_get(self, cr, uid, fields, context=None):
+    def query(self, cr, uid, context=None):
         
         obj = self.pool.get('beacon')
         #res = super(payment_order_create, self).default_get(cr, uid, fields, context=context)
         
         cr.execute('''SELECT beacon_test.name, proximity, min(accuracy), max(accuracy) 
-FROM beacon
-JOIN beacon_test ON (beacon.test = beacon_test.id)
-WHERE proximity != '0'
-GROUP BY beacon_test.name, proximity
-ORDER BY beacon_test.name, proximity;''')
+            FROM beacon
+            JOIN beacon_test ON (beacon.test = beacon_test.id)
+            WHERE proximity != '0'
+            GROUP BY beacon_test.name, proximity
+            ORDER BY beacon_test.name, proximity;''')
         
         data = cr.fetchall()
         res = {}
@@ -56,14 +56,22 @@ ORDER BY beacon_test.name, proximity;''')
                      'max': item[3],
                     }
             count = count + 1
-#             self.create(cr, uid, {
-#                                   'test': item[0],
-#                                   'proximity': item[1],
-#                                   'min': item[2],
-#                                   'max': item[3],
-#                                   }, context)
+            self.create(cr, uid, {
+                                  'test': item[0],
+                                  'proximity': item[1],
+                                  'min': item[2],
+                                  'max': item[3],
+                                  }, context)
             
-        return res
+        return {
+            'view_type': 'form',
+            'view_mode': 'tree',
+            'res_model': 'beacon.proximity.bounds',
+            'type': 'ir.actions.act_window',
+            'context': context,
+            #'target':'new',
+            'nodestroy': True,
+         }
     
         #ids = obj.search(cr, uid, [], limit=none, context=context)
         #for line in obj.browse(cr,uid, ids, context=context)

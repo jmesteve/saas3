@@ -44,7 +44,7 @@
             <field name="name">Proximity Boundaries</field>
             <field name="model_id" ref="model_beacon_proximity_bounds"></field>
             <field name="state">code</field>
-            <field name="code"> action="self.query(cr, uid, context=context)"</field>
+            <field name="code"> action=self.query(cr, uid, context=context)</field>
         </record>
         
    		<menuitem id="menu_ibeacon_proximity" name="Proximity" parent="menu_ibeacon_data" action='action_menu_ibeacon_proximity'  groups="group_ibeacon_access"/>	
