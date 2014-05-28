@@ -95,7 +95,7 @@
 				                    <field name="check_accuracy" nolabel="1"/>
 				                    <field name="broadcasting_cycle"/> 
 				                    <field name="check_broadcasting_cycle" nolabel="1"/>
-				                    <field name="password" password="True"/>
+				                    <field name="password"/>
 				                    <field name="check_password" nolabel="1"/>
 			                    </group>
 			                	<newline/>

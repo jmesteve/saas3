@@ -4,49 +4,35 @@ from openerp.osv import fields,osv
 class beacon_proximity(osv.osv_memory):
     
     _name = 'beacon.proximity.bounds'
-    
-#     def _calculate(self, cr, ids, query):
-#         cr.execute(query)
-#         mins = cr.fetchall()[0]
-#         res = {}
-#         for id in ids:
-#             res[id] = mins[0]
-#         return res
-#   
-#     def _min_inm(self, cr, uid, ids, name, arg, context=None):
-#         return self._calculate( cr, ids, '''SELECT min(accuracy) FROM beacon WHERE proximity LIKE '1' GROUP BY test;''')
-#     
-#     def _max_inm(self, cr, uid, ids, name, arg, context=None):
-#         return self._calculate( cr, ids, '''SELECT max(accuracy) FROM beacon WHERE proximity LIKE '1' GROUP BY test;''')
-#     
-#     def _min_near(self, cr, uid, ids, name, arg, context=None):
-#         return self._calculate( cr, ids, '''SELECT min(accuracy) FROM beacon WHERE proximity LIKE '2' GROUP BY test;''')
-#     
-#     def _max_near(self, cr, uid, ids, name, arg, context=None):
-#         return self._calculate( cr, ids, '''SELECT max(accuracy) FROM beacon WHERE proximity LIKE '2' GROUP BY test;''')
-#     
-#     def _min_far(self, cr, uid, ids, name, arg, context=None):
-#         return self._calculate( cr, ids, '''SELECT min(accuracy) FROM beacon WHERE proximity LIKE '3' GROUP BY test;''')
-#     
-#     def _max_far(self, cr, uid, ids, name, arg, context=None):
-#         return self._calculate( cr, ids, '''SELECT max(accuracy) FROM beacon WHERE proximity LIKE '3' GROUP BY test;''')
-#     
-    
-    def query(self, cr, uid, context=None):
         
+    _columns = {
+                'test': fields.many2one('beacon.test', 'Test', select=1, ondelete="cascade"),
+                'proximity': fields.integer('Proximity'),
+                'min': fields.float('Min'),
+                'max': fields.float('Max'),
+                }
+    
+    _order = "proximity"
+    
+    def generate_query(self, cr, uid, context=None):
+        
+        #first empty entity
+        ids = self.search(cr, uid, [],context = context)
+        self.unlink(cr, uid, ids, context = context)
+        
+        #second obtain data with SQL
         obj = self.pool.get('beacon')
-        #res = super(payment_order_create, self).default_get(cr, uid, fields, context=context)
-        
-        cr.execute('''SELECT beacon_test.name, proximity, min(accuracy), max(accuracy) 
+       
+        cr.execute('''SELECT test, proximity, min(accuracy), max(accuracy) 
             FROM beacon
-            JOIN beacon_test ON (beacon.test = beacon_test.id)
             WHERE proximity != '0'
-            GROUP BY beacon_test.name, proximity
-            ORDER BY beacon_test.name, proximity;''')
+            GROUP BY test, proximity
+            ORDER BY test, proximity;''')
         
         data = cr.fetchall()
         res = {}
         
+        #third insert data in database
         count = 0
         for item in data:
             res[count] = {
@@ -62,33 +48,16 @@ class beacon_proximity(osv.osv_memory):
                                   'min': item[2],
                                   'max': item[3],
                                   }, context)
-            
+        
+        #finally return view    
         return {
             'view_type': 'form',
-            'view_mode': 'tree',
+            'view_mode': 'tree,form',
             'res_model': 'beacon.proximity.bounds',
             'type': 'ir.actions.act_window',
             'context': context,
-            #'target':'new',
             'nodestroy': True,
          }
     
-        #ids = obj.search(cr, uid, [], limit=none, context=context)
-        #for line in obj.browse(cr,uid, ids, context=context)
-            
-        
-#         if 'entries' in fields:
-#             if context and 'line_ids' in context and context['line_ids']:
-#                 res.update({'entries':  context['line_ids']})
-# 
-#         return res
-    
-    _columns = {
-                'test': fields.char('Test', size=128),
-                'proximity': fields.integer('Proximity'),
-                'min': fields.float('Min'),
-                'max': fields.float('Max'),
-                }
-    
-    
+      
     

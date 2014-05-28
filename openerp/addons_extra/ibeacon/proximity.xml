@@ -31,20 +31,12 @@
                 </form>
             </field>
         </record>
-   
-<!--     	
-		<record model='ir.actions.act_window' id='action_menu_ibeacon_proximity'>
-            <field name="name">Proximity Boundaries</field>
-            <field name="res_model">beacon.proximity.bounds</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form, tree</field>
-        </record> -->
         
         <record model='ir.actions.server' id='action_menu_ibeacon_proximity'>
             <field name="name">Proximity Boundaries</field>
             <field name="model_id" ref="model_beacon_proximity_bounds"></field>
             <field name="state">code</field>
-            <field name="code"> action=self.query(cr, uid, context=context)</field>
+            <field name="code"> action=self.generate_query(cr, uid, context=context)</field>
         </record>
         
    		<menuitem id="menu_ibeacon_proximity" name="Proximity" parent="menu_ibeacon_data" action='action_menu_ibeacon_proximity'  groups="group_ibeacon_access"/>	

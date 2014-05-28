@@ -28,8 +28,8 @@ class ibeacons_scanned(osv.osv):
                 'major': fields.integer('Major 0xFFF2',  help="0-65535"),
                 'minor': fields.integer('Minor 0xFFF3',  help="0-65535"),
                 'accuracy': fields.integer('Accuracy adjust 0xFFF4',help="0-255"),
-                'txpower': fields.selection([('00','+0 dBm'),('01','+4 dBm'),('02','-6 dBm'), ('03','-23 dBm')], 'Tx-power  0xFFF5', size=2, select=True),
-                'broadcasting_cycle': fields.char('Broadcasting cycle 0xFFF7',size=4, help="1-255"),
+                'txpower': fields.selection([('00','+0 dBm'),('01','+4 dBm'),('02','-6 dBm'), ('03','-23 dBm')], 'Tx-power  0xFFF5',type="char", size=2, select=True),
+                'broadcasting_cycle': fields.integer('Broadcasting cycle 0xFFF7',help="1-255"),
                 'serial_id': fields.integer('Serial Id 0xFFF8', help="0001-9999"),
                 'template_id': fields.many2one('ibeacon.parameters', 'Template id', select=1, ondelete="cascade"),
                 'active_beacon': fields.function(_status_ibeacon, type='boolean', string='active',store=True),
@@ -65,15 +65,15 @@ class ibeacons_scanned(osv.osv):
                 accuracy = obj.gatttool_write(bluetooth_adr, '0x3c', accuracy)
                 #status.append(accuracy)
             if template[0].check_txpower:
-                #txpower = hex(template[0].txpower)
-                txpower = obj.gatttool_write(bluetooth_adr, '0x3F', template[0].txpower)
-                status.append(txpower)
+                txpower = template[0].txpower
+                txpower = obj.gatttool_write(bluetooth_adr, '0x3f', txpower)
+                #status.append(txpower)
             if template[0].check_password:
                 password = hex(template[0].password)
                 password = obj.gatttool_write(bluetooth_adr, '0x42', password)
                 #status.append(password)
             if template[0].check_broadcasting_cycle:
-                broadcasting_cycle = hex(template[0].broadcasting_cycle)
+                broadcasting_cycle = str(template[0].broadcasting_cycle)
                 broadcasting_cycle = obj.gatttool_write(bluetooth_adr, '0x45', broadcasting_cycle)
                 #status.append(broadcasting_cycle)
             if template[0].check_serial_id:
@@ -100,9 +100,9 @@ class ibeacons_scanned(osv.osv):
             
             status.append(obj.ssh_login(cr, uid, [template_id], context=context))
             
-            reboot = hex(template[0].reboot)
+            password = hex(template[0].password)
             reboot = obj.gatttool_write(bluetooth_adr, '0x4b', password)  #send the password
-            #status.append(reboot)
+            status.append(reboot)
             
         except:
             status.append("gatttool reboot Failed")
@@ -152,7 +152,7 @@ class ibeacons_scanned(osv.osv):
             #status.append(txpower)
             
             broadcasting_cycle = obj.gatttool_read(bluetooth_adr, '0x45')
-            broadcasting_cycle = broadcasting_cycle.replace(" ", "")
+            broadcasting_cycle = int(broadcasting_cycle.replace(" ", ""),16)
             #status.append(broadcasting_cycle)
             
             serial_id = obj.gatttool_read(bluetooth_adr, '0x48')
@@ -198,18 +198,18 @@ class ibeacon_parameters(osv.osv):
                 'reboot': fields.boolean('Reboot'),
                 'uuid': fields.char('Uuid', size=36, help="128 bit"),
                 'check_uuid': fields.boolean('Check'),
-                'major': fields.integer('Major', size=36, help="0-65535"),
+                'major': fields.integer('Major', help="0-65535"),
                 'check_major': fields.boolean('Check'),
                 'minor': fields.integer('Minor', help="0-65535"),
                 'check_minor': fields.boolean('Check'),
                 'accuracy': fields.integer('Proximity Accuracy adjust', help="0-255"),
                 'check_accuracy': fields.boolean('Check'),
-                'txpower': fields.selection([('0','+0 dBm'),('1','+4 dBm'),('2','-6 dBm'), ('3','-23 dBm')], 'Tx-power', select=True),
+                'txpower': fields.selection([('00','+0 dBm'),('01','+4 dBm'),('02','-6 dBm'), ('03','-23 dBm')], 'Tx-power',type="char",size=2,  select=True),
                 'check_txpower': fields.boolean('Check'),
                 #'pairing': fields.boolean('Pairing password 0xFFF6', help="0-999999"),
                 'broadcasting_cycle': fields.integer('Broadcasting cycle  (100ms) ', help="1-255"),
                 'check_broadcasting_cycle': fields.boolean('Check'),
-                'serial_id': fields.char('Serial Id', size=4, help="0001-9999"),
+                'serial_id': fields.integer('Serial Id', help="0001-9999"),
                 'check_serial_id': fields.boolean('Check'),
                 #'reboot': fields.boolean('Reboot and pairing Id 0xFFF9', help="0-999999"),
                 'password': fields.integer('Password', help="0-999999"),
@@ -224,7 +224,7 @@ class ibeacon_parameters(osv.osv):
                 'accuracy':198,
                 'broadcasting_cycle': 9,
                 'serial_id': '3714',
-                'txpower':'0'
+                'txpower':'00'
                 }
     
     # battery level uuid:2a19 hnd:0x0025
