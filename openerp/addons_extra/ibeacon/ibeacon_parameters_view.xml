@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    	<record id="view_ibeacon_scanned_tree" model="ir.ui.view">
+            <field name="name">view.ibeacon.scanned.tree</field>
+            <field name="model">ibeacon.scanned</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="view_ibeacon_scanned_tree">
+                	<field name="mac"/>
+                	<field name="name"/>
+                	<field name="enable"/>
+                	<field name="create_date"/>
+                	<field name="write_date"/>
+                	<button name="action_read" icon="gtk-yes" string="read" type="object"/>
+                	<field name="uuid"/>
+                	<field name="major"/>
+                    <field name="minor"/>
+                    <field name="txpower"/> 
+                    <field name="accuracy"/>  
+                    <field name="broadcasting_cycle"/> 
+                    <field name="serial_id"/>
+                </tree>
+            </field>
+        </record>
+    
+    
+    	<record id="view_ibeacon_parameters_tree" model="ir.ui.view">
+            <field name="name">view.ibeacon.parameters.tree</field>
+            <field name="model">ibeacon.parameters</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="view_ibeacon_parameters_tree">
+                	<field name="uuid"/>
+                	<field name="major"/>
+                    <field name="minor"/>
+                    <field name="txpower"/> 
+                    <field name="accuracy"/>  
+                    <field name="broadcasting_cycle"/> 
+                    <field name="serial_id"/>
+                    <field name="beacons_scanned"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_ibeacon_parameters_form" model="ir.ui.view">
+            <field name="name">view.ibeacon.parameters.form</field>
+            <field name="model">ibeacon.parameters</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="view_ibeacon_parameters_form" version="7.0">
+                		<header>
+                			<span  attrs="{'invisible':[('state','!=','draft')]}">
+                				<button name="action_workflow_done" icon="gtk-no" string="scan" type="object"/>
+                			</span>
+                			<span  attrs="{'invisible':[('state','!=','done')]}">
+                				<button name="action_scan" icon="gtk-yes" string="scan" type="object"/>
+                				<button name="action_workflow_disable" icon="gtk-no" string="disable" type="object" confirm="Are you sure you want to do this?"/>
+                				<button name="action_workflow_draft" icon="gtk-no" string="draft" type="object"/>
+                			</span>
+                			<span  attrs="{'invisible':[('state','!=','disable')]}">
+                				<button name="action_workflow_draft" icon="gtk-no" string="draft" type="object" confirm="Are you sure you want to do this?"/>
+                			</span>
+                			<div class="oe_right">
+                        		<field name="state" select="1" widget="statusbar"/>
+                       		</div>
+                		</header>
+                	    <sheet string="parameters">
+                	        <group string="SSH" col="6">
+		                    	<field name="host"/>
+			                	<field name="ssh_user"/>
+			                	<field name="ssh_password" password="True"/>
+			                	<newline/>
+		                    </group>
+                	    	<group string="Template">
+			                	<field name="uuid"/>
+			                	<newline/>
+			                	<field name="major"/>
+			                	<newline/>
+			                    <field name="minor"/>
+			                    <newline/>
+			                    <field name="txpower"/> 
+			                    <newline/>
+			                    <field name="accuracy"/>  
+			                    <newline/>
+			                    <field name="broadcasting_cycle"/> 
+			                    <newline/>
+			                    <field name="serial_id"/>
+			                    <newline/>
+			                    <field name="password" password="True"/>
+			                    <newline/>
+							</group>
+			                <group string="Scanned">
+			                    <field name="beacons_scanned"/>
+		                    </group>
+		                    
+		                   
+                   		</sheet>
+                </form>
+            </field>
+        </record>
+    	
+    	<record model='ir.actions.act_window' id='action_menu_ibeacon_parameters'>
+            <field name="name">Template Parameters</field>
+            <field name="res_model">ibeacon.parameters</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    	
+    	<menuitem id="menu_ibeacon_technical" name="Technical" parent="menu_ibeacon" groups="group_ibeacon_access"/> 
+    		<menuitem id="menu_ibeacon_parameters" name="Change Parameters" parent="menu_ibeacon_technical" action='action_menu_ibeacon_parameters' groups="group_ibeacon_access"/> 
+     </data>
+</openerp>

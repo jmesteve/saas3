@@ -1,4 +1,5 @@
 from openerp.osv import fields,osv
+from openerp import pooler
     
 class beacon_test(osv.osv):
     _name = 'beacon.test'
