@@ -233,6 +233,23 @@ class ibeacon_parameters(osv.osv):
     
     session = {}
     
+    def reboot_system(self, cr, uid, ids, context=None):
+        status=[]
+        try: 
+            
+            status.append(self.ssh_login(cr, uid, ids, context=context))
+            
+            order = 'sudo reboot'
+            self.session.sendline(order)
+            self.session.prompt()  
+            
+            status.append("reboot system Ok")
+        except:
+            status.append("reboot system Failes")
+            
+        status.append(self.ssh_logout())
+        return status
+    
     def lescan_hci(self, timeout=5):
         status = []
         try:
@@ -445,6 +462,12 @@ class ibeacon_parameters(osv.osv):
         for line in status:
             if line != []:
                 return self.pool.get('warning_box').info(cr, uid, title='SSH Scan', message=status)  
+            
+    def action_reboot(self, cr, uid, ids, context=None):
+        status = self.reboot_system(cr, uid, ids, context)
+        for line in status:
+            if line != []:
+                return self.pool.get('warning_box').info(cr, uid, title='Reboot System', message=status)  
         
     def action_workflow_draft(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, { 'state' : 'draft' }, context=context)
