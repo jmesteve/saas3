@@ -30,18 +30,9 @@ class beacon_proximity(osv.osv_memory):
             ORDER BY test, proximity;''')
         
         data = cr.fetchall()
-        res = {}
         
         #third insert data in database
-        count = 0
         for item in data:
-            res[count] = {
-                     'test': item[0],
-                     'proximity': item[1],
-                     'min': item[2],
-                     'max': item[3],
-                    }
-            count = count + 1
             self.create(cr, uid, {
                                   'test': item[0],
                                   'proximity': item[1],
