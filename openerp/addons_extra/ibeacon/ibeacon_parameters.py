@@ -38,9 +38,15 @@ class ibeacons_scanned(osv.osv):
                 'hnd_minor': fields.char('hnd minor', size=6),
                 'hnd_accuracy': fields.char('hnd accuracy', size=6),
                 'hnd_txpower': fields.char('hnd txpower', size=6),
-                'hnd_broadcasting_cycle': fields.char('hnd', size=6),
+                'hnd_broadcasting_cycle': fields.char('hnd broadcasting cycle', size=6),
                 'hnd_serial_id': fields.char('hnd serial id', size=6),
                 'hnd_password': fields.char('hnd password', size=6),
+                'hnd_reboot': fields.char('hnd reboot', size=6),
+                }
+    
+    _defaults = {
+                'hnd_password': '0x004b',
+                'hnd_reboot': '0x0042',
                 }
     
     _order = "active_beacon desc, minor"
@@ -119,7 +125,7 @@ class ibeacons_scanned(osv.osv):
             status.append(obj.ssh_login(cr, uid, [template_id], context=context))
             
             password = format(template[0].password,'#08x')[2:]
-            hnd_password = ibeacon_scanned.hnd_password 
+            hnd_password = ibeacon_scanned.hnd_reboot 
             reboot = obj.gatttool_write(bluetooth_adr, hnd_password, password)  #send the password
             status.append(reboot)
             

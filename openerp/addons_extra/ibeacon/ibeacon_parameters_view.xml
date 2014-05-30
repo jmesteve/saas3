@@ -35,6 +35,8 @@
 		                    <field name="hnd_accuracy"/>  
 		                    <field name="hnd_broadcasting_cycle"/> 
 		                    <field name="hnd_serial_id"/>
+		                    <field name="hnd_password"/>
+		                    <field name="hnd_reboot"/>
 		                </group>
 	               
                 </form>
