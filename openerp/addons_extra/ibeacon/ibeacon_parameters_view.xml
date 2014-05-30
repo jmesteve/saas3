@@ -1,6 +1,47 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+    
+    	<record id="view_ibeacon_scanned_form" model="ir.ui.view">
+            <field name="name">view.ibeacon.scanned.form</field>
+            <field name="model">ibeacon.scanned</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="view_ibeacon_scanned_form">
+                
+	                	<group string="details">
+		                	<field name="mac"/>
+		                	<field name="name"/>
+		                	<field name="create_date"/>
+		                	<field name="write_date"/>
+		                	<field name="active_beacon" attrs="{'invisible':True}"/>
+		                 </group>
+		                 <newline/>
+		                <group string="parameters">
+		                	<field name="uuid"/>
+		                	<field name="major"/>
+		                    <field name="minor"/>
+		                    <field name="txpower"/> 
+		                    <field name="accuracy"/>  
+		                    <field name="broadcasting_cycle"/> 
+		                    <field name="serial_id"/>
+	                    </group>
+	                    <newline/>
+	                    <group string="hnd">
+		                	<field name="hnd_uuid"/>
+		                	<field name="hnd_major"/>
+		                    <field name="hnd_minor"/>
+		                    <field name="hnd_txpower"/> 
+		                    <field name="hnd_accuracy"/>  
+		                    <field name="hnd_broadcasting_cycle"/> 
+		                    <field name="hnd_serial_id"/>
+		                </group>
+	               
+                </form>
+            </field>
+        </record>
+    
+    
     	<record id="view_ibeacon_scanned_tree" model="ir.ui.view">
             <field name="name">view.ibeacon.scanned.tree</field>
             <field name="model">ibeacon.scanned</field>
