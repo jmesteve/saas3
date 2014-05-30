@@ -33,6 +33,7 @@ class ibeacons_scanned(osv.osv):
                 'serial_id': fields.integer('Serial Id 0xFFF8', help="0001-9999"),
                 'template_id': fields.many2one('ibeacon.parameters', 'Template id', select=1, ondelete="cascade"),
                 'active_beacon': fields.function(_status_ibeacon, type='boolean', string='active',store=True),
+                'auto_reboot':fields.boolean('auto reboot'),
                 'hnd_uuid': fields.char('hnd uuid', size=6),
                 'hnd_major': fields.char('hnd major', size=6),
                 'hnd_minor': fields.char('hnd minor', size=6),
@@ -50,8 +51,8 @@ class ibeacons_scanned(osv.osv):
                 }
     
     _order = "active_beacon desc, minor"
-    
-    def ssh_write(self, cr, uid, ids, checkall=False, context=None):
+ 
+    def write_hnd(self, cr, uid, ids, checkall=False, context=None):
         status=[]
         try: 
             obj = self.pool.get('ibeacon.parameters')
@@ -60,8 +61,6 @@ class ibeacons_scanned(osv.osv):
             bluetooth_adr = ibeacon_scanned.mac
             template_id = ibeacon_scanned.template_id.id
             template = obj.browse(cr,uid,[template_id],context=context)
-            
-            status.append(obj.ssh_login(cr, uid, [template_id], context=context))
             
             hnd_uuid = ibeacon_scanned.hnd_uuid
             if hnd_uuid != False and checkall or template[0].check_uuid:
@@ -102,15 +101,27 @@ class ibeacons_scanned(osv.osv):
                 serial_id = format(template[0].serial_id,'#06x')[2:]
                 serial_id = obj.gatttool_write(bluetooth_adr, hnd_serial_id, serial_id)
                 #status.append(serial_id)
-                
-            self.ssh_read_uuid(cr, uid, ids, checkall=False, login=False, context=context)
+            hnd_password = ibeacon_scanned.hnd_reboot 
+            if hnd_password != False and checkall or template[0].auto_reboot:
+                password = format(template[0].password,'#08x')[2:]
+                reboot = obj.gatttool_write(bluetooth_adr, hnd_password, password)  #send the password   
+                self.read_uuid(cr, uid, ids, checkall=False, context=context)
            
         except:
             status.append("gatttool write Failed")
-            
-        status.append(obj.ssh_logout())
+        
         return status
     
+    def ssh_write(self, cr, uid, ids, checkall=False, context=None):
+        status=[]
+        obj = self.pool.get('ibeacon.parameters')
+        obj_scanned = self.pool.get('ibeacon.scanned')
+        ibeacon_scanned = self.browse(cr, uid, ids[0], context=context)
+        template_id = ibeacon_scanned.template_id.id
+        status.append(obj.ssh_login(cr, uid, [template_id], context=context))
+        status.append(obj_scanned.write_hnd(cr, uid, ids, checkall=checkall, context=context))    
+        status.append(obj.ssh_logout())
+        return status
     
     def action_reboot(self, cr, uid, ids, context=None):
         status=[]
@@ -134,23 +145,17 @@ class ibeacons_scanned(osv.osv):
             
         status.append(obj.ssh_logout())
         return status
-    
-    def ssh_read_uuid(self, cr, uid, ids, checkall=True, login=True, context=None):
+
+    def read_uuid(self, cr, uid, ids, checkall=True, login=True, context=None):
         status=[]
         try: 
-            
+            obj = self.pool.get('ibeacon.parameters')
             ibeacon_scanned = self.browse(cr, uid, ids[0], context=context)
             name = ibeacon_scanned.name
             if name == "(unknown)":
                 status.append("ibeacon unknown")
                 return status
-            obj = self.pool.get('ibeacon.parameters')
             template = ibeacon_scanned.template_id
-            template_id = template.id
-            
-            if login==True:
-                status.append(obj.ssh_login(cr, uid, [template_id], context=context))
-            
             bluetooth_adr = ibeacon_scanned.mac
             object_beacon = {}
             if checkall:
@@ -205,15 +210,26 @@ class ibeacons_scanned(osv.osv):
                 #status.append(serial_id)
                 object_beacon['serial_id'] = serial_id
                 object_beacon['hnd_serial_id'] = response[1]
-            
+            object_beacon['validate']=True
             if object_beacon !={}:
                 self.write(cr, uid, ids[0], object_beacon, context=context)
           
         except:
+            self.write(cr, uid, ids[0], {'validate':False}, context=context)
             status.append("gatttool read Failed")
-           
-        if login==True:    
-            status.append(obj.ssh_logout())
+        return status
+   
+    
+    def ssh_read_uuid(self, cr, uid, ids, checkall=True, context=None):
+        status=[]
+        obj = self.pool.get('ibeacon.parameters')
+        obj_scanned = self.pool.get('ibeacon.scanned')
+        ibeacon_scanned = obj_scanned.browse(cr, uid, ids[0], context=context)
+        template = ibeacon_scanned.template_id
+        template_id = template.id
+        status.append(obj.ssh_login(cr, uid, [template_id], context=context))
+        status.append(obj_scanned.read_uuid(cr, uid, ids, checkall=checkall, context=context))
+        status.append(obj.ssh_logout())
         return status
         
     def action_read(self, cr, uid, ids, context=None):
@@ -541,6 +557,36 @@ class ibeacon_parameters(osv.osv):
         for line in status:
             if line != []:
                 return self.pool.get('warning_box').info(cr, uid, title='Reboot System', message=status)  
+            
+    def action_read_all(self, cr, uid, ids, context=None):
+        obj = self.pool.get('ibeacon.scanned')
+        obj_id = obj.search(cr, uid, [('template_id', '=', ids[0]),('active_beacon', '=', True)] , limit=None, context=context)
+        #obj_browse = obj.browse(cr, uid, obj_id, context=context)
+        status=[]
+        status.append(self.ssh_login(cr, uid, ids, context=context))
+        for id in obj_id:
+            status.append(obj.read_uuid(cr, uid,[id], checkall=True, context=context))
+            
+        status.append(self.ssh_logout())
+        
+        for line in status:
+            if line != []:
+                return self.pool.get('warning_box').info(cr, uid, title='Reboot System', message=status) 
+    def action_write_all(self, cr, uid, ids, context=None):
+        obj = self.pool.get('ibeacon.scanned')
+        obj_id = obj.search(cr, uid, [('template_id', '=', ids[0]),('active_beacon', '=', True)] , limit=None, context=context)
+        #obj_browse = obj.browse(cr, uid, obj_id, context=context)
+        status=[]
+        status.append(self.ssh_login(cr, uid, ids, context=context))
+        for id in obj_id:
+            status.append(obj.write_hnd(cr, uid,[id], checkall=True, context=context))
+            
+        status.append(self.ssh_logout())
+        
+        for line in status:
+            if line != []:
+                return self.pool.get('warning_box').info(cr, uid, title='Reboot System', message=status) 
+        
         
     def action_workflow_draft(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, { 'state' : 'draft' }, context=context)

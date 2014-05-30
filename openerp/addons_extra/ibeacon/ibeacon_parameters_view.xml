@@ -14,7 +14,8 @@
 		                	<field name="name"/>
 		                	<field name="create_date"/>
 		                	<field name="write_date"/>
-		                	<field name="active_beacon" attrs="{'invisible':True}"/>
+		                	<field name="active_beacon"/>
+		                	<field name="auto_reboot"/>
 		                 </group>
 		                 <newline/>
 		                <group string="parameters">
@@ -101,6 +102,8 @@
                 			</span>
                 			<span  attrs="{'invisible':[('state','!=','done')]}">
                 				<button name="action_scan" icon="gtk-yes" string="scan" type="object"/>
+                				<button name="action_read_all" icon="terp-read" string="read all" type="object"/>
+                				<button name="action_write_all" icon="terp-write" string="write all" type="object"/>
                 				<button name="action_reboot" icon="terp-reboot" string="reboot" type="object"/>
                 				<button name="action_workflow_disable" icon="gtk-no" string="disable" type="object" confirm="Are you sure you want to do this?"/>
                 				<button name="action_workflow_draft" icon="gtk-no" string="draft" type="object"/>
@@ -118,31 +121,35 @@
 			                	<field name="ssh_user"/>
 			                	<field name="ssh_password" password="True"/>
 		                    </group>
-		                    <newline/>
-		                    
-                	    	<group string="Template">
-                	    		<group col="12">
-                	    			<field name="uuid"/>
-                	    			<field name="check_uuid" nolabel="1"/>
-                	    			<field name="serial_id"/>
-				                	<field name="check_serial_id" nolabel="1"/>
-				                    <field name="major"/>
-				                    <field name="check_major" nolabel="1"/>
-				                	<field name="minor"/>
-				                	<field name="check_minor" nolabel="1"/>
+		                    <group  colspan="2">
+	                	    	<group string="Template">
+	                	    		<group col="3">
+	                	    			<field name="uuid"/>
+	                	    			<field name="check_uuid" nolabel="1"/>
+	                	    			<newline/>
+	                	    			<field name="serial_id"/>
+					                	<field name="check_serial_id" nolabel="1"/>
+					                	<newline/>
+					                    <field name="major"/>
+					                    <field name="check_major" nolabel="1"/>
+					                    <newline/>
+					                	<field name="minor"/>
+					                	<field name="check_minor" nolabel="1"/>
+				                	</group>
+				                	<group col="3">
+				                		<field name="txpower"/> 
+					                    <field name="check_txpower" nolabel="1"/>
+					                    <newline/>
+					                    <field name="accuracy"/> 
+					                    <field name="check_accuracy" nolabel="1"/>
+					                    <newline/>
+					                    <field name="broadcasting_cycle"/> 
+					                    <field name="check_broadcasting_cycle" nolabel="1"/>
+					                    <newline/>
+					                    <field name="password"/>
+					                    <field name="check_password" nolabel="1"/>
+				                    </group>
 			                	</group>
-			                	<newline/>
-			                	<group col="12">
-			                		<field name="txpower"/> 
-				                    <field name="check_txpower" nolabel="1"/>
-				                    <field name="accuracy"/> 
-				                    <field name="check_accuracy" nolabel="1"/>
-				                    <field name="broadcasting_cycle"/> 
-				                    <field name="check_broadcasting_cycle" nolabel="1"/>
-				                    <field name="password"/>
-				                    <field name="check_password" nolabel="1"/>
-			                    </group>
-			                	<newline/>
 							</group>
 			                <group string="Scanned">
 			                    <field name="beacons_scanned"/>
