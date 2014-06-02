@@ -4,7 +4,9 @@
 #    OpenERP, Open Source Management Solution
 #    Copyright (c) 2013 jmesteve All Rights Reserved
 #                       https://github.com/jmesteve
+#                       https://github.com/escrichov
 #                       <jmesteve@me.com>
+#                       <escrichov@gmail.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -23,7 +25,7 @@
 
 {
     'name': "Website Login",
-    'version': '0.2',
+    'version': '0.3',
     'category': 'Hidden',
     'description': """
         [ENG] Change addon Website Login 

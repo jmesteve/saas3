@@ -11,3 +11,49 @@
 .oe_product .oe_subdescription.oe_shadow{
 	display: none;
 }
+
+.img-responsive{
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 100%;
+}
+
+@media (min-width: 1200px) {
+  .img-responsive {
+	  height: 70%;
+	}
+
+	.oe_image_full .img-responsive {
+	  height: 90%;
+	}
+}
+
+@media (max-width: 1200px) and (min-width:768px)  {
+  .img-responsive {
+	  height: 60%;
+	}
+
+	.oe_image_full .img-responsive {
+	  height: 87%;
+	}
+}
+
+@media (max-width:768px) and (min-width:400px) {
+  .img-responsive {
+	  height: 81%;
+	}
+
+	.oe_image_full .img-responsive {
+	  height: 81%;
+	}
+}
+
+@media (max-width:400px){
+  .img-responsive {
+	  height: 79%;
+	}
+	.oe_image_full .img-responsive {
+	  height: 79%;
+	}
+}

@@ -23,3 +23,4 @@
 
 import shop_redirect
 import controller
+import product
