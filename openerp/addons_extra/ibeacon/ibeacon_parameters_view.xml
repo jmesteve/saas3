@@ -1,6 +1,50 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+    
+    	<record id="view_ibeacon_scanned_form" model="ir.ui.view">
+            <field name="name">view.ibeacon.scanned.form</field>
+            <field name="model">ibeacon.scanned</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="view_ibeacon_scanned_form">
+                
+	                	<group string="details">
+		                	<field name="mac"/>
+		                	<field name="name"/>
+		                	<field name="create_date"/>
+		                	<field name="write_date"/>
+		                	<field name="active_beacon"/>
+		                	<field name="auto_reboot"/>
+		                 </group>
+		                 <newline/>
+		                <group string="parameters">
+		                	<field name="uuid"/>
+		                	<field name="major"/>
+		                    <field name="minor"/>
+		                    <field name="txpower"/> 
+		                    <field name="accuracy"/>  
+		                    <field name="broadcasting_cycle"/> 
+		                    <field name="serial_id"/>
+	                    </group>
+	                    <newline/>
+	                    <group string="hnd">
+		                	<field name="hnd_uuid"/>
+		                	<field name="hnd_major"/>
+		                    <field name="hnd_minor"/>
+		                    <field name="hnd_txpower"/> 
+		                    <field name="hnd_accuracy"/>  
+		                    <field name="hnd_broadcasting_cycle"/> 
+		                    <field name="hnd_serial_id"/>
+		                    <field name="hnd_password"/>
+		                    <field name="hnd_reboot"/>
+		                </group>
+	               
+                </form>
+            </field>
+        </record>
+    
+    
     	<record id="view_ibeacon_scanned_tree" model="ir.ui.view">
             <field name="name">view.ibeacon.scanned.tree</field>
             <field name="model">ibeacon.scanned</field>
@@ -9,10 +53,13 @@
                 <tree string="view_ibeacon_scanned_tree">
                 	<field name="mac"/>
                 	<field name="name"/>
-                	<field name="enable"/>
                 	<field name="create_date"/>
                 	<field name="write_date"/>
-                	<button name="action_read" icon="gtk-yes" string="read" type="object"/>
+                	<field name="active_beacon" attrs="{'invisible':True}"/>
+                	<button name="action_read" attrs="{'invisible':[('active_beacon','==',False)]}" icon="terp-read" string="read" type="object"/>
+                	<button name="action_write" attrs="{'invisible':[('active_beacon','==',False)]}" icon="terp-write" string="write" type="object"/>
+                	<button name="action_reboot" attrs="{'invisible':[('active_beacon','==',False)]}" icon="terp-reboot" string="reboot" type="object"/>
+                	<button name="action_read" attrs="{'invisible':[('active_beacon','==',True)]}" icon="gtk-no" string="read" type="object"/>
                 	<field name="uuid"/>
                 	<field name="major"/>
                     <field name="minor"/>
@@ -55,6 +102,9 @@
                 			</span>
                 			<span  attrs="{'invisible':[('state','!=','done')]}">
                 				<button name="action_scan" icon="gtk-yes" string="scan" type="object"/>
+                				<button name="action_read_all" icon="terp-read" string="read all" type="object"/>
+                				<button name="action_write_all" icon="terp-write" string="write all" type="object"/>
+                				<button name="action_reboot" icon="terp-reboot" string="reboot" type="object"/>
                 				<button name="action_workflow_disable" icon="gtk-no" string="disable" type="object" confirm="Are you sure you want to do this?"/>
                 				<button name="action_workflow_draft" icon="gtk-no" string="draft" type="object"/>
                 			</span>
@@ -70,25 +120,36 @@
 		                    	<field name="host"/>
 			                	<field name="ssh_user"/>
 			                	<field name="ssh_password" password="True"/>
-			                	<newline/>
 		                    </group>
-                	    	<group string="Template">
-			                	<field name="uuid"/>
-			                	<newline/>
-			                	<field name="major"/>
-			                	<newline/>
-			                    <field name="minor"/>
-			                    <newline/>
-			                    <field name="txpower"/> 
-			                    <newline/>
-			                    <field name="accuracy"/>  
-			                    <newline/>
-			                    <field name="broadcasting_cycle"/> 
-			                    <newline/>
-			                    <field name="serial_id"/>
-			                    <newline/>
-			                    <field name="password" password="True"/>
-			                    <newline/>
+		                    <group  colspan="2">
+	                	    	<group string="Template">
+	                	    		<group col="3">
+	                	    			<field name="uuid"/>
+	                	    			<field name="check_uuid" nolabel="1"/>
+	                	    			<newline/>
+	                	    			<field name="serial_id"/>
+					                	<field name="check_serial_id" nolabel="1"/>
+					                	<newline/>
+					                    <field name="major"/>
+					                    <field name="check_major" nolabel="1"/>
+					                    <newline/>
+					                	<field name="minor"/>
+					                	<field name="check_minor" nolabel="1"/>
+				                	</group>
+				                	<group col="3">
+				                		<field name="txpower"/> 
+					                    <field name="check_txpower" nolabel="1"/>
+					                    <newline/>
+					                    <field name="accuracy"/> 
+					                    <field name="check_accuracy" nolabel="1"/>
+					                    <newline/>
+					                    <field name="broadcasting_cycle"/> 
+					                    <field name="check_broadcasting_cycle" nolabel="1"/>
+					                    <newline/>
+					                    <field name="password"/>
+					                    <field name="check_password" nolabel="1"/>
+				                    </group>
+			                	</group>
 							</group>
 			                <group string="Scanned">
 			                    <field name="beacons_scanned"/>

@@ -1,33 +1,54 @@
 from openerp.osv import fields,osv
 
 
-class beacon_proximity(osv.osv):
+class beacon_proximity(osv.osv_memory):
+    
     _name = 'beacon.proximity.bounds'
-    
-    def _min_near(self, cr, uid, ids, name, arg, context=None):
-        cr.execute('''SELECT min(accuracy) FROM beacon WHERE proximity LIKE '1';''')
-        mins = cr.fetchall()[0]
-        res = {}
-        for id in ids:
-            res[id] = mins[0]
-        return res
-    
-    def _max_near(self, cr, uid, ids, name, arg, context=None):
-        cr.execute('''SELECT max(accuracy) FROM beacon WHERE proximity LIKE '1';''')
-        mins = cr.fetchall()[0]
-        res = {}
-        for id in ids:
-            res[id] = mins[0]
-        return res
         
     _columns = {
-                'min_near': fields.function(_min_near,
-                                                 type='float',
-                                                 string='Min. Near'),
-                'max_near': fields.function(_max_near,
-                                                 type='float',
-                                                 string='Max. Near'),
+                'test': fields.many2one('beacon.test', 'Test', select=1, ondelete="cascade"),
+                'proximity': fields.integer('Proximity'),
+                'min': fields.float('Min'),
+                'max': fields.float('Max'),
                 }
     
+    _order = "proximity"
     
+    def generate_query(self, cr, uid, context=None):
+        
+        #first empty entity
+        ids = self.search(cr, uid, [],context = context)
+        self.unlink(cr, uid, ids, context = context)
+        
+        #second obtain data with SQL
+        obj = self.pool.get('beacon')
+       
+        cr.execute('''SELECT test, proximity, min(accuracy), max(accuracy) 
+            FROM beacon
+            WHERE proximity != '0'
+            GROUP BY test, proximity
+            ORDER BY test, proximity;''')
+        
+        data = cr.fetchall()
+        
+        #third insert data in database
+        for item in data:
+            self.create(cr, uid, {
+                                  'test': item[0],
+                                  'proximity': item[1],
+                                  'min': item[2],
+                                  'max': item[3],
+                                  }, context)
+        
+        #finally return view    
+        return {
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'res_model': 'beacon.proximity.bounds',
+            'type': 'ir.actions.act_window',
+            'context': context,
+            'nodestroy': True,
+         }
+    
+      
     
