@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <!-- Migration -->
+    <function model="res.company" name="_set_local_media_repository_website"/>
+    <function model="product.template" name="_migrate_images_to_files"/>
+    <function model="product.template" name="_delete_bin_images"/>
+
+  </data>
+</openerp>

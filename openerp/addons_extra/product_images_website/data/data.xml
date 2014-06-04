@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="ir_config_parameter_certificates_data" model="ir.config_parameter">
+            <field name="key">certificates_path</field>
+            <field name="value">certificates</field>
+        </record>
+    </data>
+</openerp>
