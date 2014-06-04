@@ -1,7 +1,21 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-   
+   		
+   		<record id="proximity_search_form_view" model="ir.ui.view">
+            <field name="name">proximity.search.form.view</field>
+            <field name="model">beacon.proximity.bounds</field>
+            <field name="arch" type="xml">
+                <search string="Beacon">
+                   <group expand='0' string='Group by...'>
+                   		<filter name="test" string="test" icon="terp-check" context="{'group_by':'test'}"/>
+                   		<filter name="proximity" string="proximity" icon="terp-check" context="{'group_by':'proximity'}"/>
+                   		<filter name="tipo" string="tipo" icon="terp-check" context="{'group_by':'tipo'}"/>
+                   </group>
+                </search>
+            </field>
+        </record>
+        
    		<record id="view_ibeacon_proximity_tree" model="ir.ui.view">
             <field name="name">ibeacon.proximity.tree</field>
             <field name="model">beacon.proximity.bounds</field>
@@ -10,8 +24,8 @@
                 <tree string="ibeacon_proximity_tree">
 					<field name="test"/>
 					<field name="proximity"/>
-					<field name="min"/>
-					<field name="max"/>
+					<field name="tipo"/>
+					<field name="value"/>
                 </tree>
             </field>
         </record>
@@ -25,10 +39,24 @@
                 	<group>
 						<field name="test"/>
 						<field name="proximity"/>
-						<field name="min"/>
-						<field name="max"/>
+						<field name="tipo"/>
+						<field name="value"/>
 					</group>
                 </form>
+            </field>
+        </record>
+        
+        <record id="view_ibeacon_proximity_graph" model="ir.ui.view">
+            <field name="name">ibeacon.proximity.graph</field>
+            <field name="model">beacon.proximity.bounds</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Proximity -> Distance" orientation="vertical" type="bar">
+                    <field name="proximity" group="True"/>
+					<field name="tipo" group="True"/>
+					<field name="test" group="True"/>
+					<field name="value" operator="*"/>
+                </graph>
             </field>
         </record>
         
@@ -39,6 +67,60 @@
             <field name="code"> action=self.generate_query(cr, uid, context=context)</field>
         </record>
         
-   		<menuitem id="menu_ibeacon_proximity" name="Proximity" parent="menu_ibeacon_data" action='action_menu_ibeacon_proximity'  groups="group_ibeacon_access"/>	
+   		<menuitem id="menu_ibeacon_proximity" name="Proximity" parent="menu_ibeacon_data" action='action_menu_ibeacon_proximity'  groups="group_ibeacon_access"/>
+   		
+   		
+   		
+   		<record id="view_ibeacon_distance_tree" model="ir.ui.view">
+            <field name="name">ibeacon.distance.tree</field>
+            <field name="model">beacon.real.distance</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="ibeacon_real_distance">
+					<field name="rssi"/>
+					<field name="min"/>
+					<field name="median"/>
+					<field name="max"/>
+                </tree>
+            </field>
+        </record>
+   
+   		<record id="view_ibeacon_distance_form" model="ir.ui.view">
+            <field name="name">ibeacon.distance.form</field>
+            <field name="model">beacon.real.distance</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="beacon_real_distance">
+                	<group>
+						<field name="rssi"/>
+						<field name="min"/>
+						<field name="median"/>
+						<field name="max"/>
+					</group>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_ibeacon_distance_graph" model="ir.ui.view">
+            <field name="name">ibeacon.distance.graph</field>
+            <field name="model">beacon.real.distance</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="RSSI -> Distance" orientation="vertical" type="bar">
+                    <field name="rssi" group="True"/>
+					<field name="median" />
+                </graph>
+            </field>
+        </record>
+        
+   		<record model='ir.actions.server' id='action_menu_ibeacon_distance'>
+            <field name="name">Real distance</field>
+            <field name="model_id" ref="model_beacon_real_distance"></field>
+            <field name="state">code</field>
+            <field name="code"> action=self.generate_query(cr, uid, context=context)</field>
+        </record>
+        
+   		<menuitem id="menu_ibeacon_distance" name="Real Distance" parent="menu_ibeacon_data" action='action_menu_ibeacon_distance'  groups="group_ibeacon_access"/>
+   			
     </data>
 </openerp>
