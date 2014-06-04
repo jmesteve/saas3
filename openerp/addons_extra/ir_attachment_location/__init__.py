@@ -2,10 +2,8 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (c) 2013 jmesteve All Rights Reserved
+#    Copyright (c) 2013 escrichov All Rights Reserved
 #                       https://github.com/jmesteve
-#                       https://github.com/escrichov
-#                       <jmesteve@me.com>
 #                       <escrichov@gmail.com>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -23,25 +21,4 @@
 #
 ##############################################################################
 
-{
-    'name': "Website Login",
-    'version': '0.4',
-    'category': 'Hidden',
-    'description': """
-        [ENG] Change addon Website Login 
-    """,
-    'author': 'jmesteve',
-    'website': 'http://www.erpandcloud.com',
-    'license': 'AGPL-3',
-    "depends": ['web','website', 'auth_signup', 'website_sale'],
-    'data': ['security/ir.model.access.csv',
-             'views/shop_redirect_view.xml',
-             'views/website_templates.xml',
-             'views/website_sale.xml',
-             'data/website_login_data.xml'
-    ],
-    "application": True,
-    "active": True,
-    "installable": True,
-    'auto_install': False,
-}
+import ir_attachment

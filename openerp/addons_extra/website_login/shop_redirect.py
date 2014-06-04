@@ -24,4 +24,3 @@ class shop_redirect(osv.osv):
     def action_autostart(self, cr, uid, ids, context=None):
         return False
 
-shop_redirect()

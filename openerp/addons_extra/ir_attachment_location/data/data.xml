@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    
+	<function model="ir.attachment" name="_set_config_location"/>
+	<function model="ir.attachment" name="_attachment_migration_to_filestore"/>
+
+  </data>
+</openerp>

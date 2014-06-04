@@ -27,7 +27,7 @@
     'author': 'jmesteve',
     'website': 'https://github.com/jmesteve',
     "category" : "Generic Modules",
-    "depends" : ['base','product'],
+    "depends" : ['base','product', 'website'],
     "description": """
 This Module implements an Image Gallery for products.
 You can add images to every product.

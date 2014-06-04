@@ -5,6 +5,7 @@ import werkzeug.utils
 from openerp.addons.web.http import request, LazyResponse
 import openerp.addons.website.controllers.main as website
 import openerp.addons.web.controllers.main as web
+import openerp.addons.payment_paypal.controllers.main as payment_paypal
 from openerp import pooler, sql_db
 import openerp
 import openerp.addons.auth_signup.controllers.main as auth_signup
@@ -13,6 +14,9 @@ from openerp.tools.translate import _
 from openerp.addons.auth_signup.res_users import SignupError
 from openerp.tools import exception_to_unicode
 import re
+from openerp.osv import orm, fields
+from openerp import SUPERUSER_ID
+import urllib2
 
 _logger = logging.getLogger(__name__)
 
@@ -206,7 +210,7 @@ class Ecommerce(ecommerce.Ecommerce):
         pids = product_obj.search(cr, uid, domain, limit=ecommerce.PPG+10, offset=pager['offset'], order=self._order, context=context)
         products_nofilter = product_obj.browse(cr, uid, pids, context=context)
         
-        products = [product for product in products_nofilter if product.product_variant_ids[0].qty_available > 0]
+        products = [product for product in products_nofilter if product.product_variant_ids[0].virtual_available > 0 and not product.product_variant_ids[0].is_delivery]
 
         styles = []
         try:
@@ -239,3 +243,121 @@ class Ecommerce(ecommerce.Ecommerce):
         }
         return request.website.render("website_sale.products", values)
     
+    @http.route('/shop/payment/validate/', type='http', auth="public", website=True, multilang=True)
+    def payment_validate(self, transaction_id=None, sale_order_id=None, **post):
+        """ Method that should be called by the server when receiving an update
+        for a transaction. State at this point :
+
+         - UDPATE ME
+        """
+        cr, uid, context = request.cr, request.uid, request.context
+        email_act = None
+        sale_order_obj = request.registry['sale.order']
+
+        if transaction_id is None:
+            tx = context.get('website_sale_transaction')
+        else:
+            tx = request.registry['payment.transaction'].browse(cr, uid, transaction_id, context=context)
+
+        if sale_order_id is None:
+            order = self.get_order()
+        else:
+            order = request.registry['sale.order'].browse(cr, SUPERUSER_ID, sale_order_id, context=context)
+            assert order.website_session_id == request.httprequest.session['website_session_id']
+
+        if not tx or not order:
+            return request.redirect('/shop/')
+
+        if not order.amount_total or tx.state == 'done':
+            # confirm the quotation
+            sale_order_obj.action_button_confirm(cr, SUPERUSER_ID, [order.id], context=request.context)
+            # send by email
+            email_act = sale_order_obj.action_quotation_send(cr, SUPERUSER_ID, [order.id], context=request.context)
+        elif tx.state == 'pending':
+            # confirm the quotation
+            sale_order_obj.action_button_confirm(cr, SUPERUSER_ID, [order.id], context=request.context)
+            # send by email
+            email_act = sale_order_obj.action_quotation_send(cr, SUPERUSER_ID, [order.id], context=request.context)
+        elif tx.state == 'cancel':
+            # cancel the quotation
+            sale_order_obj.action_cancel(cr, SUPERUSER_ID, [order.id], context=request.context)
+
+        # clean context and session, then redirect to the confirmation page
+        request.registry['website'].ecommerce_reset(cr, uid, context=context)
+
+        return request.redirect('/shop/confirmation/%s' % order.id)
+       
+
+class Website(orm.Model):
+    _inherit = 'website'
+
+    def ecommerce_update_order(self, cr, uid, order_id, context=None):
+        order_line_obj = self.pool.get('sale.order.line')
+        order_line_ids = order_line_obj.search(cr, SUPERUSER_ID, [('order_id', '=', order_id)], context=context)
+        order_line_ids_values = order_line_obj.browse(cr, SUPERUSER_ID, order_line_ids, context=context)
+        for order_line in order_line_ids_values:
+            if (order_line.product_id.virtual_available <= 0 or not order_line.product_id.website_published) and not order_line.product_id.is_delivery:
+                order_line_obj.unlink(cr, SUPERUSER_ID, order_line.id, context=context)
+    
+    def ecommerce_get_current_order(self, cr, uid, context=None):
+        SaleOrder = self.pool.get('sale.order')
+        context = dict(context or {}, pricelist=self.ecommerce_get_pricelist_id(cr, uid, None, context=context))
+        order_id = request.httprequest.session.get('ecommerce_order_id')
+        if not order_id:
+            request.httprequest.session['ecommerce_order_id'] = False
+            return False
+        if not order_id in SaleOrder.exists(cr, uid, [order_id], context=context):
+            request.httprequest.session['ecommerce_order_id'] = False
+            return False
+        try:
+            order = SaleOrder.browse(cr, SUPERUSER_ID, order_id, context=context)
+            assert order.website_session_id == request.httprequest.session['website_session_id']
+            self.ecommerce_update_order(cr, SUPERUSER_ID, order_id, context=context)
+            return order
+        except:
+            request.httprequest.session['ecommerce_order_id'] = False
+            return False
+        
+class PaypalController(payment_paypal.PaypalController):
+    
+    def paypal_validate_data(self, **post):
+        """ Paypal IPN: three steps validation to ensure data correctness
+
+         - step 1: return an empty HTTP 200 response -> will be done at the end
+           by returning ''
+         - step 2: POST the complete, unaltered message back to Paypal (preceded
+           by cmd=_notify-validate), with same encoding
+         - step 3: paypal send either VERIFIED or INVALID (single word)
+
+        Once data is validated, process it. """
+        res = False
+        new_post = dict(post, cmd='_notify-validate')
+        urequest = urllib2.Request("https://www.sandbox.paypal.com/cgi-bin/webscr", werkzeug.url_encode(new_post))
+        uopen = urllib2.urlopen(urequest)
+        resp = uopen.read()
+        if resp == 'VERIFIED':
+            tx_id = request.httprequest.session['website_sale_transaction_id']
+            if tx_id:
+                tx_ids = request.registry['payment.transaction'].browse(request.cr, SUPERUSER_ID, tx_id, context=request.context)
+                if type(tx_ids) is not list:
+                    tx = tx_ids
+                    tx.write({
+                        'state': 'done',
+                        #'date_validate': values.get('udpate_time', fields.datetime.now()),
+                        #'paypal_txn_id': values['id'],
+                    })
+                elif type(tx_ids) is list:
+                    tx = tx_ids[0]
+                    tx.write({
+                        'state': 'done',
+                        #'date_validate': values.get('udpate_time', fields.datetime.now()),
+                        #'paypal_txn_id': values['id'],
+                    })
+            _logger.info('Paypal: validated data')
+            cr, uid, context = request.cr, SUPERUSER_ID, request.context
+            res = request.registry['payment.transaction'].form_feedback(cr, uid, post, 'paypal', context=context)
+        elif resp == 'INVALID':
+            _logger.warning('Paypal: answered INVALID on data verification')
+        else:
+            _logger.warning('Paypal: unrecognized paypal answer, received %s instead of VERIFIED or INVALID' % resp.text)
+        return res
