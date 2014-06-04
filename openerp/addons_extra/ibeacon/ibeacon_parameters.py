@@ -33,7 +33,6 @@ class ibeacons_scanned(osv.osv):
                 'serial_id': fields.integer('Serial Id 0xFFF8', help="0001-9999"),
                 'template_id': fields.many2one('ibeacon.parameters', 'Template id', select=1, ondelete="cascade"),
                 'active_beacon': fields.function(_status_ibeacon, type='boolean', string='active',store=True),
-                'auto_reboot':fields.boolean('auto reboot'),
                 'hnd_uuid': fields.char('hnd uuid', size=6),
                 'hnd_major': fields.char('hnd major', size=6),
                 'hnd_minor': fields.char('hnd minor', size=6),
@@ -46,8 +45,8 @@ class ibeacons_scanned(osv.osv):
                 }
     
     _defaults = {
-                'hnd_password': '0x004b',
-                'hnd_reboot': '0x0042',
+                'hnd_password': '0x0042',
+                'hnd_reboot': '0x004b',
                 }
     
     _order = "active_beacon desc, minor"
@@ -61,6 +60,8 @@ class ibeacons_scanned(osv.osv):
             bluetooth_adr = ibeacon_scanned.mac
             template_id = ibeacon_scanned.template_id.id
             template = obj.browse(cr,uid,[template_id],context=context)
+            
+            handle = obj.hcitool_lecc(bluetooth_adr)
             
             hnd_uuid = ibeacon_scanned.hnd_uuid
             if hnd_uuid != False and checkall or template[0].check_uuid:
@@ -102,10 +103,12 @@ class ibeacons_scanned(osv.osv):
                 serial_id = obj.gatttool_write(bluetooth_adr, hnd_serial_id, serial_id)
                 #status.append(serial_id)
             hnd_password = ibeacon_scanned.hnd_reboot 
-            if hnd_password != False and checkall or template[0].auto_reboot:
+            if hnd_password != False and checkall or template[0].reboot:
                 password = format(template[0].password,'#08x')[2:]
                 reboot = obj.gatttool_write(bluetooth_adr, hnd_password, password)  #send the password   
                 self.read_uuid(cr, uid, ids, checkall=False, context=context)
+                
+            obj.hcitool_ledc(handle)
            
         except:
             status.append("gatttool write Failed")
@@ -145,18 +148,25 @@ class ibeacons_scanned(osv.osv):
             
         status.append(obj.ssh_logout())
         return status
+    
 
+            
+        
     def read_uuid(self, cr, uid, ids, checkall=True, login=True, context=None):
         status=[]
         try: 
             obj = self.pool.get('ibeacon.parameters')
-            ibeacon_scanned = self.browse(cr, uid, ids[0], context=context)
+            obj_scanned = self.pool.get('ibeacon.scanned')
+            ibeacon_scanned = obj_scanned.browse(cr, uid, ids[0], context=context)
             name = ibeacon_scanned.name
             if name == "(unknown)":
                 status.append("ibeacon unknown")
                 return status
             template = ibeacon_scanned.template_id
             bluetooth_adr = ibeacon_scanned.mac
+                 
+            handle = obj.hcitool_lecc(bluetooth_adr)
+            
             object_beacon = {}
             if checkall:
                 response = obj.gatttool_read_uuid(bluetooth_adr, '2a00')
@@ -210,9 +220,14 @@ class ibeacons_scanned(osv.osv):
                 #status.append(serial_id)
                 object_beacon['serial_id'] = serial_id
                 object_beacon['hnd_serial_id'] = response[1]
+                
+            obj.hcitool_ledc(handle)
+            
             object_beacon['validate']=True
             if object_beacon !={}:
                 self.write(cr, uid, ids[0], object_beacon, context=context)
+           
+            
           
         except:
             self.write(cr, uid, ids[0], {'validate':False}, context=context)
@@ -447,6 +462,40 @@ class ibeacon_parameters(osv.osv):
             status.append("gatttool read Failed")
         return status  
      
+    def hcitool_lecc(self, bluetooth_adr, timeout=10):
+        status=[]
+        try:
+            order = 'sudo timeout '+ str(timeout) +' hcitool lecc ' + bluetooth_adr
+            self.session.sendline(order)
+            self.session.prompt()
+            response = self.session.before
+            if response.find("failed")==-1 and response.find("error")==-1:
+                pattern_handle = "handle"
+                sizePattern_handle = len(pattern_handle)
+                responseBegin_handle = response.find(pattern_handle) + sizePattern_handle + 1
+                responseFormatted_handle = response[responseBegin_handle:-2]
+                #status.append("gatttool read Ok")
+                return responseFormatted_handle
+        except:
+            status.append("hci-tool lecc Failed")
+        return status     
+    
+    def hcitool_ledc(self, handle):
+        status=[]
+        try:
+            if handle==[] or handle.isdigit()==False:
+                return status
+            order = 'sudo hcitool ledc ' + handle
+            self.session.sendline(order)
+            self.session.prompt()
+            #self.session.sendline ('uptime')
+            #self.session.prompt()
+            response = self.session.before
+            status.append(response)
+        except:
+            status.append("hci-tool ledc Failed")
+        return status     
+
     def ssh_login(self, cr, uid, ids, context=None): 
         self.session = pxssh.pxssh()
         #login(server, username, password='', terminal_type='ansi', original_prompt='[#$]', 
@@ -556,7 +605,16 @@ class ibeacon_parameters(osv.osv):
         status = self.reboot_system(cr, uid, ids, context)
         for line in status:
             if line != []:
-                return self.pool.get('warning_box').info(cr, uid, title='Reboot System', message=status)  
+                return self.pool.get('warning_box').info(cr, uid, title='Reboot System', message=status) 
+            
+    def action_restart(self, cr, uid, ids, context=None):
+        status=[]
+        status.append(self.ssh_login(cr, uid, ids, context=context))
+        status.append(self.restart_hci())
+        status.append(self.ssh_logout())  
+        for line in status:
+            if line != []:
+                return self.pool.get('warning_box').info(cr, uid, title='Restart hci BLE', message=status) 
             
     def action_read_all(self, cr, uid, ids, context=None):
         obj = self.pool.get('ibeacon.scanned')
