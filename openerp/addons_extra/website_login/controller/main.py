@@ -271,13 +271,49 @@ class Ecommerce(ecommerce.Ecommerce):
         if not order.amount_total or tx.state == 'done':
             # confirm the quotation
             sale_order_obj.action_button_confirm(cr, SUPERUSER_ID, [order.id], context=request.context)
+            
             # send by email
             email_act = sale_order_obj.action_quotation_send(cr, SUPERUSER_ID, [order.id], context=request.context)
+            sale_order_obj.write(cr, SUPERUSER_ID, order.id, {'user_id': SUPERUSER_ID}, context=request.context)
+            compose_id = request.registry['mail.compose.message'].create(
+                    cr, SUPERUSER_ID, {
+                        'model': email_act.get('context').get('default_model'),
+                        #'composition_mode': email_act.get('context').get('default_composition_mode'),
+                        'template_id': email_act.get('context').get('default_template_id'),
+                        'composition_mode': 'mass_mail'
+                    }, context=email_act.get('context'))
+            
+            request.registry['mail.compose.message'].write(
+                    cr, SUPERUSER_ID, [compose_id],
+                    request.registry['mail.compose.message'].onchange_template_id(
+                        cr, SUPERUSER_ID, [compose_id],
+                        email_act.get('context').get('default_template_id'), 'mass_mail', email_act.get('context').get('default_model'), False,
+                        context=email_act.get('context'))['value'],
+                    context=email_act.get('context'))
+            request.registry['mail.compose.message'].send_mail(cr, SUPERUSER_ID, [compose_id], context=email_act.get('context'))
         elif tx.state == 'pending':
             # confirm the quotation
             sale_order_obj.action_button_confirm(cr, SUPERUSER_ID, [order.id], context=request.context)
+            
             # send by email
             email_act = sale_order_obj.action_quotation_send(cr, SUPERUSER_ID, [order.id], context=request.context)
+            sale_order_obj.write(cr, SUPERUSER_ID, order.id, {'user_id': SUPERUSER_ID}, context=request.context)
+            compose_id = request.registry['mail.compose.message'].create(
+                    cr, SUPERUSER_ID, {
+                        'model': email_act.get('context').get('default_model'),
+                        #'composition_mode': email_act.get('context').get('default_composition_mode'),
+                        'template_id': email_act.get('context').get('default_template_id'),
+                        'composition_mode': 'mass_mail'
+                    }, context=email_act.get('context'))
+            
+            request.registry['mail.compose.message'].write(
+                    cr, SUPERUSER_ID, [compose_id],
+                    request.registry['mail.compose.message'].onchange_template_id(
+                        cr, SUPERUSER_ID, [compose_id],
+                        email_act.get('context').get('default_template_id'), 'mass_mail', email_act.get('context').get('default_model'), False,
+                        context=email_act.get('context'))['value'],
+                    context=email_act.get('context'))
+            request.registry['mail.compose.message'].send_mail(cr, SUPERUSER_ID, [compose_id], context=email_act.get('context'))
         elif tx.state == 'cancel':
             # cancel the quotation
             sale_order_obj.action_cancel(cr, SUPERUSER_ID, [order.id], context=request.context)
@@ -361,3 +397,13 @@ class PaypalController(payment_paypal.PaypalController):
         else:
             _logger.warning('Paypal: unrecognized paypal answer, received %s instead of VERIFIED or INVALID' % resp.text)
         return res
+    
+    @http.route('/payment/paypal/ipn/', type='http', auth='none', methods=['POST'])
+    def paypal_ipn(self, **post):
+        """ Paypal IPN. """
+        _logger.info('Beginning Paypal IPN form_feedback with post data %s', pprint.pformat(post))  # debug
+        self.paypal_validate_data(**post)
+        return_url = self._get_return_url(**post)
+        if not return_url:
+            return_url = '/shop/payment/validate/'
+        return werkzeug.utils.redirect(return_url)
