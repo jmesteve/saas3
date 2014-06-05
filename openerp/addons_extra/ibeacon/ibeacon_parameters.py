@@ -61,7 +61,7 @@ class ibeacons_scanned(osv.osv):
             template_id = ibeacon_scanned.template_id.id
             template = obj.browse(cr,uid,[template_id],context=context)
             
-            handle = obj.hcitool_lecc(bluetooth_adr)
+            #handle = obj.hcitool_lecc(bluetooth_adr)
             
             hnd_uuid = ibeacon_scanned.hnd_uuid
             if hnd_uuid != False and checkall or template[0].check_uuid:
@@ -106,9 +106,9 @@ class ibeacons_scanned(osv.osv):
             if hnd_password != False and checkall or template[0].reboot:
                 password = format(template[0].password,'#08x')[2:]
                 reboot = obj.gatttool_write(bluetooth_adr, hnd_password, password)  #send the password   
-                self.read_uuid(cr, uid, ids, checkall=False, context=context)
+                #self.read_uuid(cr, uid, ids, checkall=False, context=context)
                 
-            obj.hcitool_ledc(handle)
+            #obj.hcitool_ledc(handle)
            
         except:
             status.append("gatttool write Failed")
@@ -226,8 +226,6 @@ class ibeacons_scanned(osv.osv):
             object_beacon['validate']=True
             if object_beacon !={}:
                 self.write(cr, uid, ids[0], object_beacon, context=context)
-           
-            
           
         except:
             self.write(cr, uid, ids[0], {'validate':False}, context=context)
@@ -329,7 +327,7 @@ class ibeacon_parameters(osv.osv):
         status.append(self.ssh_logout())
         return status
     
-    def lescan_hci(self, timeout=5):
+    def lescan_hci(self, timeout=10):
         status = []
         try:
             order = 'sudo timeout ' + str(timeout) + ' hcitool lescan'
