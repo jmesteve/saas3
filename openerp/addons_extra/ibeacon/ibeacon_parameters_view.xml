@@ -15,7 +15,6 @@
 		                	<field name="create_date"/>
 		                	<field name="write_date"/>
 		                	<field name="active_beacon"/>
-		                	<field name="auto_reboot"/>
 		                 </group>
 		                 <newline/>
 		                <group string="parameters">
@@ -104,7 +103,8 @@
                 				<button name="action_scan" icon="gtk-yes" string="scan" type="object"/>
                 				<button name="action_read_all" icon="terp-read" string="read all" type="object"/>
                 				<button name="action_write_all" icon="terp-write" string="write all" type="object"/>
-                				<button name="action_reboot" icon="terp-reboot" string="reboot" type="object"/>
+                				<button name="action_reboot" icon="terp-reboot" string="reboot" type="object" confirm="Are you sure you want to do this?"/>
+                				<button name="action_restart" icon="terp-reboot" string="restart BLE" type="object"/>
                 				<button name="action_workflow_disable" icon="gtk-no" string="disable" type="object" confirm="Are you sure you want to do this?"/>
                 				<button name="action_workflow_draft" icon="gtk-no" string="draft" type="object"/>
                 			</span>
@@ -120,6 +120,7 @@
 		                    	<field name="host"/>
 			                	<field name="ssh_user"/>
 			                	<field name="ssh_password" password="True"/>
+			                	<field name="reboot"/>
 		                    </group>
 		                    <group  colspan="2">
 	                	    	<group string="Template">

@@ -30,7 +30,7 @@
                         <button name="%(action_execute_fyc_view)d" type="action" string="Perform operations" class="oe_highlight" states="draft" />
                         <button name="confirm" string="Confirm" class="oe_highlight" states="in_progress"/>
                         <button name="%(action_cancel_fyc_view)d" type="action" string="Cancel" states="in_progress,done" />
-                        <button name="action_recover" string="Draft" type="object" states="cancelled"/>
+                        <button name="action_recover" string="Draft" type="object" states="cancelled,in_progress"/>
                         <field name="state" select="2" widget="statusbar"
                             statusbar_visible="draft,in_progress,done" statusbar_colors='{"cancelled":"red","in_progress":"blue"}' />
                     </header>
