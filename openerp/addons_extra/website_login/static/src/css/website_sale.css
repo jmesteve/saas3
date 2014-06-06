@@ -19,6 +19,10 @@
 	max-width: 100%;
 }
 
+#mycart_products img.img-responsive{
+	max-width: 100px;
+}
+
 @media (min-width: 1200px) {
 	.oe_image_full.oe-height-4 .img-responsive{
 	  height: 85%;

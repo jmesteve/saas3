@@ -24,3 +24,7 @@
 import shop_redirect
 import controller
 import product
+import paypal
+import ogone
+import adyen
+import ir_config_parameter

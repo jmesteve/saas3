@@ -17,6 +17,8 @@ import re
 from openerp.osv import orm, fields
 from openerp import SUPERUSER_ID
 import urllib2
+import pprint
+import urlparse
 
 _logger = logging.getLogger(__name__)
 
@@ -372,7 +374,11 @@ class PaypalController(payment_paypal.PaypalController):
         uopen = urllib2.urlopen(urequest)
         resp = uopen.read()
         if resp == 'VERIFIED':
-            tx_id = request.httprequest.session['website_sale_transaction_id']
+            tx_id = False
+            if 'website_sale_transaction_id' in request.httprequest.session:
+                tx_id = request.httprequest.session['website_sale_transaction_id']
+            if not tx_id:
+                return
             if tx_id:
                 tx_ids = request.registry['payment.transaction'].browse(request.cr, SUPERUSER_ID, tx_id, context=request.context)
                 if type(tx_ids) is not list:
@@ -405,5 +411,6 @@ class PaypalController(payment_paypal.PaypalController):
         self.paypal_validate_data(**post)
         return_url = self._get_return_url(**post)
         if not return_url:
-            return_url = '/shop/payment/validate/'
-        return werkzeug.utils.redirect(return_url)
+            base_url = self.pool['ir.config_parameter'].get_param(cr, uid, 'website_payment.base.url')
+            return_url = urlparse.urljoin(base_url, '/shop/payment/validate/')
+        urllib2.urlopen(return_url)

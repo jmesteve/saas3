@@ -4,7 +4,9 @@
 #    OpenERP, Open Source Management Solution
 #    Copyright (c) 2013 jmesteve All Rights Reserved
 #                       https://github.com/jmesteve
+#                       https://github.com/escrichov
 #                       <jmesteve@me.com>
+#                       <escrichov@gmail.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -23,12 +25,12 @@
 
 {
     'name': "Website Extra",
-    'version': '0.1',
+    'version': '0.2',
     'category': 'Hidden',
     'description': """
         [ENG] Extend addon Website  
     """,
-    'author': 'jmesteve',
+    'author': 'jmesteve,escrichov',
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
     "depends": ['website'],

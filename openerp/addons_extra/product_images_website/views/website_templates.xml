@@ -28,5 +28,16 @@
 				<span t-field="product.image_website_small" t-field-options='{"widget": "image", "class": "img-rounded"}'/>
 			</xpath>
 		</template>
+		<template id="payment" inherit_id="website_sale.payment">
+			<xpath expr="//span[@t-field='line.product_id.image_small']" position="replace">
+				<span t-field="line.product_id.image_website_small" t-field-options='{"widget": "image", "class": "img-rounded"}'/>
+			</xpath>
+		</template>
+		
+		<template id="mycart" inherit_id="website_sale.mycart" name="Your Cart">
+			<xpath expr="//span[@t-field='line.product_id.image_small']" position="replace">
+				<span t-field="line.product_id.image_website_small" t-field-options='{"widget": "image", "class": "img-rounded"}'/>
+			</xpath>
+		</template>
     </data>
 </openerp>
