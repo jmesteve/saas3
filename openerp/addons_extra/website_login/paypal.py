@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from openerp.osv import osv, fields
 from openerp.addons.payment_paypal.controllers.main import PaypalController
 import urlparse
