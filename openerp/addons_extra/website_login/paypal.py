@@ -5,6 +5,9 @@ try:
     import simplejson as json
 except ImportError:
     import json
+    
+import controller.main as ecommerce
+from openerp.addons.web.http import request
 
 class AcquirerPaypal(osv.Model):
     _inherit = 'payment.acquirer'
@@ -12,6 +15,19 @@ class AcquirerPaypal(osv.Model):
     def paypal_form_generate_values(self, cr, uid, id, partner_values, tx_values, context=None):
         base_url = self.pool['ir.config_parameter'].get_param(cr, uid, 'website_payment.base.url')
         acquirer = self.browse(cr, uid, id, context=context)
+        
+        # Pass order_id in custom field to paypal
+        order = ecommerce.Ecommerce().get_order()
+        if order:
+            order_id = order.id
+        else:
+            order_id = False
+        
+        # Pass transaction_id in custom field to paypal
+        if 'website_sale_transaction_id' in request.httprequest.session:
+            website_sale_transaction_id = request.httprequest.session['website_sale_transaction_id']
+        else:
+            website_sale_transaction_id = False
 
         paypal_tx_values = dict(tx_values)
         paypal_tx_values.update({
@@ -35,5 +51,7 @@ class AcquirerPaypal(osv.Model):
         if acquirer.fees_active:
             paypal_tx_values['handling'] = '%.2f' % paypal_tx_values.pop('fees', 0.0)
         if paypal_tx_values.get('return_url'):
-            paypal_tx_values['custom'] = json.dumps({'return_url': '%s' % paypal_tx_values.pop('return_url')})
+            paypal_tx_values['custom'] = json.dumps({'return_url': '%s' % paypal_tx_values.pop('return_url'), 
+                                                     'order_id': order_id, 
+                                                     'tx_id': website_sale_transaction_id})
         return partner_values, paypal_tx_values

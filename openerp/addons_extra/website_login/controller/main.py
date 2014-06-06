@@ -17,8 +17,13 @@ import re
 from openerp.osv import orm, fields
 from openerp import SUPERUSER_ID
 import urllib2
+import urllib
 import pprint
 import urlparse
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 _logger = logging.getLogger(__name__)
 
@@ -324,6 +329,146 @@ class Ecommerce(ecommerce.Ecommerce):
         request.registry['website'].ecommerce_reset(cr, uid, context=context)
 
         return request.redirect('/shop/confirmation/%s' % order.id)
+    
+    @http.route('/shop/payment/validate/ipn/', type='http', auth="public", website=True, multilang=True)
+    def payment_validate_ipn(self, transaction_id=None, sale_order_id=None, **post):
+        """ Method that should be called by the server when receiving an update
+        for a transaction. State at this point :
+
+         - UDPATE ME
+        """
+        cr, uid, context = request.cr, request.uid, request.context
+        email_act = None
+        sale_order_obj = request.registry['sale.order']
+
+        if transaction_id is None:
+            tx = context.get('website_sale_transaction')
+        else:
+            tx = request.registry['payment.transaction'].browse(cr, uid, transaction_id, context=context)
+
+        if sale_order_id is None:
+            order = self.get_order()
+        else:
+            order = request.registry['sale.order'].browse(cr, SUPERUSER_ID, sale_order_id, context=context)
+            assert order.website_session_id == request.httprequest.session['website_session_id']
+
+        # Get transaction from post data
+        if not tx and 'custom' in post and 'tx_id' in post['custom']:
+            transaction_id = post['custom']['tx_id']
+            tx = request.registry['payment.transaction'].browse(cr, SUPERUSER_ID, transaction_id, context=context)
+        
+        # Get order from post data
+        if not order and 'custom' in post and 'order_id' in post['custom']:
+            order_id = post['custom']['order_id']
+            order = request.registry['sale.order'].browse(cr, SUPERUSER_ID, order_id, context=context)
+
+        if not tx or not order:
+            return request.redirect('/shop/')
+
+        if not order.amount_total or tx.state == 'done':
+            # confirm the quotation
+            sale_order_obj.action_button_confirm(cr, SUPERUSER_ID, [order.id], context=request.context)
+            
+            # send by email
+            email_act = sale_order_obj.action_quotation_send(cr, SUPERUSER_ID, [order.id], context=request.context)
+            sale_order_obj.write(cr, SUPERUSER_ID, order.id, {'user_id': SUPERUSER_ID}, context=request.context)
+            compose_id = request.registry['mail.compose.message'].create(
+                    cr, SUPERUSER_ID, {
+                        'model': email_act.get('context').get('default_model'),
+                        #'composition_mode': email_act.get('context').get('default_composition_mode'),
+                        'template_id': email_act.get('context').get('default_template_id'),
+                        'composition_mode': 'mass_mail'
+                    }, context=email_act.get('context'))
+            
+            request.registry['mail.compose.message'].write(
+                    cr, SUPERUSER_ID, [compose_id],
+                    request.registry['mail.compose.message'].onchange_template_id(
+                        cr, SUPERUSER_ID, [compose_id],
+                        email_act.get('context').get('default_template_id'), 'mass_mail', email_act.get('context').get('default_model'), False,
+                        context=email_act.get('context'))['value'],
+                    context=email_act.get('context'))
+            request.registry['mail.compose.message'].send_mail(cr, SUPERUSER_ID, [compose_id], context=email_act.get('context'))
+        elif tx.state == 'pending':
+            # confirm the quotation
+            sale_order_obj.action_button_confirm(cr, SUPERUSER_ID, [order.id], context=request.context)
+            
+            # send by email
+            email_act = sale_order_obj.action_quotation_send(cr, SUPERUSER_ID, [order.id], context=request.context)
+            sale_order_obj.write(cr, SUPERUSER_ID, order.id, {'user_id': SUPERUSER_ID}, context=request.context)
+            compose_id = request.registry['mail.compose.message'].create(
+                    cr, SUPERUSER_ID, {
+                        'model': email_act.get('context').get('default_model'),
+                        #'composition_mode': email_act.get('context').get('default_composition_mode'),
+                        'template_id': email_act.get('context').get('default_template_id'),
+                        'composition_mode': 'mass_mail'
+                    }, context=email_act.get('context'))
+            
+            request.registry['mail.compose.message'].write(
+                    cr, SUPERUSER_ID, [compose_id],
+                    request.registry['mail.compose.message'].onchange_template_id(
+                        cr, SUPERUSER_ID, [compose_id],
+                        email_act.get('context').get('default_template_id'), 'mass_mail', email_act.get('context').get('default_model'), False,
+                        context=email_act.get('context'))['value'],
+                    context=email_act.get('context'))
+            request.registry['mail.compose.message'].send_mail(cr, SUPERUSER_ID, [compose_id], context=email_act.get('context'))
+        elif tx.state == 'cancel':
+            # cancel the quotation
+            sale_order_obj.action_cancel(cr, SUPERUSER_ID, [order.id], context=request.context)
+
+        # clean context and session, then redirect to the confirmation page
+        request.registry['website'].ecommerce_reset(cr, uid, context=context)
+        
+    @http.route(['/shop/payment/transaction/<int:acquirer_id>'], type='http', methods=['POST'], auth="public", website=True)
+    def payment_transaction(self, acquirer_id, **post):
+        """ Hook method that creates a payment.transaction and redirect to the
+        acquirer, using post values to re-create the post action.
+
+        :param int acquirer_id: id of a payment.acquirer record. If not set the
+                                user is redirected to the checkout page
+        :param dict post: should coutain all post data for the acquirer
+        """
+        # @TDEFIXME: don't know why we received those data, but should not be send to the acquirer
+        post.pop('submit.x', None)
+        post.pop('submit.y', None)
+        cr, uid, context = request.cr, request.uid, request.context
+        payment_obj = request.registry.get('payment.acquirer')
+        transaction_obj = request.registry.get('payment.transaction')
+        order = self.get_order()
+
+        if not order or not order.order_line or acquirer_id is None:
+            return request.redirect("/shop/checkout/")
+
+        # find an already existing transaction
+        tx = context.get('website_sale_transaction')
+        if not tx:
+            tx_id = transaction_obj.create(cr, SUPERUSER_ID, {
+                'acquirer_id': acquirer_id,
+                'type': 'form',
+                'amount': order.amount_total,
+                'currency_id': order.pricelist_id.currency_id.id,
+                'partner_id': order.partner_id.id,
+                'reference': order.name,
+                'sale_order_id': order.id,
+            }, context=context)
+            request.httprequest.session['website_sale_transaction_id'] = tx_id
+        elif tx and tx.state == 'draft':  # button cliked but no more info -> rewrite on tx or create a new one ?
+            tx.write({
+                'acquirer_id': acquirer_id,
+            })
+        
+        if 'custom' in post:
+            custom = json.loads(post['custom'])
+            if tx:
+                custom['tx_id'] = tx.id
+            elif tx_id:
+                custom['tx_id'] = tx_id
+            else:
+                custom['tx_id'] = request.httprequest.session['website_sale_transaction_id']
+            post['custom'] = json.dumps(custom)
+
+        acquirer_form_post_url = payment_obj.get_form_action_url(cr, uid, acquirer_id, context=context)
+        acquirer_total_url = '%s?%s' % (acquirer_form_post_url, werkzeug.url_encode(post))
+        return request.redirect(acquirer_total_url)
        
 
 class Website(orm.Model):
@@ -374,10 +519,11 @@ class PaypalController(payment_paypal.PaypalController):
         uopen = urllib2.urlopen(urequest)
         resp = uopen.read()
         if resp == 'VERIFIED':
-            tx_id = False
             if 'website_sale_transaction_id' in request.httprequest.session:
                 tx_id = request.httprequest.session['website_sale_transaction_id']
-            if not tx_id:
+            elif 'custom' in post and 'tx_id' in post['custom']:
+                tx_id = post['custom']['tx_id']
+            else:
                 return
             if tx_id:
                 tx_ids = request.registry['payment.transaction'].browse(request.cr, SUPERUSER_ID, tx_id, context=request.context)
@@ -395,6 +541,7 @@ class PaypalController(payment_paypal.PaypalController):
                         #'date_validate': values.get('udpate_time', fields.datetime.now()),
                         #'paypal_txn_id': values['id'],
                     })
+                request.httprequest.session['website_payment_paypal_done'] = True
             _logger.info('Paypal: validated data')
             cr, uid, context = request.cr, SUPERUSER_ID, request.context
             res = request.registry['payment.transaction'].form_feedback(cr, uid, post, 'paypal', context=context)
@@ -411,6 +558,8 @@ class PaypalController(payment_paypal.PaypalController):
         self.paypal_validate_data(**post)
         return_url = self._get_return_url(**post)
         if not return_url:
+            data = urllib.urlencode(post)
             base_url = self.pool['ir.config_parameter'].get_param(cr, uid, 'website_payment.base.url')
-            return_url = urlparse.urljoin(base_url, '/shop/payment/validate/')
-        urllib2.urlopen(return_url)
+            return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn/')
+            req = urllib2.Request(url, data)
+        urllib2.urlopen(req)
