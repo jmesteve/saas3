@@ -458,6 +458,7 @@ class Ecommerce(ecommerce.Ecommerce):
             })
         
         if 'custom' in post:
+            _logger.info(post['custom'])
             custom = json.loads(post['custom'])
             if tx:
                 custom['tx_id'] = tx.id
