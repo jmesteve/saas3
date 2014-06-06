@@ -9,6 +9,7 @@ except ImportError:
     
 import controller.main as ecommerce
 from openerp.addons.web.http import request
+import logging
 
 _logger = logging.getLogger(__name__)
 
