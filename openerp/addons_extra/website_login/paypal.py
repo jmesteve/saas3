@@ -55,8 +55,6 @@ class AcquirerPaypal(osv.Model):
         if acquirer.fees_active:
             paypal_tx_values['handling'] = '%.2f' % paypal_tx_values.pop('fees', 0.0)
         if paypal_tx_values.get('return_url'):
-            paypal_tx_values['custom'] = json.dumps({'return_url': '%s' % paypal_tx_values.pop('return_url'), 
-                                                     'order_id': order_id, 
-                                                     'tx_id': website_sale_transaction_id})
+            paypal_tx_values['custom'] = json.dumps({'return_url': '%s' % paypal_tx_values.pop('return_url')})
         _logger.info(paypal_tx_values)
         return partner_values, paypal_tx_values

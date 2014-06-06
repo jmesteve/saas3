@@ -458,14 +458,18 @@ class Ecommerce(ecommerce.Ecommerce):
             })
         
         if 'custom' in post:
-            _logger.info(post['custom'])
-            custom = json.loads(post['custom'])
+            custom = {}
             if tx:
                 custom['tx_id'] = tx.id
             elif tx_id:
                 custom['tx_id'] = tx_id
             else:
                 custom['tx_id'] = request.httprequest.session['website_sale_transaction_id']
+            
+            if order:
+                custom['order_id'] = order.id
+                
+            custom['return_url'] = '/shop/payment/validate'
             post['custom'] = json.dumps(custom)
 
         acquirer_form_post_url = payment_obj.get_form_action_url(cr, uid, acquirer_id, context=context)
@@ -558,10 +562,9 @@ class PaypalController(payment_paypal.PaypalController):
         """ Paypal IPN. """
         _logger.info('Beginning Paypal IPN form_feedback with post data %s', pprint.pformat(post))  # debug
         self.paypal_validate_data(**post)
-        return_url = self._get_return_url(**post)
-        if not return_url:
-            data = urllib.urlencode(post)
-            base_url = self.pool['ir.config_parameter'].get_param(cr, uid, 'website_payment.base.url')
-            return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn/')
-            req = urllib2.Request(url, data)
+        
+        data = urllib.urlencode(post)
+        base_url = self.pool['ir.config_parameter'].get_param(cr, uid, 'website_payment.base.url')
+        return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn/')
+        req = urllib2.Request(url, data)
         urllib2.urlopen(req)

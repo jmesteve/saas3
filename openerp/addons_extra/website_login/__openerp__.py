@@ -25,7 +25,7 @@
 
 {
     'name': "Website Login",
-    'version': '0.12',
+    'version': '0.13',
     'category': 'Hidden',
     'description': """
         [ENG] Change addon Website Login 
