@@ -10,6 +10,8 @@ except ImportError:
 import controller.main as ecommerce
 from openerp.addons.web.http import request
 
+_logger = logging.getLogger(__name__)
+
 class AcquirerPaypal(osv.Model):
     _inherit = 'payment.acquirer'
     
