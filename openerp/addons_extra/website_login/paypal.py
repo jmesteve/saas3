@@ -55,4 +55,5 @@ class AcquirerPaypal(osv.Model):
             paypal_tx_values['custom'] = json.dumps({'return_url': '%s' % paypal_tx_values.pop('return_url'), 
                                                      'order_id': order_id, 
                                                      'tx_id': website_sale_transaction_id})
+        _logger.info(paypal_tx_values)
         return partner_values, paypal_tx_values
