@@ -354,14 +354,18 @@ class Ecommerce(ecommerce.Ecommerce):
             assert order.website_session_id == request.httprequest.session['website_session_id']
 
         # Get transaction from post data
-        if not tx and 'custom' in post and 'tx_id' in post['custom']:
-            transaction_id = post['custom']['tx_id']
-            tx = request.registry['payment.transaction'].browse(cr, SUPERUSER_ID, transaction_id, context=context)
+        if not tx and 'custom' in post:
+            custom = json.loads(post['custom'])
+            if 'tx_id' in post['custom']:
+                transaction_id = custom['tx_id']
+                tx = request.registry['payment.transaction'].browse(cr, SUPERUSER_ID, transaction_id, context=context)
         
         # Get order from post data
-        if not order and 'custom' in post and 'order_id' in post['custom']:
-            order_id = post['custom']['order_id']
-            order = request.registry['sale.order'].browse(cr, SUPERUSER_ID, order_id, context=context)
+        if not order and 'custom' in post:
+            custom = json.loads(post['custom'])
+            if 'order_id' in custom:
+                order_id = custom['order_id']
+                order = request.registry['sale.order'].browse(cr, SUPERUSER_ID, order_id, context=context)
 
         if not tx or not order:
             return request.redirect('/shop/')
@@ -528,7 +532,8 @@ class PaypalController(payment_paypal.PaypalController):
             if 'website_sale_transaction_id' in request.httprequest.session:
                 tx_id = request.httprequest.session['website_sale_transaction_id']
             elif 'custom' in post and 'tx_id' in post['custom']:
-                tx_id = post['custom']['tx_id']
+                custom = json.loads(post['custom'])
+                tx_id = custom['tx_id']
             else:
                 return
             if tx_id:
