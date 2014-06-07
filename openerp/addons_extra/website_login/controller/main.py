@@ -4,6 +4,7 @@ import logging
 from openerp import http
 import werkzeug.utils
 import werkzeug.wrappers
+from werkzeug.exceptions import HTTPException, NotFound
 from openerp.addons.web.http import request, LazyResponse
 import openerp.addons.website.controllers.main as website
 import openerp.addons.web.controllers.main as web
