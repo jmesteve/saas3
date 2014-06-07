@@ -366,7 +366,9 @@ class Ecommerce(ecommerce.Ecommerce):
             if 'order_id' in custom:
                 order_id = custom['order_id']
                 order = request.registry['sale.order'].browse(cr, SUPERUSER_ID, order_id, context=context)
-
+        
+        _logger.info(order, tx, post)
+        
         if not tx or not order:
             return request.redirect('/shop/')
 
@@ -572,6 +574,5 @@ class PaypalController(payment_paypal.PaypalController):
         base_url = request.registry['ir.config_parameter'].get_param(request.cr, SUPERUSER_ID, 'website_payment.base.url')
         return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn/')
         req = urllib2.Request(return_url, data)
-        _logger.info(req)
         urllib2.urlopen(req)
         return ''
