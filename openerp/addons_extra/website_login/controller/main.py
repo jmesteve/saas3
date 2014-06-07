@@ -563,8 +563,7 @@ class PaypalController(payment_paypal.PaypalController):
         base_url = request.registry['ir.config_parameter'].get_param(request.cr, SUPERUSER_ID, 'website_payment.base.url')
         return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn')
         req = urllib2.Request(return_url, data)
-        response = urllib2.urlopen(req)
-        if response.status_code == 204:
-            return ''
-        else:
-            return werkzeug.wrappers.Response(status=404)
+        try: 
+            return urllib2.urlopen(req)
+        except HTTPException as e:
+            return e
