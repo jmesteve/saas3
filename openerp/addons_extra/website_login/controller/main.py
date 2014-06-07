@@ -590,19 +590,51 @@ class PaypalController(payment_paypal.PaypalController):
             _logger.warning('Paypal: unrecognized paypal answer, received %s instead of VERIFIED or INVALID' % resp.text)
         return res
     
+    def paypal_validate_data_ipn(self, **post):
+        """ Paypal IPN: three steps validation to ensure data correctness
+
+         - step 1: return an empty HTTP 200 response -> will be done at the end
+           by returning ''
+         - step 2: POST the complete, unaltered message back to Paypal (preceded
+           by cmd=_notify-validate), with same encoding
+         - step 3: paypal send either VERIFIED or INVALID (single word)
+
+        Once data is validated, process it. """
+        res = False
+        new_post = dict(post, cmd='_notify-validate')
+        urequest = urllib2.Request("https://www.sandbox.paypal.com/cgi-bin/webscr", werkzeug.url_encode(new_post))
+        uopen = urllib2.urlopen(urequest)
+        resp = uopen.read()
+        if resp == 'VERIFIED':
+            _logger.info('Paypal: validated data')
+            cr, uid, context = request.cr, SUPERUSER_ID, request.context
+            res = request.registry['payment.transaction'].form_feedback(cr, uid, post, 'paypal', context=context)
+        elif resp == 'INVALID':
+            _logger.warning('Paypal: answered INVALID on data verification')
+        else:
+            _logger.warning('Paypal: unrecognized paypal answer, received %s instead of VERIFIED or INVALID' % resp.text)
+        return res
+
     @http.route('/payment/paypal/ipn/', type='http', auth='none', methods=['POST'])
     def paypal_ipn(self, **post):
         """ Paypal IPN. """
         _logger.info('Beginning Paypal IPN form_feedback with post data %s', pprint.pformat(post))  # debug
-        self.paypal_validate_data(**post)
-        
-        data = urllib.urlencode(post)
-        base_url = request.registry['ir.config_parameter'].get_param(request.cr, SUPERUSER_ID, 'website_payment.base.url')
-        return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn')
-        req = urllib2.Request(return_url, data)
-        try: 
-            urllib2.urlopen(req)
-            return ''
-        except urllib2.HTTPError as e:
-            return werkzeug.wrappers.Response('Not Found', status=404)
+        self.paypal_validate_data_ipn(**post)
+        return ''
+    
+#     @http.route('/payment/paypal/ipn/', type='http', auth='none', methods=['POST'])
+#     def paypal_ipn(self, **post):
+#         """ Paypal IPN. """
+#         _logger.info('Beginning Paypal IPN form_feedback with post data %s', pprint.pformat(post))  # debug
+#         self.paypal_validate_data(**post)
+#         
+#         data = urllib.urlencode(post)
+#         base_url = request.registry['ir.config_parameter'].get_param(request.cr, SUPERUSER_ID, 'website_payment.base.url')
+#         return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn')
+#         req = urllib2.Request(return_url, data)
+#         try: 
+#             urllib2.urlopen(req)
+#             return ''
+#         except urllib2.HTTPError as e:
+#             return werkzeug.wrappers.Response('Not Found', status=404)
         

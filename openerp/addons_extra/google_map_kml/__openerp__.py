@@ -23,7 +23,7 @@
 ##############################################################################
 {
     'name': 'Google Map KML',
-    'version': '1.2',
+    'version': '1.3',
     'author': 'ErpAndCloud',
     'category': 'Customer Relationship Management',    
     'description': """
@@ -38,6 +38,7 @@
              'data/google_map_kml_data.xml',
              'security/groups.xml',
              'security/ir.model.access.csv',
+             'partner_view.xml'
              ],
     'css': ['static/src/css/location_map_partner.css'],
     'js': ['https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places',

@@ -266,3 +266,7 @@ msgstr "Mapa de la Empresa"
 msgid "Dark Green"
 msgstr "Verde oscuro"
 
+#. module: google_map_kml
+#: view:res.partner:0
+msgid "City completion Google"
+msgstr "Autocompletado de Google"
