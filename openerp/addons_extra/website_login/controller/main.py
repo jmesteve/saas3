@@ -376,7 +376,7 @@ class Ecommerce(ecommerce.Ecommerce):
                 _logger.info("Payment IPN Order id: %s" % order_id)
         
         if not tx or not order:
-            return False
+            return werkzeug.wrappers.Response(status=404)
 
         if not order.amount_total or tx.state == 'done':
             _logger.info("Paypal IPN Confirmed")
@@ -403,16 +403,16 @@ class Ecommerce(ecommerce.Ecommerce):
                         context=email_act.get('context'))['value'],
                     context=email_act.get('context'))
             request.registry['mail.compose.message'].send_mail(cr, SUPERUSER_ID, [compose_id], context=email_act.get('context'))
-            return True
+            return ''
         elif tx.state == 'cancel':
             # cancel the quotation
             sale_order_obj.action_cancel(cr, SUPERUSER_ID, [order.id], context=request.context)
-            return True
+            return ''
 
         # clean context and session, then redirect to the confirmation page
         request.registry['website'].ecommerce_reset(cr, uid, context=context)
         
-        return False
+        return werkzeug.wrappers.Response(status=404)
         
     @http.route(['/shop/payment/transaction/<int:acquirer_id>'], type='http', methods=['POST'], auth="public", website=True)
     def payment_transaction(self, acquirer_id, **post):
@@ -563,8 +563,8 @@ class PaypalController(payment_paypal.PaypalController):
         base_url = request.registry['ir.config_parameter'].get_param(request.cr, SUPERUSER_ID, 'website_payment.base.url')
         return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn')
         req = urllib2.Request(return_url, data)
-        result = urllib2.urlopen(req)
-        if result == True:
+        response = urllib2.urlopen(req)
+        if response.status_code == 204:
             return ''
         else:
             return werkzeug.wrappers.Response(status=404)
