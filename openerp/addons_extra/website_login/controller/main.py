@@ -3,6 +3,7 @@ import logging
 
 from openerp import http
 import werkzeug.utils
+import werkzeug.wrappers
 from openerp.addons.web.http import request, LazyResponse
 import openerp.addons.website.controllers.main as website
 import openerp.addons.web.controllers.main as web
@@ -274,6 +275,9 @@ class Ecommerce(ecommerce.Ecommerce):
             assert order.website_session_id == request.httprequest.session['website_session_id']
 
         if not tx or not order:
+            # clean context and session, then redirect to the shop
+            request.registry['website'].ecommerce_reset(cr, uid, context=context)
+            
             return request.redirect('/shop/')
 
         if not order.amount_total or tx.state == 'done':
@@ -353,12 +357,15 @@ class Ecommerce(ecommerce.Ecommerce):
             order = request.registry['sale.order'].browse(cr, SUPERUSER_ID, sale_order_id, context=context)
             assert order.website_session_id == request.httprequest.session['website_session_id']
 
+        _logger.info("Beginning validate payment IPN")
+        
         # Get transaction from post data
         if not tx and 'custom' in post:
             custom = json.loads(post['custom'])
             if 'tx_id' in post['custom']:
                 transaction_id = custom['tx_id']
                 tx = request.registry['payment.transaction'].browse(cr, SUPERUSER_ID, transaction_id, context=context)
+                _logger.info("Payment IPN Transaction id: %s" % transaction_id)
         
         # Get order from post data
         if not order and 'custom' in post:
@@ -366,11 +373,10 @@ class Ecommerce(ecommerce.Ecommerce):
             if 'order_id' in custom:
                 order_id = custom['order_id']
                 order = request.registry['sale.order'].browse(cr, SUPERUSER_ID, order_id, context=context)
-        
-        _logger.info("Beginning validate payment IPN")
+                _logger.info("Payment IPN Order id: %s" % order_id)
         
         if not tx or not order:
-            return request.redirect('/shop/')
+            return False
 
         if not order.amount_total or tx.state == 'done':
             _logger.info("Paypal IPN Confirmed")
@@ -397,35 +403,16 @@ class Ecommerce(ecommerce.Ecommerce):
                         context=email_act.get('context'))['value'],
                     context=email_act.get('context'))
             request.registry['mail.compose.message'].send_mail(cr, SUPERUSER_ID, [compose_id], context=email_act.get('context'))
-        elif tx.state == 'pending':
-            # confirm the quotation
-            sale_order_obj.action_button_confirm(cr, SUPERUSER_ID, [order.id], context=request.context)
-            
-            # send by email
-            email_act = sale_order_obj.action_quotation_send(cr, SUPERUSER_ID, [order.id], context=request.context)
-            sale_order_obj.write(cr, SUPERUSER_ID, order.id, {'user_id': SUPERUSER_ID}, context=request.context)
-            compose_id = request.registry['mail.compose.message'].create(
-                    cr, SUPERUSER_ID, {
-                        'model': email_act.get('context').get('default_model'),
-                        #'composition_mode': email_act.get('context').get('default_composition_mode'),
-                        'template_id': email_act.get('context').get('default_template_id'),
-                        'composition_mode': 'mass_mail'
-                    }, context=email_act.get('context'))
-            
-            request.registry['mail.compose.message'].write(
-                    cr, SUPERUSER_ID, [compose_id],
-                    request.registry['mail.compose.message'].onchange_template_id(
-                        cr, SUPERUSER_ID, [compose_id],
-                        email_act.get('context').get('default_template_id'), 'mass_mail', email_act.get('context').get('default_model'), False,
-                        context=email_act.get('context'))['value'],
-                    context=email_act.get('context'))
-            request.registry['mail.compose.message'].send_mail(cr, SUPERUSER_ID, [compose_id], context=email_act.get('context'))
+            return True
         elif tx.state == 'cancel':
             # cancel the quotation
             sale_order_obj.action_cancel(cr, SUPERUSER_ID, [order.id], context=request.context)
+            return True
 
         # clean context and session, then redirect to the confirmation page
         request.registry['website'].ecommerce_reset(cr, uid, context=context)
+        
+        return False
         
     @http.route(['/shop/payment/transaction/<int:acquirer_id>'], type='http', methods=['POST'], auth="public", website=True)
     def payment_transaction(self, acquirer_id, **post):
@@ -574,7 +561,10 @@ class PaypalController(payment_paypal.PaypalController):
         
         data = urllib.urlencode(post)
         base_url = request.registry['ir.config_parameter'].get_param(request.cr, SUPERUSER_ID, 'website_payment.base.url')
-        return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn/')
+        return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn')
         req = urllib2.Request(return_url, data)
-        urllib2.urlopen(req)
-        return ''
+        result = urllib2.urlopen(req)
+        if result == True:
+            return ''
+        else:
+            return werkzeug.wrappers.Response(status=404)
