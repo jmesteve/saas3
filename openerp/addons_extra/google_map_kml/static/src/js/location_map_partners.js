@@ -661,6 +661,90 @@ openerp.google_map_kml = function (instance)
 	    template: 'location_map.website_button_selectimage',
 	});
 	
+	instance.google_map_kml.location_autocomplete = instance.web.form.FieldChar.extend({
+	    template: 'location_autocomplete',
+	    init: function (field_manager, node) {
+	        this._super(field_manager, node);
+	        this.password = this.node.attrs.password === 'True' || this.node.attrs.password === '1';
+	    },
+	    initialize_content: function() {
+	        this.setupFocus(this.$('input'));
+	        this.autocomplete = false;
+	        var options = {
+	        		types: ['geocode']
+	        };
+	        var componentForm = {
+	        		  street_number: ['long_name'],
+	        		  route: ['long_name'],
+	        		  locality: ['long_name'],
+	        		  administrative_area_level_2: ['short_name', 'long_name'],
+	        		  administrative_area_level_1: ['short_name', 'long_name'],
+	        		  country: ['short_name', 'long_name'],
+	        		  postal_code: ['short_name']
+	        };
+	        var fields = this.fields;
+	        var field_manager = this.field_manager;
+	        var input = this.$('input').get(0);
+	        if(typeof google !== "undefined" && typeof input !== "undefined") {
+			   var autocomplete = new google.maps.places.Autocomplete(input, options);
+			   google.maps.event.addListener(autocomplete, 'place_changed', function() {
+				   var place = autocomplete.getPlace();
+				   if(place && place.address_components){
+					   var values = {};
+					   for (var i=0; i < place.address_components.length; i++){
+						   var addressType = place.address_components[i].types[0];
+						   values[addressType] = {};
+						   if (componentForm[addressType]) {
+							   for (var j=0; j < componentForm[addressType].length; j++){
+							   
+								   var val = place.address_components[i][componentForm[addressType][j]];
+								   values[addressType][componentForm[addressType][j]] = val;
+							   }
+						   }
+					   }
+						   
+					   var street = "";
+					   if(values['route'] && values['street_number']){
+						   street = values['route']['long_name'] + ", " + values['street_number']['long_name'];
+					   }
+					   else if(values['route']){
+						   street = values['route']['long_name'];
+					   }
+					   var Partner = new instance.web.Model('res.partner');
+					   
+					   state_name = "";
+					   state_code = "";
+					   if(values['administrative_area_level_2']){
+						   state_code = values['administrative_area_level_2']['short_name'];
+						   state_name = values['administrative_area_level_2']['long_name'];
+					   }
+					   else if(values['administrative_area_level_1']){
+						   state_code = values['administrative_area_level_1']['short_name'];
+						   state_name = values['administrative_area_level_1']['long_name'];
+					   }
+					   
+					   country_name = "";
+					   country_code = "";
+					   if(values['country']){
+						   country_code = values['country']['short_name'];
+						   country_name = values['country']['long_name'];
+					   }
+					   
+					   Partner.call('location_autocomplete_content', [state_code, state_name, country_code, country_name]).then(function(result) {
+						   field_manager.set_values({
+					            "city": values['locality'] && values['locality']['long_name'] ? values['locality']['long_name'] : "",
+					            "zip": values['postal_code'] && values['postal_code']['short_name'] ? values['postal_code']['short_name'] : "",
+					            "street": street ? street : field_manager.get_field_value('street'),
+					            "country_id": result['country_id'],
+					            "state_id": result['state_id']
+					       });;
+			            });						   
+				   }
+			   });
+			}
+	    }
+	});
+	
 	instance.web.client_actions.add('location_map.partners', 'instance.google_map_kml.OpenMap');
 	instance.web.client_actions.add('location_map.partners_point', 'instance.google_map_kml.OpenMapPoint');
 	instance.web.client_actions.add('location_map.partners_company', 'instance.google_map_kml.OpenMapCompany');
@@ -677,4 +761,5 @@ openerp.google_map_kml = function (instance)
 	instance.web.form.widgets.add('google_map_partner_comparison_point', 'instance.google_map_kml.MapPartnerComparisonPoint');
 	instance.web.form.widgets.add('google_map_partner_website_button_visited', 'instance.google_map_kml.WebsiteButtonVisited');
 	instance.web.form.widgets.add('google_map_partner_website_button_select_image', 'instance.google_map_kml.WebsiteButtonSelectImage');
+	instance.web.form.widgets.add('location_autocomplete', 'instance.google_map_kml.location_autocomplete');
 }

@@ -24,3 +24,4 @@
 
 import google_map_partner
 import google_map_partner_comparison
+import partner
