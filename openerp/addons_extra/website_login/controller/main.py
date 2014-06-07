@@ -601,7 +601,8 @@ class PaypalController(payment_paypal.PaypalController):
         return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn')
         req = urllib2.Request(return_url, data)
         try: 
-            return urllib2.urlopen(req)
+            urllib2.urlopen(req)
+            return ''
         except urllib2.HTTPError as e:
             return werkzeug.wrappers.Response('Not Found', status=404)
         
