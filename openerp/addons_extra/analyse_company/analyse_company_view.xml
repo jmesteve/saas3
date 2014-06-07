@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="0">
+
+		<record id="view_analyse_company_tree" model="ir.ui.view">
+            <field name="name">analyse.company.tree</field>
+            <field name="model">analyse.company</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="analyse_company_tree">
+						<field name="year"/>
+						<field name="type"/>
+						<field name="company"/>
+						<field name="value"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_analyse_company_form" model="ir.ui.view">
+            <field name="name">analyse.company.form</field>
+            <field name="model">analyse.company</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="analyse_company_form">
+						<field name="year"/>
+						<newline/>
+						<field name="type"/>
+						<newline/>
+						<field name="company"/>
+						<newline/>
+						<field name="value"/>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_analyse_company_graph1" model="ir.ui.view">
+            <field name="name">view.analyse.company.graph1</field>
+            <field name="model">analyse.company</field>
+            <field name="arch" type="xml">
+                <graph string="analyse company value" orientation="horizontal" type="bar">
+                    <field name="year"/>
+                    <field name="type"/>
+                    <field name="value" operator="+"/>
+                </graph>
+            </field>
+        </record>
+		
+		<record id="analyse_company_search_form_view" model="ir.ui.view">
+            <field name="name">analyse_company.search.form</field>
+            <field name="model">analyse.company</field>
+            <field name="arch" type="xml">
+                <search string="Analyse Company">
+                   <group expand='0' string='Group by...'>
+                   		<filter name="year" string="Year" icon="terp-check" context="{'group_by':'year'}"/>
+                   		<filter name="type" string="Type" icon="terp-check" context="{'group_by':'type'}"/>
+                   		<filter name="company" string="Company" icon="terp-check" context="{'group_by':'company'}"/>
+                   </group>
+                </search>
+            </field>
+        </record>
+		
+		<record model='ir.actions.act_window' id='action_menu_analyse_company'>
+            <field name="name">Analyse Company</field>
+            <field name="res_model">analyse.company</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'search_default_year':1,'search_default_type':1}</field>
+            <field name="search_view_id" ref="analyse_company_search_form_view"/>
+            <field name="view_id" ref="view_analyse_company_tree"/>
+        </record>
+		
+    	<menuitem id="menu_analyse_company" parent="base.menu_sales" action="action_menu_analyse_company" sequence="5"/>
+    </data>
+</openerp>
+
