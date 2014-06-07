@@ -367,12 +367,14 @@ class Ecommerce(ecommerce.Ecommerce):
                 order_id = custom['order_id']
                 order = request.registry['sale.order'].browse(cr, SUPERUSER_ID, order_id, context=context)
         
-        _logger.info(order, tx, post)
+        _logger.info("Beginning validate payment IPN")
         
         if not tx or not order:
             return request.redirect('/shop/')
 
         if not order.amount_total or tx.state == 'done':
+            _logger.info("Paypal IPN Confirmed")
+            
             # confirm the quotation
             sale_order_obj.action_button_confirm(cr, SUPERUSER_ID, [order.id], context=request.context)
             
