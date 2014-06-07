@@ -24,6 +24,9 @@ class analyse_company(osv.osv):
                 'year': fields.char('Year',  size=4, required=True),
                 'type': fields.many2one('analyse.type', 'Type', select=1, required=True),
                 'value': fields.float('Value',  digits=(16,2), required=True),
+                'date_begin': fields.date('Date begin'),
+                'date_end': fields.date('Date end'),
+                'notes': fields.text('notes'),
                 }
     _defaults ={
                'year': _datetime_year,

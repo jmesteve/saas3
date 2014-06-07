@@ -12,6 +12,9 @@
 						<field name="type"/>
 						<field name="company"/>
 						<field name="value"/>
+						<field name="date_begin"/>
+						<field name="date_end"/>
+						<field name="notes"/>
                 </tree>
             </field>
         </record>
@@ -21,13 +24,22 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="analyse_company_form">
+                	<group col="8">
 						<field name="year"/>
-						<newline/>
 						<field name="type"/>
-						<newline/>
 						<field name="company"/>
-						<newline/>
 						<field name="value"/>
+					</group>
+					<newline/>
+					<group col="8">
+						<field name="date_begin"/>
+						<field name="date_end"/>
+						
+					</group>
+					<newline/>
+					<group col="8">
+						<field name="notes"/>
+					</group>
                 </form>
             </field>
         </record>
