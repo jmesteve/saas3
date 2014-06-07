@@ -10,5 +10,34 @@
 		      </a>
 		  </xpath>
 		</template>
+		
+		<template id="product" inherit_id="website_sale.product" name="Product">
+			<xpath expr="//span[@t-field='product.image']" position="replace">
+			      <span t-field="product.image_website_main" t-field-options='{"widget": "image", "class": "product_detail_img"}'/>
+			</xpath>
+		</template>
+		
+		<template id="recommended_products" inherit_id="website_sale.recommended_products" name="Recommended Products">
+			<xpath expr="//span[@t-field='product.image_small']" position="replace">
+				<span t-field="product.image_website_small" t-field-options='{"widget": "image", "class": "img-rounded shadow" }'/>
+			</xpath>
+		</template>
+		
+		<template id="suggested_products_list" inherit_id="website_sale.suggested_products_list" name="Suggested Products in my cart">
+			<xpath expr="//span[@t-field='product.image_small']" position="replace">
+				<span t-field="product.image_website_small" t-field-options='{"widget": "image", "class": "img-rounded"}'/>
+			</xpath>
+		</template>
+		<template id="payment" inherit_id="website_sale.payment">
+			<xpath expr="//span[@t-field='line.product_id.image_small']" position="replace">
+				<span t-field="line.product_id.image_website_small" t-field-options='{"widget": "image", "class": "img-rounded"}'/>
+			</xpath>
+		</template>
+		
+		<template id="mycart" inherit_id="website_sale.mycart" name="Your Cart">
+			<xpath expr="//span[@t-field='line.product_id.image_small']" position="replace">
+				<span t-field="line.product_id.image_website_small" t-field-options='{"widget": "image", "class": "img-rounded"}'/>
+			</xpath>
+		</template>
     </data>
 </openerp>

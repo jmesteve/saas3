@@ -17,5 +17,11 @@
 	            </xpath>
 	        </field>
    		</record>
+   		
+   		<template id="mycart" inherit_id="website_sale.mycart" name="Your Cart">
+   			<xpath expr="//link[@href='/website_sale/static/src/css/website_sale.css']" position="after">
+		      <link rel='stylesheet' href='/website_login/static/src/css/website_sale.css'/>
+		  	</xpath>
+   		</template>
 	</data>
 </openerp>

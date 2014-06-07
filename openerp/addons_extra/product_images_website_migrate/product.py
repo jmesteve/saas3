@@ -33,5 +33,5 @@ class product_product(orm.Model):
     def _delete_bin_images(self, cr, uid, context=None):
         # Borrar imagen antigua de la base de datos
         product_ids = self.search(cr, uid, [], context=context)
-        self.write(cr, uid, product_ids, {'image': False}, context=context)
+        self.write(cr, uid, product_ids, {'image': False, 'image_small': False, 'image_medium': False}, context=context)
                 
