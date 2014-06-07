@@ -377,7 +377,7 @@ class Ecommerce(ecommerce.Ecommerce):
                 _logger.info("Payment IPN Order id: %s" % order_id)
         
         if not tx or not order:
-            raise NotFound()
+            return werkzeug.wrappers.Response('Not Found', status=404)
 
         if not order.amount_total or tx.state == 'done':
             _logger.info("Paypal IPN Confirmed")
@@ -413,7 +413,7 @@ class Ecommerce(ecommerce.Ecommerce):
         # clean context and session, then redirect to the confirmation page
         request.registry['website'].ecommerce_reset(cr, uid, context=context)
         
-        raise NotFound()
+        return werkzeug.wrappers.Response('Not Found', status=404)
         
     @http.route(['/shop/payment/transaction/<int:acquirer_id>'], type='http', methods=['POST'], auth="public", website=True)
     def payment_transaction(self, acquirer_id, **post):
