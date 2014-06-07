@@ -377,7 +377,7 @@ class Ecommerce(ecommerce.Ecommerce):
                 _logger.info("Payment IPN Order id: %s" % order_id)
         
         if not tx or not order:
-            return ''
+            raise NotFound()
 
         if not order.amount_total or tx.state == 'done':
             _logger.info("Paypal IPN Confirmed")
@@ -413,7 +413,7 @@ class Ecommerce(ecommerce.Ecommerce):
         # clean context and session, then redirect to the confirmation page
         request.registry['website'].ecommerce_reset(cr, uid, context=context)
         
-        return ''
+        raise NotFound()
         
     @http.route(['/shop/payment/transaction/<int:acquirer_id>'], type='http', methods=['POST'], auth="public", website=True)
     def payment_transaction(self, acquirer_id, **post):
@@ -564,5 +564,44 @@ class PaypalController(payment_paypal.PaypalController):
         base_url = request.registry['ir.config_parameter'].get_param(request.cr, SUPERUSER_ID, 'website_payment.base.url')
         return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn')
         req = urllib2.Request(return_url, data)
-        return urllib2.urlopen(req)
-    
+        try: 
+            return urllib2.urlopen(req)
+        except urllib2.HTTPError as e:
+            return werkzeug.wrappers.Reponse('Not Found', status=404)
+        
+    @http.route(['/shop/mycart/'], type='http', auth="public", website=True, multilang=True)
+    def mycart(self, **post):
+        cr, uid, context = request.cr, request.uid, request.context
+        prod_obj = request.registry.get('product.product')
+
+        # must have a draft sale order with lines at this point, otherwise reset
+        order = self.get_order()
+        if order and order.state != 'draft':
+            request.registry['website'].ecommerce_reset(cr, uid, context=context)
+            return request.redirect('/shop/')
+
+        self.get_pricelist()
+
+        suggested_ids = []
+        product_ids = []
+        if order:
+            for line in order.order_line:
+                suggested_ids += [p.id for p in line.product_id and line.product_id.accessory_product_ids or []]
+                product_ids.append(line.product_id.id)
+        suggested_ids = list(set(suggested_ids) - set(product_ids))
+        if suggested_ids:
+            suggested_ids = prod_obj.search(cr, uid, [('id', 'in', suggested_ids)], context=context)
+
+        # select 3 random products
+        suggested_products = []
+        while len(suggested_products) < 3 and suggested_ids:
+            index = random.randrange(0, len(suggested_ids))
+            suggested_products.append(suggested_ids.pop(index))
+
+        context = dict(context or {}, pricelist=request.registry['website'].ecommerce_get_pricelist_id(cr, uid, None, context=context))
+
+        values = {
+            'int': int,
+            'suggested_products': prod_obj.browse(cr, uid, suggested_products, context),
+        }
+        return request.website.render("website_sale.mycart", values)
