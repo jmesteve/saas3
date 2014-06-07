@@ -603,5 +603,5 @@ class PaypalController(payment_paypal.PaypalController):
         try: 
             return urllib2.urlopen(req)
         except urllib2.HTTPError as e:
-            return werkzeug.wrappers.Reponse('Not Found', status=404)
+            return werkzeug.wrappers.Response('Not Found', status=404)
         
