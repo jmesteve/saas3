@@ -569,7 +569,7 @@ class PaypalController(payment_paypal.PaypalController):
         self.paypal_validate_data(**post)
         
         data = urllib.urlencode(post)
-        base_url = request.registry['ir.config_parameter'].get_param(cr, uid, 'website_payment.base.url')
+        base_url = request.registry['ir.config_parameter'].get_param(request.cr, SUPERUSER_ID, 'website_payment.base.url')
         return_url = urlparse.urljoin(base_url, '/shop/payment/validate/ipn/')
         req = urllib2.Request(url, data)
         urllib2.urlopen(req)
