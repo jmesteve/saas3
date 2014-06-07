@@ -1,7 +1,5 @@
 from openerp.osv import fields,osv
-from openerp import pooler
 import datetime;
-    
     
 class analyse_type(osv.osv):
     _name = 'analyse.type'
@@ -20,8 +18,8 @@ class analyse_company(osv.osv):
         return str(now.year)
     
     _columns = {
-                'company': fields.many2one('res.partner', 'Company', select=1, required=True),
-                'year': fields.char('Year',  size=4, required=True),
+                'company': fields.many2one('res.partner', 'Company', select=1),
+                'year': fields.char('Year',  size=5, required=True),
                 'type': fields.many2one('analyse.type', 'Type', select=1, required=True),
                 'value': fields.float('Value',  digits=(16,2), required=True),
                 'date_begin': fields.date('Date begin'),
@@ -34,3 +32,10 @@ class analyse_company(osv.osv):
     _sql_constraints = [
         ('name_uniq', 'unique(company, year, type)', 'Name must be unique per analyse!'),
     ]
+    
+    def copy(self, cr, uid, id, default={}, context=None):
+        default.update({
+                'company':'',
+            })
+
+        return super(analyse_company, self).copy(cr, uid, id, default, context)

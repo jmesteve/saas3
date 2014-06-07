@@ -27,8 +27,8 @@
                 	<group col="8">
 						<field name="year"/>
 						<field name="type"/>
-						<field name="company"/>
-						<field name="value"/>
+						<field name="company" default_focus="1" placeholder="Company name"/>
+						<field name="value"  width="200" />
 					</group>
 					<newline/>
 					<group col="8">
