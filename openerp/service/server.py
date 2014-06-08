@@ -36,6 +36,8 @@ from openerp.tools.misc import stripped_sys_argv, dumpstacks
 
 import wsgi_server
 
+from openerp.tools_extend.autoreload_watchdog import AutoReloadWatchdog
+
 _logger = logging.getLogger(__name__)
 
 SLEEP_INTERVAL = 60 # 1 min
@@ -822,7 +824,7 @@ def start():
         server = ThreadedServer(openerp.service.wsgi_server.application)
 
     if config['auto_reload']:
-        autoreload = AutoReload(server)
+        autoreload = AutoReloadWatchdog(server)
         autoreload.run()
 
     server.run()
