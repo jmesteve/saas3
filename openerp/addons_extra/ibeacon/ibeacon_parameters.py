@@ -104,7 +104,7 @@ class ibeacons_scanned(osv.osv):
                 #status.append(serial_id)
             hnd_password = ibeacon_scanned.hnd_reboot 
             if hnd_password != False and checkall or template[0].reboot:
-                password = format(template[0].password,'#08x')[2:]
+                password = str(template[0].password) #format(template[0].password,'#08x')[2:]
                 reboot = obj.gatttool_write(bluetooth_adr, hnd_password, password)  #send the password   
                 #self.read_uuid(cr, uid, ids, checkall=False, context=context)
                 
@@ -138,7 +138,7 @@ class ibeacons_scanned(osv.osv):
             
             status.append(obj.ssh_login(cr, uid, [template_id], context=context))
             
-            password = template[0].password#format(template[0].password,'#08x')[2:]
+            password = str(template[0].password)#format(template[0].password,'#08x')[2:]
             hnd_password = ibeacon_scanned.hnd_reboot 
             reboot = obj.gatttool_write(bluetooth_adr, hnd_password, password)  #send the password
             status.append(reboot)
