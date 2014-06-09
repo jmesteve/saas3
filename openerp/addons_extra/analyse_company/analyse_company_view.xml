@@ -80,7 +80,7 @@
             <field name="view_id" ref="view_analyse_company_tree"/>
         </record>
 		
-    	<menuitem id="menu_analyse_company" parent="base.menu_sales" action="action_menu_analyse_company" sequence="5"/>
+    	<menuitem id="menu_analyse_company" parent="base.menu_sales" action="action_menu_analyse_company" sequence="5" groups="group_analyse_company"/>
     </data>
 </openerp>
 

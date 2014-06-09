@@ -32,9 +32,10 @@
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
     'images': [],
-    'depends' : [],
-    'data': [
+    'depends' : ['base'],
+    'data': ['security/groups.xml',
              'analyse_company_view.xml',
+             'security/ir.model.access.csv',
              ],
     'demo': [],
     'installable': True,
