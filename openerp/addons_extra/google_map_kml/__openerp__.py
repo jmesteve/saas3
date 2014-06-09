@@ -34,8 +34,8 @@
     'images': [],
     'depends' : ['base','web', 'website'],
     'data': [
-             'google_map_kml_view.xml',
              'data/google_map_kml_data.xml',
+             'google_map_kml_view.xml',
              'security/groups.xml',
              'security/ir.model.access.csv',
              'partner_view.xml'

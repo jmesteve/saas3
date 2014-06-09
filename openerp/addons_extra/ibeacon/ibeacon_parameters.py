@@ -138,7 +138,7 @@ class ibeacons_scanned(osv.osv):
             
             status.append(obj.ssh_login(cr, uid, [template_id], context=context))
             
-            password = format(template[0].password,'#08x')[2:]
+            password = template[0].password#format(template[0].password,'#08x')[2:]
             hnd_password = ibeacon_scanned.hnd_reboot 
             reboot = obj.gatttool_write(bluetooth_adr, hnd_password, password)  #send the password
             status.append(reboot)

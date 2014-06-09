@@ -280,5 +280,5 @@ class google_map_partner(osv.osv):
              'context': ctx
         }
         
-google_map_partner()
+#google_map_partner()
 

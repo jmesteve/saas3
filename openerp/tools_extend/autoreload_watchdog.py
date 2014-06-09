@@ -65,7 +65,7 @@ class AutoReloadWatchdog(object):
                     self.modules[module]=1
         if self.modules:
             _logger.info('autoreload: xml change detected, autoreload activated')
-            restart()
+            openerp.service.server.restart()
 
     def process_python(self, files):
         # process python changes
@@ -85,7 +85,7 @@ class AutoReloadWatchdog(object):
                     _logger.info('autoreload: SyntaxError %s',i)
             else:
                 _logger.info('autoreload: python code updated, autoreload activated')
-                restart()
+                openerp.service.server.restart()
 
     def check_thread(self):
         # Check if some files have been touched in the addons path.
