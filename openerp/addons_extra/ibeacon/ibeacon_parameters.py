@@ -44,10 +44,10 @@ class ibeacons_scanned(osv.osv):
                 'hnd_reboot': fields.char('hnd reboot', size=6),
                 }
     
-    _defaults = {
-                'hnd_password': '0x0042',
-                'hnd_reboot': '0x004b',
-                }
+#     _defaults = {
+#                 'hnd_password': '0x0042',
+#                 'hnd_reboot': '0x004b',
+#                 }
     
     _order = "active_beacon desc, minor"
  
@@ -74,7 +74,13 @@ class ibeacons_scanned(osv.osv):
                 #status.append(major)
             hnd_minor = ibeacon_scanned.hnd_minor
             if hnd_minor != False and checkall or template[0].check_minor:
-                minor = format(template[0].minor,'#06x')[2:]
+                minor_value = template[0].minor
+                if minor_value == 0:
+                    minor = format(ibeacon_scanned.serial_id,'#06x')[2:]
+                else:
+                    minor = format(ibeacon_scanned.minor,'#06x')[2:]
+                    #format(template[0].minor,'#06x')[2:]
+                
                 minor = obj.gatttool_write(bluetooth_adr, hnd_minor, minor)
                 #status.append(minor)
             hnd_accuracy = ibeacon_scanned.hnd_accuracy 
@@ -104,8 +110,8 @@ class ibeacons_scanned(osv.osv):
                 #status.append(serial_id)
             hnd_password = ibeacon_scanned.hnd_reboot 
             if hnd_password != False and checkall or template[0].reboot:
-                password = str(template[0].password) #format(template[0].password,'#08x')[2:]
-                reboot = obj.gatttool_write(bluetooth_adr, hnd_password, password)  #send the password   
+                password = format(template[0].password,'#08x')[2:]  #str(template[0].password)
+                reboot = obj.gatttool_reboot(bluetooth_adr, hnd_password, password)  #send the password   
                 #self.read_uuid(cr, uid, ids, checkall=False, context=context)
                 
             #obj.hcitool_ledc(handle)
@@ -138,9 +144,9 @@ class ibeacons_scanned(osv.osv):
             
             status.append(obj.ssh_login(cr, uid, [template_id], context=context))
             
-            password = str(template[0].password)#format(template[0].password,'#08x')[2:]
+            password = format(template[0].password,'#08x')[2:] #str(template[0].password)
             hnd_password = ibeacon_scanned.hnd_reboot 
-            reboot = obj.gatttool_write(bluetooth_adr, hnd_password, password)  #send the password
+            reboot = obj.gatttool_reboot(bluetooth_adr, hnd_password, password)  #send the password
             status.append(reboot)
             
         except:
@@ -168,6 +174,11 @@ class ibeacons_scanned(osv.osv):
             handle = obj.hcitool_lecc(bluetooth_adr)
             
             object_beacon = {}
+            
+            char_desc = obj.gatttool_char_desc(bluetooth_adr)
+            object_beacon['hnd_reboot'] = char_desc['ffff']
+            object_beacon['hnd_password'] = char_desc['fff6']
+            
             if checkall:
                 response = obj.gatttool_read_uuid(bluetooth_adr, '2a00')
                 name_verify = binascii.unhexlify(''.join(response[0].split()))
@@ -256,13 +267,28 @@ class ibeacons_scanned(osv.osv):
         for line in status:
             if line != []:
                 return self.pool.get('warning_box').info(cr, uid, title='SSH Scan', message=status)  
+            
+    def action_go_to_ibeacon_scanned(self, cr, uid, ids, context=None):
+        return {
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': False,
+            'res_id': ids[0],
+            'res_model': 'ibeacon.scanned',
+            'type': 'ir.actions.act_window',
+            'context': context,
+            'target':'current',
+            'nodestroy': True,
+            }
 
 class ibeacon_parameters(osv.osv):
     _name = 'ibeacon.parameters'
      
     _columns = {'host': fields.char('Host', size=64),
+                'ssh_port': fields.integer('SSH Port'),
                 'ssh_user': fields.char('SSH User', size=32),
                 'ssh_password': fields.char('SSH Password', size=32),
+                
                 'reboot': fields.boolean('Reboot'),
                 
                 'uuid': fields.char('Uuid', size=36, help="128 bit"),
@@ -271,7 +297,7 @@ class ibeacon_parameters(osv.osv):
                 'major': fields.integer('Major', help="0-65535"),
                 'check_major': fields.boolean('Check'),
                 
-                'minor': fields.integer('Minor', help="0-65535"),
+                'minor': fields.selection([('0','Serial Id'),('1','Minor')], 'Minor 0xFFF3',type="char", size=1, select=True, help="0-65535"),
                 'check_minor': fields.boolean('Check'),
                 
                 'accuracy': fields.integer('Proximity Accuracy adjust', help="0-255"),
@@ -295,6 +321,7 @@ class ibeacon_parameters(osv.osv):
                 'beacons_scanned': fields.one2many('ibeacon.scanned', 'template_id','Beacons Scanned'),
                 }
     _defaults = {
+                'ssh_port':'22',
                 'state': 'draft',
                 'uuid':'e2c56db5dffb48d2b060d0f5a71096e0',
                 'password':987123,
@@ -413,6 +440,26 @@ class ibeacon_parameters(osv.osv):
             status.append("gatttool write Failed")
         return status  
     
+    def gatttool_reboot(self, mac, hnd, value, timeout=500):
+        status = []
+        try:
+            order = 'sudo timeout '+ str(timeout) +' gatttool -b ' + mac + ' --char-write -a ' + hnd + ' -n '+ value 
+            self.session.sendline(order)
+            self.session.prompt()
+            response = self.session.before
+            if response.find("failed")==-1 and response.find("error")==-1:
+                pattern = "Characteristic value/descriptor:"
+                
+                sizePattern = len(pattern)
+                responseBegin = response.find("Characteristic value/descriptor:") + sizePattern + 1
+                responseFormatted = response[responseBegin:-3]
+                #status.append("gatttool read Ok")
+                return responseFormatted
+                
+        except:
+            status.append("gatttool write Failed")
+        return status 
+    
     def gatttool_read(self, mac, hnd, timeout=500):
         status = []
         try:
@@ -459,6 +506,33 @@ class ibeacon_parameters(osv.osv):
         except:
             status.append("gatttool read Failed")
         return status  
+    
+    def gatttool_char_desc(self, mac, timeout=500):
+        status = []
+        try:
+            pattern_handle = "handle"
+            sizePattern_handle = len(pattern_handle)
+            for i in range(1,5):
+                order = 'sudo timeout '+ str(timeout) +' gatttool -b ' + mac + ' --char-desc'
+                self.session.sendline(order)
+                self.session.prompt()
+                response = self.session.before
+                if response.find("failed")==-1 and response.find("error")==-1:
+                    response = response.splitlines();
+                    result={}
+                    for line in response:
+                        line = line.split(',')
+                        handle_pos = line[0].find(pattern_handle)
+                        if handle_pos != -1:
+                            handle_begin = handle_pos + sizePattern_handle +3
+                            handle = line[0][handle_begin:]
+                            uuid = line[1][12:16]
+                            result[uuid] = handle
+                    return result
+                
+        except:
+            status.append("gatttool char-desc Failed")
+        return status  
      
     def hcitool_lecc(self, bluetooth_adr, timeout=10):
         status=[]
@@ -503,9 +577,10 @@ class ibeacon_parameters(osv.osv):
         host = ibeacon_parameters.host
         user = ibeacon_parameters.ssh_user
         password = ibeacon_parameters.ssh_password
+        port = str(ibeacon_parameters.ssh_port)
         status = []
         try:
-            self.session.login(host, user, password=password)
+            self.session.login(host, user, password=password, port=port)
             self.session.sendline ('uptime')
             self.session.prompt()         # match the prompt
             #status.append(self.session.before)     # print everything before the prompt.
@@ -635,7 +710,7 @@ class ibeacon_parameters(osv.osv):
         status=[]
         status.append(self.ssh_login(cr, uid, ids, context=context))
         for id in obj_id:
-            status.append(obj.write_hnd(cr, uid,[id], checkall=True, context=context))
+            status.append(obj.write_hnd(cr, uid,[id], checkall=False, context=context))
             
         status.append(self.ssh_logout())
         
