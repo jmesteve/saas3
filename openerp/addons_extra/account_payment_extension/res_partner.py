@@ -36,14 +36,14 @@ class res_partner(orm.Model):
             relation='payment.type',
             string='Customer Payment Type', 
             method=True, 
-            view_load=True,
+            #view_load=True,
             help="Payment type of the customer"),
         'payment_type_supplier': fields.property(
             type='many2one', 
             relation='payment.type',
             string='Supplier Payment Type', 
             method=True, 
-            view_load=True,
+            #view_load=True,
             help="Payment type of the supplier"),
     }
 

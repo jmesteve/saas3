@@ -24,20 +24,17 @@
 ##############################################################################
 
 {
-    'name': "Website Login",
-    'version': '0.35',
+    'name': "Website Login Colegio",
+    'version': '0.2',
     'category': 'Hidden',
     'description': """
-        [ENG] Change addon Website Login 
+        [ENG] Fix Database Colegio 
     """,
     'author': 'escrichov,jmesteve',
     'website': 'http://www.erpandcloud.com',
     'license': 'AGPL-3',
-    "depends": ['base', 'web','website', 'stock', 'auth_signup', 'website_sale', 'payment_paypal', 'payment_ogone', 'payment_adyen', 'product'],
-    'data': ['security/ir.model.access.csv',
-             'views/shop_redirect_view.xml',
-             'views/website_templates.xml',
-             'views/website_sale.xml',
+    "depends": ['base', 'website_login'],
+    'data': [
              'data/website_login_data.xml'
     ],
     "application": True,

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- Default template user for new users signing in -->
+        <record id="default_template_user" model="res.users">
+            <field name="name">Template User</field>
+            <field name="login">portaltemplate</field>
+            <!-- No password: this template user doesn't need to log in -->
+            <field name="password"></field>
+            <field name="active" eval="False"/>
+            <!-- Avoid auto-including this user in any default group, just like a typical portal member -->
+            <field name="groups_id" eval="[(4,ref('base.group_portal'))]"/>
+            <!-- allow signuped users to have a alias -->
+            <field name="alias_name">_usertemplate</field>
+        </record>
+    </data>
+</openerp>

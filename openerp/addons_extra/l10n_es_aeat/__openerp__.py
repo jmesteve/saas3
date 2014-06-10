@@ -33,6 +33,9 @@
         ],
     'website' : "http://www.pexego.es, http://www.acysos.com",
     'category' : "Localisation/Accounting",
+    'description': """
+        [ENG] AEAT Base
+    """,
     'depends' : [
         "account",
         ],
