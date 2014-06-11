@@ -25,7 +25,7 @@
 
 {
     'name': "Website Login Colegio",
-    'version': '0.2',
+    'version': '0.3',
     'category': 'Hidden',
     'description': """
         [ENG] Fix Database Colegio 
@@ -38,7 +38,6 @@
              'data/website_login_data.xml'
     ],
     "application": True,
-    "active": True,
     "installable": True,
-    'auto_install': False,
+    'auto_install': False
 }
