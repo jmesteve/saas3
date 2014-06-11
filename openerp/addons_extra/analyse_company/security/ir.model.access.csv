@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_group_analyse_company,analyse_company.access,model_analyse_company,analyse_company.group_analyse_company,1,1,1,1
+access_group_analyse_company,analyse.company,model_analyse_company,analyse_company.group_analyse_company,1,1,1,1
+access_group_analyse_type,analyse.type,model_analyse_type,analyse_company.group_analyse_company,1,1,1,1

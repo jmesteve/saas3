@@ -49,8 +49,9 @@
             <field name="model">ibeacon.scanned</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="view_ibeacon_scanned_tree">
+                <tree string="view_ibeacon_scanned_tree" editable="bottom">
                 	<field name="mac"/>
+                	<button name="action_go_to_ibeacon_scanned" string="Form" icon="gtk-go" type="object"/>
                 	<field name="name"/>
                 	<field name="create_date"/>
                 	<field name="write_date"/>
@@ -118,6 +119,7 @@
                 	    <sheet string="parameters">
                 	        <group string="SSH" col="6">
 		                    	<field name="host"/>
+		                    	<field name="ssh_port"/>
 			                	<field name="ssh_user"/>
 			                	<field name="ssh_password" password="True"/>
 			                	<field name="reboot"/>
