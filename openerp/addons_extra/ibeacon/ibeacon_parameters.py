@@ -27,6 +27,7 @@ class ibeacons_scanned(osv.osv):
                 'uuid': fields.char('Uuid 0xFFF1', size=36, help="128 bit"),
                 'major': fields.integer('Major 0xFFF2',  help="0-65535"),
                 'minor': fields.integer('Minor 0xFFF3',  help="0-65535"),
+                'battery': fields.integer('Battery 0x2A19',  help="0-100"),
                 'accuracy': fields.integer('Accuracy adjust 0xFFF4',help="0-255"),
                 'txpower': fields.selection([('00','+0 dBm'),('01','+4 dBm'),('02','-6 dBm'), ('03','-23 dBm')], 'Tx-power  0xFFF5',type="char", size=2, select=True),
                 'broadcasting_cycle': fields.integer('Broadcasting cycle 0xFFF7',help="1-255"),
@@ -43,12 +44,7 @@ class ibeacons_scanned(osv.osv):
                 'hnd_password': fields.char('hnd password', size=6),
                 'hnd_reboot': fields.char('hnd reboot', size=6),
                 }
-    
-#     _defaults = {
-#                 'hnd_password': '0x0042',
-#                 'hnd_reboot': '0x004b',
-#                 }
-    
+
     _order = "active_beacon desc, minor"
  
     def write_hnd(self, cr, uid, ids, checkall=False, context=None):
@@ -80,7 +76,6 @@ class ibeacons_scanned(osv.osv):
                 else:
                     minor = format(ibeacon_scanned.minor,'#06x')[2:]
                     #format(template[0].minor,'#06x')[2:]
-                
                 minor = obj.gatttool_write(bluetooth_adr, hnd_minor, minor)
                 #status.append(minor)
             hnd_accuracy = ibeacon_scanned.hnd_accuracy 
@@ -105,17 +100,18 @@ class ibeacons_scanned(osv.osv):
                 #status.append(broadcasting_cycle)
             hnd_serial_id = ibeacon_scanned.hnd_serial_id
             if hnd_serial_id != False and checkall or template[0].check_serial_id:
-                serial_id = format(template[0].serial_id,'#06x')[2:]
+                serial_id_value = template[0].serial_id
+                if serial_id_value == 0:
+                    serial_id = format(ibeacon_scanned.minor,'#06x')[2:]
+                else:
+                    serial_id = format(ibeacon_scanned.serial_id,'#06x')[2:]
+                    #format(template[0].minor,'#06x')[2:]
                 serial_id = obj.gatttool_write(bluetooth_adr, hnd_serial_id, serial_id)
                 #status.append(serial_id)
             hnd_password = ibeacon_scanned.hnd_reboot 
             if hnd_password != False and checkall or template[0].reboot:
                 password = format(template[0].password,'#08x')[2:]  #str(template[0].password)
-                reboot = obj.gatttool_reboot(bluetooth_adr, hnd_password, password)  #send the password   
-                #self.read_uuid(cr, uid, ids, checkall=False, context=context)
-                
-            #obj.hcitool_ledc(handle)
-           
+                reboot = obj.gatttool_reboot(bluetooth_adr, hnd_password, password)  #send the password 
         except:
             status.append("gatttool write Failed")
         
@@ -154,9 +150,6 @@ class ibeacons_scanned(osv.osv):
             
         status.append(obj.ssh_logout())
         return status
-    
-
-            
         
     def read_uuid(self, cr, uid, ids, checkall=True, login=True, context=None):
         status=[]
@@ -180,8 +173,13 @@ class ibeacons_scanned(osv.osv):
             object_beacon['hnd_password'] = char_desc['fff6']
             
             if checkall:
+                #name verify
                 response = obj.gatttool_read_uuid(bluetooth_adr, '2a00')
                 name_verify = binascii.unhexlify(''.join(response[0].split()))
+                #batterys state
+                response = obj.gatttool_read_uuid(bluetooth_adr, '2a19')
+                battery = int(response[0].replace(" ", ""),16)
+                object_beacon['battery'] = battery
             
             if checkall or template.check_uuid:
                 response = obj.gatttool_read_uuid(bluetooth_adr, 'fff1')
@@ -283,7 +281,7 @@ class ibeacons_scanned(osv.osv):
 
 class ibeacon_parameters(osv.osv):
     _name = 'ibeacon.parameters'
-     
+ 
     _columns = {'host': fields.char('Host', size=64),
                 'ssh_port': fields.integer('SSH Port'),
                 'ssh_user': fields.char('SSH User', size=32),
@@ -297,7 +295,7 @@ class ibeacon_parameters(osv.osv):
                 'major': fields.integer('Major', help="0-65535"),
                 'check_major': fields.boolean('Check'),
                 
-                'minor': fields.selection([('0','Serial Id'),('1','Minor')], 'Minor 0xFFF3',type="char", size=1, select=True, help="0-65535"),
+                'minor': fields.selection([('0','Serial Id'),('1','Value')], 'Minor 0xFFF3',type="char", size=1, select=True, help="0-65535"),
                 'check_minor': fields.boolean('Check'),
                 
                 'accuracy': fields.integer('Proximity Accuracy adjust', help="0-255"),
@@ -310,7 +308,7 @@ class ibeacon_parameters(osv.osv):
                 'broadcasting_cycle': fields.integer('Broadcasting cycle  (100ms) ', help="1-255"),
                 'check_broadcasting_cycle': fields.boolean('Check'),
                 
-                'serial_id': fields.integer('Serial Id', help="0001-9999"),
+                'serial_id': fields.selection([('0','Minor'),('1','Value')], 'serial_id',type="char", size=1, select=True, help="1-9999"),
                 'check_serial_id': fields.boolean('Check'),
                 
                 #'reboot': fields.boolean('Reboot and pairing Id 0xFFF9', help="0-999999"),
@@ -320,22 +318,52 @@ class ibeacon_parameters(osv.osv):
                 'state': fields.selection([('draft','Draft'), ('done','Done'), ('disable','Disable')], 'State', readonly=True, help="The state.", select=True),
                 'beacons_scanned': fields.one2many('ibeacon.scanned', 'template_id','Beacons Scanned'),
                 }
+    
     _defaults = {
-                'ssh_port':'22',
+                'ssh_port':22,
                 'state': 'draft',
                 'uuid':'e2c56db5dffb48d2b060d0f5a71096e0',
                 'password':987123,
                 'accuracy':198,
                 'broadcasting_cycle': 9,
-                'serial_id': '3714',
+                'serial_id': '1',
+                'minor': '0',
                 'txpower':'00'
                 }
-    
-    # battery level uuid:2a19 hnd:0x0025
-    # reboot and pairing uuid:ffff hnd:0x004b
-    # pairing uuid:fff6 hnd:0x0042 change password
+   
     
     session = {}
+
+    def validate(self, vals):
+        status=[]
+        if vals.get('major') and vals.get('major')<0 or vals.get('major')>65535:
+            status.append('major value between 0 and 65535')
+        #minor in lines scanned
+        if vals.get('accuracy') and vals.get('accuracy')<0 or vals.get('accuracy')>255:
+            status.append('accuracy value between 0 and 255')
+        if vals.get('txpower') and (vals.get('txpower')==False or vals.get('txpower') not in ['00','01','02','03']):
+            status.append('txpower selection error')
+        if vals.get('password') and vals.get('password')<0 or vals.get('password')>999999:
+            status.append('accuracy value between 0 and 999999')
+        if vals.get('broadcasting_cycle') and vals.get('broadcasting_cycle')<1 or vals.get('broadcasting_cycle')>255:
+            status.append('broadcasting_cycle value between 1 and 255')
+        
+        for line in status:
+            if line != []:
+                raise osv.except_osv('Error', status)
+            
+        return status
+        
+        
+   
+    def write(self, cr, uid, ids, vals, context=None):
+        self.validate(vals)
+        return super(ibeacon_parameters, self).write(cr, uid, ids, vals, context=context)
+    
+    def create(self, cr, uid, vals, context=None):
+        self.validate(vals)
+        return super(ibeacon_parameters, self).create(cr, uid, vals, context=context)
+     
     
     def reboot_system(self, cr, uid, ids, context=None):
         status=[]

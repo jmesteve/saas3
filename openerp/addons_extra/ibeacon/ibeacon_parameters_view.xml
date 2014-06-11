@@ -15,6 +15,7 @@
 		                	<field name="create_date"/>
 		                	<field name="write_date"/>
 		                	<field name="active_beacon"/>
+		                	<field name="battery"/>
 		                 </group>
 		                 <newline/>
 		                <group string="parameters">
@@ -67,6 +68,7 @@
                     <field name="accuracy"/>  
                     <field name="broadcasting_cycle"/> 
                     <field name="serial_id"/>
+                    <field name="battery"/>
                 </tree>
             </field>
         </record>
