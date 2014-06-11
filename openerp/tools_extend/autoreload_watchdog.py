@@ -2,11 +2,6 @@ import logging
 import threading
 import openerp
 
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-from watchdog.events import FileCreatedEvent
-from watchdog.events import FileModifiedEvent
-
 _logger = logging.getLogger(__name__)
 
 #----------------------------------------------------------
@@ -15,6 +10,11 @@ _logger = logging.getLogger(__name__)
 
 class AutoReloadWatchdog(object):
     def __init__(self, server):
+        from watchdog.observers import Observer
+        from watchdog.events import FileSystemEventHandler
+        from watchdog.events import FileCreatedEvent
+        from watchdog.events import FileModifiedEvent
+        
         self.server = server
         self.files = {}
         self.modules = {}
