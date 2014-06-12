@@ -400,7 +400,7 @@ class ibeacon_parameters(osv.osv):
             self.session.sendline(order)
             self.session.prompt()      
             
-            order = 'sudo hciconfig hci0 up'
+            order = 'sudo timeout '+ str(timeout) + ' sudo hciconfig hci0 up'
             self.session.sendline(order)
             self.session.prompt()     
             #status.append("hci restart Ok")
@@ -630,14 +630,14 @@ class ibeacon_parameters(osv.osv):
         status=[]
         status.append(self.ssh_login(cr, uid, ids, context=context))
         try: 
-            status.append(self.restart_hci())
+            #status.append(self.restart_hci())
             
             result_lescan = self.lescan_hci()
             ibeacon_parameters = self.browse(cr, uid, ids[0], context=context)
             beacons_scanned = ibeacon_parameters.beacons_scanned
             status.append(self.create_scanned(cr, uid, ids[0], result_lescan[0], beacons_scanned, context)) 
             
-            status.append(self.restart_hci())
+            #status.append(self.restart_hci())
         except:
             status.append("hci Failed")
             
