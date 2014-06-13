@@ -220,7 +220,7 @@ class beacon_distance(osv.osv_memory):
             dz = abs(beacon_z - punto_z)
             d = math.sqrt(dx*dx + dy*dy + dz*dz)
             
-            if key in totalsReal:
+            if key in totalsReal[txPower]:
                 totalsReal[txPower][key] += d
                 distancesReal[txPower][key].append(d)
                 count[txPower][key] += 1
@@ -231,11 +231,8 @@ class beacon_distance(osv.osv_memory):
                     
         resultsReal = {}
         for txPower in totalsReal:
-            resultsReal[txPower] = {x:float(totalsReal[txPower][x])/count[txPower][x] for x in totalsReal[txPower]}
+            resultsReal[txPower] = {x:float(totalsReal[txPower][x])/float(count[txPower][x]) for x in totalsReal[txPower]}
             if '-100' in resultsReal[txPower]: del resultsReal[txPower]['-100']
-    
-        #resultsReal = {x:float(totalsReal[x])/count[x] for x in totalsReal}
-        #if '-100' in resultsReal: del resultsReal['-100']
         
         for txPower in resultsReal:
             for key in sorted(resultsReal[txPower]):
@@ -247,9 +244,9 @@ class beacon_distance(osv.osv_memory):
                 end = (size-start)
                 distances = distances[start:end]
                 
-                minimo = distances[0]
-                median = resultsReal[txPower][key]
-                maximo = distances[-1]
+                minimo = float(distances[0])
+                median = float(resultsReal[txPower][key])
+                maximo = float(distances[-1])
                 
                 self.create(cr, uid, {'rssi': int(key),
                                       'txpower': str(txPower),
@@ -322,7 +319,7 @@ class beacon_distance(osv.osv_memory):
                 dz = abs(beacon_z - punto_z)
                 d = math.sqrt(dx*dx + dy*dy + dz*dz)
                 
-                if key in totalsReal:
+                if key in totalsReal[txPower]:
                     totalsReal[txPower][key] += d
                     distancesReal[txPower][key].append(d)
                     count[txPower][key] += 1
