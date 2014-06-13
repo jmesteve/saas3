@@ -308,14 +308,17 @@
     
    		<menuitem id="menu_ibeacon" name="iBeacon" groups="group_ibeacon_access"/>
      	<menuitem id="menu_ibeacon_data" name="Data" parent="menu_ibeacon" groups="group_ibeacon_access"/>
-   		<menuitem id="menu_ibeacon_test" name="Test" parent="menu_ibeacon_data" action='action_menu_ibeacon_test'  groups="group_ibeacon_access"/>
-<!--      		<menuitem id="menu_ibeacon_point" name="Point" parent="menu_ibeacon_data" action='action_menu_ibeacon_point'  groups="group_ibeacon_access"/> -->
-   		<menuitem id="menu_ibeacon_beacon" name="Beacons" parent="menu_ibeacon_data" action='action_menu_ibeacon_beacon'  groups="group_ibeacon_access"/>
+     	
+   		<menuitem id="menu_ibeacon_test" name="Test" parent="menu_ibeacon_data" action='action_menu_ibeacon_test'  groups="group_ibeacon_access" sequence="1"/>
+   		<menuitem id="menu_ibeacon_beacon" name="Beacons" parent="menu_ibeacon_data" action='action_menu_ibeacon_beacon'  groups="group_ibeacon_access" sequence="4"/>
+     	
+     	
      	<menuitem id="menu_ibeacon_graph" name="Graphs" parent="menu_ibeacon" groups="group_ibeacon_access"/> 
   		<menuitem id="menu_ibeacon_graph1" name="Point Minor -> Rssi" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph1'  groups="group_ibeacon_access"/>
   		<menuitem id="menu_ibeacon_graph2" name="Sample Minor -> Rssi" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph2'  groups="group_ibeacon_access"/>
   		<menuitem id="menu_ibeacon_graph3" name="Proximity -> Rssi" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph3'  groups="group_ibeacon_access"/>
   		<menuitem id="menu_ibeacon_graph4" name="Proximity -> Accuracy" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph4'  groups="group_ibeacon_access"/>
   		<menuitem id="menu_ibeacon_graph5" name="Accuracy -> Rssi" parent="menu_ibeacon_graph" action='action_menu_ibeacon_graph5'  groups="group_ibeacon_access"/>
+    
     </data>
 </openerp>

@@ -95,7 +95,7 @@
         
        
    
-     		<menuitem id="menu_ibeacon_beacon_map" name="Map" parent="menu_ibeacon_data" action='action_menu_ibeacon_beacon_map'  groups="group_ibeacon_access"/>
+     	<menuitem id="menu_ibeacon_beacon_map" name="Map" parent="menu_ibeacon_data" action='action_menu_ibeacon_beacon_map'  groups="group_ibeacon_access" sequence="3"/>
      		
     </data>
 </openerp>
