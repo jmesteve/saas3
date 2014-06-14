@@ -1,6 +1,7 @@
 from openerp.osv import fields,osv
+from openerp.tools.translate import _
 import os, inspect, subprocess, shutil, signal
-import pxssh
+from pexpect import pxssh
 from datetime import datetime
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 import binascii
@@ -48,26 +49,22 @@ class ibeacons_scanned(osv.osv):
     _order = "active_beacon desc, minor"
  
     def write_hnd(self, cr, uid, ids, checkall=False, context=None):
-        status=[]
         try: 
             obj = self.pool.get('ibeacon.parameters')
-            
             ibeacon_scanned = self.browse(cr, uid, ids[0], context=context)
             bluetooth_adr = ibeacon_scanned.mac
             template_id = ibeacon_scanned.template_id.id
             template = obj.browse(cr,uid,[template_id],context=context)
             
-            #handle = obj.hcitool_lecc(bluetooth_adr)
-            
             hnd_uuid = ibeacon_scanned.hnd_uuid
             if hnd_uuid != False and checkall or template[0].check_uuid:
                 uuid = obj.gatttool_write(bluetooth_adr, hnd_uuid.encode('ascii','ignore'), template[0].uuid)
-                #status.append(uuid)
+            
             hnd_major = ibeacon_scanned.hnd_major
             if hnd_major != False and checkall or template[0].check_major:
                 major = format(template[0].major,'#06x')[2:]
                 major = obj.gatttool_write(bluetooth_adr, hnd_major, major)
-                #status.append(major)
+            
             hnd_minor = ibeacon_scanned.hnd_minor
             if hnd_minor != False and checkall or template[0].check_minor:
                 minor_value = template[0].minor
@@ -75,29 +72,28 @@ class ibeacons_scanned(osv.osv):
                     minor = format(ibeacon_scanned.serial_id,'#06x')[2:]
                 else:
                     minor = format(ibeacon_scanned.minor,'#06x')[2:]
-                    #format(template[0].minor,'#06x')[2:]
                 minor = obj.gatttool_write(bluetooth_adr, hnd_minor, minor)
-                #status.append(minor)
+            
             hnd_accuracy = ibeacon_scanned.hnd_accuracy 
             if hnd_accuracy != False and checkall or template[0].check_accuracy:
                 accuracy = format(template[0].accuracy,'#04x')[2:]
                 accuracy = obj.gatttool_write(bluetooth_adr, hnd_accuracy, accuracy)
-                #status.append(accuracy)
+            
             hnd_txpower = ibeacon_scanned.hnd_txpower 
             if hnd_txpower != False and checkall or template[0].check_txpower:
                 txpower = template[0].txpower
                 txpower = obj.gatttool_write(bluetooth_adr, hnd_txpower, txpower)
-                #status.append(txpower)
+            
             hnd_password = ibeacon_scanned.hnd_password
             if hnd_password != False and checkall or template[0].check_password:
                 password = format(template[0].password,'#08x')[2:]
                 password = obj.gatttool_write(bluetooth_adr, hnd_password, password)
-                #status.append(password)
+            
             hnd_broadcasting_cycle = ibeacon_scanned.hnd_broadcasting_cycle
             if hnd_broadcasting_cycle != False and checkall or template[0].check_broadcasting_cycle:
                 broadcasting_cycle =  format(template[0].broadcasting_cycle,'#04x')[2:]
                 broadcasting_cycle = obj.gatttool_write(bluetooth_adr, hnd_broadcasting_cycle, broadcasting_cycle)
-                #status.append(broadcasting_cycle)
+            
             hnd_serial_id = ibeacon_scanned.hnd_serial_id
             if hnd_serial_id != False and checkall or template[0].check_serial_id:
                 serial_id_value = template[0].serial_id
@@ -105,62 +101,54 @@ class ibeacons_scanned(osv.osv):
                     serial_id = format(ibeacon_scanned.minor,'#06x')[2:]
                 else:
                     serial_id = format(ibeacon_scanned.serial_id,'#06x')[2:]
-                    #format(template[0].minor,'#06x')[2:]
                 serial_id = obj.gatttool_write(bluetooth_adr, hnd_serial_id, serial_id)
-                #status.append(serial_id)
+            
             hnd_password = ibeacon_scanned.hnd_reboot 
             if hnd_password != False and checkall or template[0].reboot:
                 password = format(template[0].password,'#08x')[2:]  #str(template[0].password)
-                reboot = obj.gatttool_reboot(bluetooth_adr, hnd_password, password)  #send the password 
+                reboot = obj.gatttool_write(bluetooth_adr, hnd_password, password)  #send the password 
+                
         except:
-            status.append("gatttool write Failed")
-        
-        return status
+            raise osv.except_osv('Error','gatttool write Failed')
     
     def ssh_write(self, cr, uid, ids, checkall=False, context=None):
-        status=[]
-        obj = self.pool.get('ibeacon.parameters')
-        obj_scanned = self.pool.get('ibeacon.scanned')
-        ibeacon_scanned = self.browse(cr, uid, ids[0], context=context)
-        template_id = ibeacon_scanned.template_id.id
-        status.append(obj.ssh_login(cr, uid, [template_id], context=context))
-        status.append(obj_scanned.write_hnd(cr, uid, ids, checkall=checkall, context=context))    
-        status.append(obj.ssh_logout())
-        return status
+        try:
+            obj = self.pool.get('ibeacon.parameters')
+            obj_scanned = self.pool.get('ibeacon.scanned')
+            ibeacon_scanned = self.browse(cr, uid, ids[0], context=context)
+            template_id = ibeacon_scanned.template_id.id
+            obj.ssh_login(cr, uid, [template_id], context=context)
+            obj_scanned.write_hnd(cr, uid, ids, checkall=checkall, context=context) 
+        except:
+            raise osv.except_osv('Error','gatttool ssh write Failed')
+        finally:
+            obj.ssh_logout()
+        
     
     def action_reboot(self, cr, uid, ids, context=None):
-        status=[]
         try: 
             obj = self.pool.get('ibeacon.parameters')
-            
             ibeacon_scanned = self.browse(cr, uid, ids[0], context=context)
             bluetooth_adr = ibeacon_scanned.mac
             template_id = ibeacon_scanned.template_id.id
             template = obj.browse(cr,uid,[template_id],context=context)
-            
-            status.append(obj.ssh_login(cr, uid, [template_id], context=context))
-            
+            obj.ssh_login(cr, uid, [template_id], context=context)
             password = format(template[0].password,'#08x')[2:] #str(template[0].password)
             hnd_password = ibeacon_scanned.hnd_reboot 
-            reboot = obj.gatttool_reboot(bluetooth_adr, hnd_password, password)  #send the password
-            status.append(reboot)
-            
+            obj.gatttool_write(bluetooth_adr, hnd_password, password)  #send the password
         except:
-            status.append("gatttool reboot Failed")
-            
-        status.append(obj.ssh_logout())
-        return status
+            raise osv.except_osv('Error','gatttool reboot Failed')
+        finally:
+            obj.ssh_logout()
         
     def read_uuid(self, cr, uid, ids, checkall=True, login=True, context=None):
-        status=[]
         try: 
             obj = self.pool.get('ibeacon.parameters')
             obj_scanned = self.pool.get('ibeacon.scanned')
             ibeacon_scanned = obj_scanned.browse(cr, uid, ids[0], context=context)
             name = ibeacon_scanned.name
             if name == "(unknown)":
-                status.append("ibeacon unknown")
-                return status
+                return
             template = ibeacon_scanned.template_id
             bluetooth_adr = ibeacon_scanned.mac
                  
@@ -184,49 +172,42 @@ class ibeacons_scanned(osv.osv):
             if checkall or template.check_uuid:
                 response = obj.gatttool_read_uuid(bluetooth_adr, 'fff1')
                 uuid = response[0].replace(" ", "")
-                #status.append(uuid)
                 object_beacon['uuid'] = uuid
                 object_beacon['hnd_uuid'] = response[1]
             
             if checkall or template.check_major:
                 response = obj.gatttool_read_uuid(bluetooth_adr, 'fff2')
                 major = int(response[0].replace(" ", ""),16)
-                #status.append(major)
                 object_beacon['major'] = major
                 object_beacon['hnd_major'] = response[1]
             
             if checkall or template.check_minor:
                 response = obj.gatttool_read_uuid(bluetooth_adr, 'fff3')
                 minor = int(response[0].replace(" ", ""),16)
-                #status.append(minor)
                 object_beacon['minor'] = minor
                 object_beacon['hnd_minor'] = response[1]
             
             if checkall or template.check_accuracy:
                 response = obj.gatttool_read_uuid(bluetooth_adr, 'fff4')
                 accuracy = int(response[0].replace(" ", ""),16)
-                #status.append(accuracy)
                 object_beacon['accuracy'] = accuracy
                 object_beacon['hnd_accuracy'] = response[1]
                 
             if checkall or template.check_txpower:
                 response = obj.gatttool_read_uuid(bluetooth_adr, 'fff5')
                 txpower = response[0].replace(" ", "")
-                #status.append(txpower)
                 object_beacon['txpower'] = txpower
                 object_beacon['hnd_txpower'] = response[1]
             
             if checkall or template.check_broadcasting_cycle:
                 response = obj.gatttool_read_uuid(bluetooth_adr, 'fff7')
                 broadcasting_cycle = int(response[0].replace(" ", ""),16)
-                #status.append(broadcasting_cycle)
                 object_beacon['broadcasting_cycle'] = broadcasting_cycle
                 object_beacon['hnd_broadcasting_cycle'] = response[1]
                 
             if checkall or template.check_serial_id:
                 response = obj.gatttool_read_uuid(bluetooth_adr, 'fff8')
                 serial_id = int(response[0].replace(" ", ""),16)
-                #status.append(serial_id)
                 object_beacon['serial_id'] = serial_id
                 object_beacon['hnd_serial_id'] = response[1]
                 
@@ -238,33 +219,27 @@ class ibeacons_scanned(osv.osv):
           
         except:
             self.write(cr, uid, ids[0], {'validate':False}, context=context)
-            status.append("gatttool read Failed")
-        return status
-   
+            raise osv.except_osv('Error','gatttool read Failed')
     
     def ssh_read_uuid(self, cr, uid, ids, checkall=True, context=None):
-        status=[]
-        obj = self.pool.get('ibeacon.parameters')
-        obj_scanned = self.pool.get('ibeacon.scanned')
-        ibeacon_scanned = obj_scanned.browse(cr, uid, ids[0], context=context)
-        template = ibeacon_scanned.template_id
-        template_id = template.id
-        status.append(obj.ssh_login(cr, uid, [template_id], context=context))
-        status.append(obj_scanned.read_uuid(cr, uid, ids, checkall=checkall, context=context))
-        status.append(obj.ssh_logout())
-        return status
+        try:
+            obj = self.pool.get('ibeacon.parameters')
+            obj_scanned = self.pool.get('ibeacon.scanned')
+            ibeacon_scanned = obj_scanned.browse(cr, uid, ids[0], context=context)
+            template = ibeacon_scanned.template_id
+            template_id = template.id
+            obj.ssh_login(cr, uid, [template_id], context=context)
+            obj_scanned.read_uuid(cr, uid, ids, checkall=checkall, context=context)
+        except:
+            raise osv.except_osv('Error','ssh read Failed')
+        finally:
+            obj.ssh_logout()
         
     def action_read(self, cr, uid, ids, context=None):
-        status = self.ssh_read_uuid(cr, uid, ids, context)
-        for line in status:
-            if line != []:
-                return self.pool.get('warning_box').info(cr, uid, title='SSH Scan', message=status)  
+        self.ssh_read_uuid(cr, uid, ids, context)
             
     def action_write(self, cr, uid, ids, context=None):
-        status = self.ssh_write(cr, uid, ids, context=context)
-        for line in status:
-            if line != []:
-                return self.pool.get('warning_box').info(cr, uid, title='SSH Scan', message=status)  
+        self.ssh_write(cr, uid, ids, context=context)
             
     def action_go_to_ibeacon_scanned(self, cr, uid, ids, context=None):
         return {
@@ -281,6 +256,8 @@ class ibeacons_scanned(osv.osv):
 
 class ibeacon_parameters(osv.osv):
     _name = 'ibeacon.parameters'
+    
+    session = {}
  
     _columns = {'host': fields.char('Host', size=64),
                 'ssh_port': fields.integer('SSH Port'),
@@ -288,6 +265,8 @@ class ibeacon_parameters(osv.osv):
                 'ssh_password': fields.char('SSH Password', size=32),
                 
                 'reboot': fields.boolean('Reboot'),
+                
+                #'progress': fields.float('Progress'),
                 
                 'uuid': fields.char('Uuid', size=36, help="128 bit"),
                 'check_uuid': fields.boolean('Check'),
@@ -330,31 +309,27 @@ class ibeacon_parameters(osv.osv):
                 'minor': '0',
                 'txpower':'00'
                 }
-   
-    
-    session = {}
 
     def validate(self, vals):
-        status=[]
-        if vals.get('major') and vals.get('major')<0 or vals.get('major')>65535:
-            status.append('major value between 0 and 65535')
-        #minor in lines scanned
-        if vals.get('accuracy') and vals.get('accuracy')<0 or vals.get('accuracy')>255:
-            status.append('accuracy value between 0 and 255')
-        if vals.get('txpower') and (vals.get('txpower')==False or vals.get('txpower') not in ['00','01','02','03']):
-            status.append('txpower selection error')
-        if vals.get('password') and vals.get('password')<0 or vals.get('password')>999999:
-            status.append('accuracy value between 0 and 999999')
-        if vals.get('broadcasting_cycle') and vals.get('broadcasting_cycle')<1 or vals.get('broadcasting_cycle')>255:
-            status.append('broadcasting_cycle value between 1 and 255')
-        
-        for line in status:
-            if line != []:
-                raise osv.except_osv('Error', status)
-            
-        return status
-        
-        
+        try:
+            status=[]
+            if vals.get('major') and vals.get('major')<0 or vals.get('major')>65535:
+                status.append('major value between 0 and 65535')
+            #minor in lines scanned
+            if vals.get('accuracy') and vals.get('accuracy')<0 or vals.get('accuracy')>255:
+                status.append('accuracy value between 0 and 255')
+            if vals.get('txpower') and (vals.get('txpower')==False or vals.get('txpower') not in ['00','01','02','03']):
+                status.append('txpower selection error')
+            if vals.get('password') and vals.get('password')<0 or vals.get('password')>999999:
+                status.append('accuracy value between 0 and 999999')
+            if vals.get('broadcasting_cycle') and vals.get('broadcasting_cycle')<1 or vals.get('broadcasting_cycle')>255:
+                status.append('broadcasting_cycle value between 1 and 255')
+            for line in status:
+                if line != []:
+                    raise osv.except_osv('Error', status)
+            return status
+        except:
+            raise osv.except_osv('Error','validate fields')
    
     def write(self, cr, uid, ids, vals, context=None):
         self.validate(vals)
@@ -363,156 +338,64 @@ class ibeacon_parameters(osv.osv):
     def create(self, cr, uid, vals, context=None):
         self.validate(vals)
         return super(ibeacon_parameters, self).create(cr, uid, vals, context=context)
-     
     
     def reboot_system(self, cr, uid, ids, context=None):
-        status=[]
         try: 
-            
-            status.append(self.ssh_login(cr, uid, ids, context=context))
-            
+            self.ssh_login(cr, uid, ids, context=context)
             order = 'sudo reboot'
             self.session.sendline(order)
             self.session.prompt()  
-            
-            status.append("reboot system Ok")
         except:
-            status.append("reboot system Failes")
-            
-        status.append(self.ssh_logout())
-        return status
+            raise osv.except_osv('Error','reboot system Failed')
+        finally:    
+            self.ssh_logout()
     
     def lescan_hci(self, timeout=10):
-        status = []
         try:
             order = 'sudo timeout ' + str(timeout) + ' hcitool lescan'
             self.session.sendline(order)
             self.session.prompt()         # match the prompt
-            status.append(self.session.before.split("\r\n"))     # print everything before the prompt.
+            response = self.session.before
+            if response.find("failed")==-1 and response.find("error")==-1:
+                return response.split("\r\n")
+            raise osv.except_osv('Error','hcitool lescan error')
         except:
-            status.append("hcitool lescan Failed")
-        return status
+            raise osv.except_osv('Error','hcitool lescan Failed')
         
-    def restart_hci(self,timeout=1):
-        status = []
+    def restart_hci(self):
         try:
-            order = 'sudo timeout '+ str(timeout) + ' hciconfig hci0 down'
+            order = 'sudo hciconfig hci0 down'
             self.session.sendline(order)
             self.session.prompt()      
             
-            order = 'sudo timeout '+ str(timeout) + ' sudo hciconfig hci0 up'
+            order = 'sudo hciconfig hci0 up'
             self.session.sendline(order)
-            self.session.prompt()     
-            #status.append("hci restart Ok")
+            self.session.prompt() 
         except:
-            status.append("hci restart Failed")
-        return status
+            raise osv.except_osv('Error','hci restart Failed')
  
-    def gatttool_connect(self, bluetooth_adr, timeout=1):
-        status = []
+    def gatttool_write(self, mac, hnd, value, timeout=10):
         try:
-            order ='sudo gatttool -t random --interactive'
-            self.session.sendline(order)
-            order = 'connect '+  bluetooth_adr
-            self.session.sendline(order)
-            #self.session.prompt()       
-            #status.append(self.session.before.split("\r\n"))
-        except:
-            status.append("gatttool connect Failed")
-        return status
-        
-    def gatttol_disconnect(self):
-        status = []
-        try:
-            order ='disconnect'  
-            self.session.sendline(order)
-            #self.session.prompt()   
-            order ='exit'  
-            self.session.sendline(order)
-            #self.session.prompt()       
-            #status.append(self.session.before.split("\r\n")) 
-        except:
-            status.append("gatttool disconnect Failed")
-        return status
-                  
-    
-#     def gatttool_read_uuid(self, mac, uuid, timeout=1):
-#         status = []
-#         try:
-#             order = 'char-read-uuid ' + uuid 
-#             self.session.sendline(order)
-#             self.session.prompt()       
-#             status.append(self.session.before.split("\r\n"))
-#         except:
-#             status.append("gatttool read Failed")
-#         return status 
-#     
-    def gatttool_write(self, mac, hnd, value, timeout=500):
-        status = []
-        try:
-            for i in range(1,5):
+            for i in range(1,3):
                 order = 'sudo timeout '+ str(timeout) +' gatttool -b ' + mac + ' --char-write-req -a ' + hnd + ' -n '+ value 
                 self.session.sendline(order)
                 self.session.prompt()
                 response = self.session.before
                 if response.find("failed")==-1 and response.find("error")==-1:
                     pattern = "Characteristic value/descriptor:"
-                    
                     sizePattern = len(pattern)
                     responseBegin = response.find("Characteristic value/descriptor:") + sizePattern + 1
                     responseFormatted = response[responseBegin:-3]
                     #status.append("gatttool read Ok")
                     return responseFormatted
-                
+            return []
         except:
-            status.append("gatttool write Failed")
-        return status  
-    
-    def gatttool_reboot(self, mac, hnd, value, timeout=500):
-        status = []
+            raise osv.except_osv('Error','gatttool write Failed')
+
+            
+    def gatttool_read_uuid(self, mac, uuid, timeout=10):
         try:
-            order = 'sudo timeout '+ str(timeout) +' gatttool -b ' + mac + ' --char-write -a ' + hnd + ' -n '+ value 
-            self.session.sendline(order)
-            self.session.prompt()
-            response = self.session.before
-            if response.find("failed")==-1 and response.find("error")==-1:
-                pattern = "Characteristic value/descriptor:"
-                
-                sizePattern = len(pattern)
-                responseBegin = response.find("Characteristic value/descriptor:") + sizePattern + 1
-                responseFormatted = response[responseBegin:-3]
-                #status.append("gatttool read Ok")
-                return responseFormatted
-                
-        except:
-            status.append("gatttool write Failed")
-        return status 
-    
-    def gatttool_read(self, mac, hnd, timeout=500):
-        status = []
-        try:
-            for i in range(1,5):
-                order = 'sudo timeout '+ str(timeout) +' gatttool -b ' + mac + ' --char-read -a ' + hnd #+ ' > output'
-                self.session.sendline(order)
-                self.session.prompt()
-                response = self.session.before
-                if response.find("failed")==-1 and response.find("error")==-1:
-                    pattern = "Characteristic value/descriptor:"
-                    
-                    sizePattern = len(pattern)
-                    responseBegin = response.find("Characteristic value/descriptor:") + sizePattern + 1
-                    responseFormatted = response[responseBegin:-3]
-                    #status.append("gatttool read Ok")
-                    return responseFormatted
-                
-        except:
-            status.append("gatttool read Failed")
-        return status  
- 
-    def gatttool_read_uuid(self, mac, uuid, timeout=500):
-        status = []
-        try:
-            for i in range(1,5):
+            for i in range(1,3):
                 order = 'sudo timeout '+ str(timeout) +' gatttool -b ' + mac + ' --char-read -u ' + uuid
                 self.session.sendline(order)
                 self.session.prompt()
@@ -528,26 +411,23 @@ class ibeacon_parameters(osv.osv):
                     responseBegin_handle = response.find(pattern_handle) + sizePattern_handle + 1
                     responseEnd_handle = responseBegin_handle + 6
                     responseFormatted_handle = response[responseBegin_handle:responseEnd_handle]
-                    #status.append("gatttool read Ok")
                     return [responseFormatted,responseFormatted_handle]
-                
+            return []
         except:
-            status.append("gatttool read Failed")
-        return status  
+            raise osv.except_osv('Error','atttool read Failed')
     
-    def gatttool_char_desc(self, mac, timeout=500):
-        status = []
+    def gatttool_char_desc(self, mac, timeout=10):
         try:
             pattern_handle = "handle"
             sizePattern_handle = len(pattern_handle)
-            for i in range(1,5):
+            result={}
+            for i in range(1,3):
                 order = 'sudo timeout '+ str(timeout) +' gatttool -b ' + mac + ' --char-desc'
                 self.session.sendline(order)
                 self.session.prompt()
                 response = self.session.before
                 if response.find("failed")==-1 and response.find("error")==-1:
                     response = response.splitlines();
-                    result={}
                     for line in response:
                         line = line.split(',')
                         handle_pos = line[0].find(pattern_handle)
@@ -557,13 +437,11 @@ class ibeacon_parameters(osv.osv):
                             uuid = line[1][12:16]
                             result[uuid] = handle
                     return result
-                
+            return result
         except:
-            status.append("gatttool char-desc Failed")
-        return status  
+            raise osv.except_osv('Error','gatttool char-desc Failed')
      
     def hcitool_lecc(self, bluetooth_adr, timeout=10):
-        status=[]
         try:
             order = 'sudo timeout '+ str(timeout) +' hcitool lecc ' + bluetooth_adr
             self.session.sendline(order)
@@ -574,103 +452,90 @@ class ibeacon_parameters(osv.osv):
                 sizePattern_handle = len(pattern_handle)
                 responseBegin_handle = response.find(pattern_handle) + sizePattern_handle + 1
                 responseFormatted_handle = response[responseBegin_handle:-2]
-                #status.append("gatttool read Ok")
                 return responseFormatted_handle
+            return []    
         except:
-            status.append("hci-tool lecc Failed")
-        return status     
+            raise osv.except_osv('Error','hci-tool lecc Failed')
+        
     
     def hcitool_ledc(self, handle):
-        status=[]
         try:
             if handle==[] or handle.isdigit()==False:
-                return status
+                return
             order = 'sudo hcitool ledc ' + handle
             self.session.sendline(order)
             self.session.prompt()
-            #self.session.sendline ('uptime')
-            #self.session.prompt()
-            response = self.session.before
-            status.append(response)
         except:
-            status.append("hci-tool ledc Failed")
-        return status     
+            raise osv.except_osv('Error','hci-tool ledc Failed')
+        
 
     def ssh_login(self, cr, uid, ids, context=None): 
-        self.session = pxssh.pxssh()
-        #login(server, username, password='', terminal_type='ansi', original_prompt='[#$]', 
-        #login_timeout=10, port=None, auto_prompt_reset=True, ssh_key=None, quiet=True, 
-        #sync_multiplier=1, check_local_ip=True)[source]
-        ibeacon_parameters = self.browse(cr, uid, ids[0], context=context)
-        host = ibeacon_parameters.host
-        user = ibeacon_parameters.ssh_user
-        password = ibeacon_parameters.ssh_password
-        port = str(ibeacon_parameters.ssh_port)
-        status = []
         try:
+            self.session = pxssh.pxssh()
+#login(server, username, password='', terminal_type='ansi', original_prompt='[#$]', 
+#login_timeout=10, port=None, auto_prompt_reset=True, ssh_key=None, quiet=True, 
+#sync_multiplier=1, check_local_ip=True)[source]
+            ibeacon_parameters = self.browse(cr, uid, ids[0], context=context)
+            host = ibeacon_parameters.host
+            user = ibeacon_parameters.ssh_user
+            password = ibeacon_parameters.ssh_password
+            port = str(ibeacon_parameters.ssh_port)
             self.session.login(host, user, password=password, port=port)
             self.session.sendline ('uptime')
-            self.session.prompt()         # match the prompt
-            #status.append(self.session.before)     # print everything before the prompt.
-            #status.append("SSH login Ok")
+            self.session.prompt()   
         except:
-            status.append("SSH login Failed")
-        return status
+            raise osv.except_osv('Error','SSH login Failed')
         
     def ssh_logout(self):
-        status = []
         try:
             self.session.logout()
-            #status.append("SSH logout Ok")
         except:
-            status.append("SSH logout Failed")
-        return status
+            raise osv.except_osv('Error','SSH logout Failed')
+    
+#     def progress(self ,cr, uid, id, value, context=None):
+#         object_beacon = {}
+#         object_beacon['progress'] = value
+#         self.write(cr, uid, id, object_beacon, context=context)
                 
     def ssh_scan(self, cr, uid, ids, context=None):
-        status=[]
-        status.append(self.ssh_login(cr, uid, ids, context=context))
         try: 
-            #status.append(self.restart_hci())
-            
+            self.ssh_login(cr, uid, ids, context=context)
+            #self.restart_hci()
             result_lescan = self.lescan_hci()
             ibeacon_parameters = self.browse(cr, uid, ids[0], context=context)
             beacons_scanned = ibeacon_parameters.beacons_scanned
-            status.append(self.create_scanned(cr, uid, ids[0], result_lescan[0], beacons_scanned, context)) 
-            
-            #status.append(self.restart_hci())
+            self.create_scanned(cr, uid, ids[0], result_lescan, beacons_scanned, context)
+            self.restart_hci()
         except:
-            status.append("hci Failed")
-            
-        status.append(self.ssh_logout())
-        return status
+            raise osv.except_osv('Error', 'ssh scan')
+        finally:
+            self.ssh_logout()
     
     def create_scanned(self, cr, uid, id, result, beacons_scanned,context=None):
-        ibeacons = []
-        ibeacons_mac = []
-        for line in result:
-            ibeacon=line.split(" ")
-            if len(ibeacon[0])==17:
-                if ibeacon[0] not in ibeacons_mac:
-                    ibeacons.append(ibeacon)
-                    ibeacons_mac.append(ibeacon[0])
-                else:
-                    if ibeacon[1] != "(unknown)":
-                        ibeacons[ibeacons_mac.index(ibeacon[0])][1] = ibeacon[1]
-                        
+        try:
+            ibeacons = []
+            ibeacons_mac = []
+            for line in result:
+                ibeacon=line.split(" ")
+                if len(ibeacon[0])==17:
+                    if ibeacon[0] not in ibeacons_mac:
+                        ibeacons.append(ibeacon)
+                        ibeacons_mac.append(ibeacon[0])
+                    else:
+                        if ibeacon[1] != "(unknown)":
+                            ibeacons[ibeacons_mac.index(ibeacon[0])][1] = ibeacon[1]
                             
-        obj = self.pool.get('ibeacon.scanned')
-        
-        scanneds = []
-        for scanned in beacons_scanned: #los beacons en base de datos
-            scanneds.append(scanned.mac)
-            obj_id = obj.search(cr, uid, [('template_id', '=', id),('mac', 'like', scanned.mac)] , limit=None, context=context)
-            if len(obj_id)>0:
-                obj.write(cr, uid, obj_id, {
-                                        'enable': False,
-                                    }, context=context)
-        status = []
-        for ibeacon in ibeacons:
-            try:
+            obj = self.pool.get('ibeacon.scanned')
+            scanneds = []
+            for scanned in beacons_scanned: #los beacons en base de datos
+                scanneds.append(scanned.mac)
+                obj_id = obj.search(cr, uid, [('template_id', '=', id),('mac', 'like', scanned.mac)] , limit=None, context=context)
+                if len(obj_id)>0:
+                    obj.write(cr, uid, obj_id, {
+                                            'enable': False,
+                                        }, context=context)
+            
+            for ibeacon in ibeacons:
                 if ibeacon[0] not in scanneds:
                     obj.create(cr, uid, {
                                 'mac':ibeacon[0],
@@ -691,68 +556,54 @@ class ibeacon_parameters(osv.osv):
                         obj.write(cr, uid, obj_id, {
                                     'enable': True,
                                     }, context=context)
-            except:
-                status.append("Failed " + ibeacon)
-        return status
-    
+        except:
+            raise osv.except_osv('Error', 'create scanned')
+        
     
     def action_scan(self, cr, uid, ids, context=None):
-        status = self.ssh_scan(cr, uid, ids, context)
-        for line in status:
-            if line != []:
-                return self.pool.get('warning_box').info(cr, uid, title='SSH Scan', message=status)  
+        self.ssh_scan(cr, uid, ids, context)
             
     def action_reboot(self, cr, uid, ids, context=None):
-        status = self.reboot_system(cr, uid, ids, context)
-        for line in status:
-            if line != []:
-                return self.pool.get('warning_box').info(cr, uid, title='Reboot System', message=status) 
+        self.reboot_system(cr, uid, ids, context)
             
     def action_restart(self, cr, uid, ids, context=None):
-        status=[]
-        status.append(self.ssh_login(cr, uid, ids, context=context))
-        status.append(self.restart_hci())
-        status.append(self.ssh_logout())  
-        for line in status:
-            if line != []:
-                return self.pool.get('warning_box').info(cr, uid, title='Restart hci BLE', message=status) 
+        try:
+            self.ssh_login(cr, uid, ids, context=context)
+            self.restart_hci()
+        except:
+            raise osv.except_osv('Error','action Restart')
+        finally:
+            self.ssh_logout()
             
     def action_read_all(self, cr, uid, ids, context=None):
-        obj = self.pool.get('ibeacon.scanned')
-        obj_id = obj.search(cr, uid, [('template_id', '=', ids[0]),('active_beacon', '=', True)] , limit=None, context=context)
-        #obj_browse = obj.browse(cr, uid, obj_id, context=context)
-        status=[]
-        status.append(self.ssh_login(cr, uid, ids, context=context))
-        for id in obj_id:
-            status.append(obj.read_uuid(cr, uid,[id], checkall=True, context=context))
-            
-        status.append(self.ssh_logout())
-        
-        for line in status:
-            if line != []:
-                return self.pool.get('warning_box').info(cr, uid, title='Reboot System', message=status) 
+        try:
+            obj = self.pool.get('ibeacon.scanned')
+            obj_id = obj.search(cr, uid, [('template_id', '=', ids[0]),('active_beacon', '=', True)] , limit=None, context=context)
+            self.ssh_login(cr, uid, ids, context=context)
+            for id in obj_id:
+                obj.read_uuid(cr, uid,[id], checkall=True, context=context)
+        except:
+            raise osv.except_osv(_('Error!'), _('Read all id:%s') % (str(id),))
+        finally:
+            self.ssh_logout()
+       
     def action_write_all(self, cr, uid, ids, context=None):
-        obj = self.pool.get('ibeacon.scanned')
-        obj_id = obj.search(cr, uid, [('template_id', '=', ids[0]),('active_beacon', '=', True)] , limit=None, context=context)
-        #obj_browse = obj.browse(cr, uid, obj_id, context=context)
-        status=[]
-        status.append(self.ssh_login(cr, uid, ids, context=context))
-        for id in obj_id:
-            status.append(obj.write_hnd(cr, uid,[id], checkall=False, context=context))
-            
-        status.append(self.ssh_logout())
-        
-        for line in status:
-            if line != []:
-                return self.pool.get('warning_box').info(cr, uid, title='Reboot System', message=status) 
-        
+        try:
+            obj = self.pool.get('ibeacon.scanned')
+            obj_id = obj.search(cr, uid, [('template_id', '=', ids[0]),('active_beacon', '=', True)] , limit=None, context=context)
+            self.ssh_login(cr, uid, ids, context=context)
+            for id in obj_id:
+                obj.write_hnd(cr, uid,[id], checkall=False, context=context)
+        except:
+            raise osv.except_osv(_('Error!'), _('Write all id:%s') % (str(id),))
+        finally:
+            self.ssh_logout()
         
     def action_workflow_draft(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, { 'state' : 'draft' }, context=context)
         return True
     
     def action_workflow_done(self, cr, uid, ids, context=None):
-        
         self.action_scan( cr, uid, ids,context)
         self.write(cr, uid, ids, { 'state' : 'done' }, context=context)
         return True
@@ -760,7 +611,5 @@ class ibeacon_parameters(osv.osv):
     def action_workflow_disable(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, { 'state' : 'disable' }, context=context)
         return True
-    
-    
-    
+
         
