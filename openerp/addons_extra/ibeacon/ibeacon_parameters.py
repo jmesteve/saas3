@@ -577,10 +577,10 @@ class ibeacon_parameters(osv.osv):
             
     def action_read_all(self, cr, uid, ids, context=None):
         try:
+            id = 0
             obj = self.pool.get('ibeacon.scanned')
             obj_id = obj.search(cr, uid, [('template_id', '=', ids[0]),('active_beacon', '=', True)] , limit=None, context=context)
             self.ssh_login(cr, uid, ids, context=context)
-            id = 0
             for id in obj_id:
                 obj.read_uuid(cr, uid,[id], checkall=True, context=context)
         except:
@@ -590,10 +590,10 @@ class ibeacon_parameters(osv.osv):
        
     def action_write_all(self, cr, uid, ids, context=None):
         try:
+            id = 0
             obj = self.pool.get('ibeacon.scanned')
             obj_id = obj.search(cr, uid, [('template_id', '=', ids[0]),('active_beacon', '=', True)] , limit=None, context=context)
             self.ssh_login(cr, uid, ids, context=context)
-            id = 0
             for id in obj_id:
                 obj.write_hnd(cr, uid,[id], checkall=False, context=context)
         except:
