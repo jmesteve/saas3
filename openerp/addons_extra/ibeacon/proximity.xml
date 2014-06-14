@@ -67,7 +67,67 @@
             <field name="code"> action=self.generate_query(cr, uid, context=context)</field>
         </record>
         
-   		<menuitem id="menu_ibeacon_proximity" name="Proximity" parent="menu_ibeacon_data" action='action_menu_ibeacon_proximity'  groups="group_ibeacon_access"/>
+   		<menuitem id="menu_ibeacon_proximity" name="Proximity" parent="menu_ibeacon_data" action='action_menu_ibeacon_proximity'  groups="group_ibeacon_access" sequence="5"/>
+   		
+   		
+   		
+   		
+   		<record id="view_ibeacon_estimated_tree" model="ir.ui.view">
+            <field name="name">ibeacon.estimated.tree</field>
+            <field name="model">beacon.estimated.distance</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="ibeacon_estimated_distance">
+					<field name="rssi"/>
+					<field name="txpower"/>
+					<field name="min"/>
+					<field name="median"/>
+					<field name="max"/>
+                </tree>
+            </field>
+        </record>
+   
+   		<record id="view_ibeacon_estimated_form" model="ir.ui.view">
+            <field name="name">ibeacon.estimated.form</field>
+            <field name="model">beacon.estimated.distance</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="beacon_estimated_distance">
+                	<group>
+						<field name="rssi"/>
+						<field name="txpower"/>
+						<field name="min"/>
+						<field name="median"/>
+						<field name="max"/>
+					</group>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_ibeacon_estimated_graph" model="ir.ui.view">
+            <field name="name">ibeacon.estimated.graph</field>
+            <field name="model">beacon.estimated.distance</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="RSSI -> Est. Distance" orientation="vertical" type="bar">
+                    <field name="rssi" group="True"/>
+					<field name="median" />
+                </graph>
+            </field>
+        </record>
+        
+   		<record model='ir.actions.server' id='action_menu_ibeacon_estimated'>
+            <field name="name">Estimated distance</field>
+            <field name="model_id" ref="model_beacon_estimated_distance"></field>
+            <field name="state">code</field>
+            <field name="code"> action=self.generate_query(cr, uid, context=context)</field>
+        </record>
+        
+   		<menuitem id="menu_ibeacon_estimatee" name="Est. Distance" parent="menu_ibeacon_data" action='action_menu_ibeacon_estimated'  groups="group_ibeacon_access" sequence="6"/>
+   		
+   		
+   		
+   		
    		
    		
    		
@@ -78,6 +138,7 @@
             <field name="arch" type="xml">
                 <tree string="ibeacon_real_distance">
 					<field name="rssi"/>
+					<field name="txpower"/>
 					<field name="min"/>
 					<field name="median"/>
 					<field name="max"/>
@@ -93,6 +154,7 @@
                 <form string="beacon_real_distance">
                 	<group>
 						<field name="rssi"/>
+						<field name="txpower"/>
 						<field name="min"/>
 						<field name="median"/>
 						<field name="max"/>
@@ -120,7 +182,71 @@
             <field name="code"> action=self.generate_query(cr, uid, context=context)</field>
         </record>
         
-   		<menuitem id="menu_ibeacon_distance" name="Real Distance" parent="menu_ibeacon_data" action='action_menu_ibeacon_distance'  groups="group_ibeacon_access"/>
+   		<menuitem id="menu_ibeacon_distance" name="Real Distance" parent="menu_ibeacon_data" action='action_menu_ibeacon_distance'  groups="group_ibeacon_access" sequence="7"/>
+   		
+   		
+   		
+   		
+   		
+   		
+   		<record id="view_ibeacon_triangulation_tree" model="ir.ui.view">
+            <field name="name">ibeacon.triangulation.tree</field>
+            <field name="model">beacon.triangulation.error</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="ibeacon_triangulation_error">
+					<field name="txpower"/>
+					<field name="test"/>
+					<field name="min"/>
+					<field name="median"/>
+					<field name="max"/>
+                </tree>
+            </field>
+        </record>
+   		
+   		<record id="view_ibeacon_triangulation_form" model="ir.ui.view">
+            <field name="name">ibeacon.triangulation.form</field>
+            <field name="model">beacon.triangulation.error</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="beacon_triangulation_error">
+                	<group>
+						<field name="txpower"/>
+						<field name="test"/>
+						<field name="min"/>
+						<field name="median"/>
+						<field name="max"/>
+					</group>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_ibeacon_triangulation_graph" model="ir.ui.view">
+            <field name="name">ibeacon.triangulation.graph</field>
+            <field name="model">beacon.triangulation.error</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="RSSI -> Distance" orientation="vertical" type="bar">
+                    <field name="test" group="True"/>
+					<field name="median" />
+                </graph>
+            </field>
+        </record>
+        
+   		<record model='ir.actions.server' id='action_menu_ibeacon_triangulation'>
+            <field name="name">Triang. Error</field>
+            <field name="model_id" ref="model_beacon_triangulation_error"></field>
+            <field name="state">code</field>
+            <field name="code"> action=self.generate_query(cr, uid, context=context)</field>
+        </record>
+        
+   		<menuitem id="menu_ibeacon_triangulation" name="Triang. Error" parent="menu_ibeacon_data" action='action_menu_ibeacon_triangulation'  groups="group_ibeacon_access" sequence="8"/>
+   		
+   		
+   		
+   		
+   		
+   		
    			
     </data>
 </openerp>
